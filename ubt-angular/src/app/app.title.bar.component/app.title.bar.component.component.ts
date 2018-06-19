@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-app.title.bar.component',
+  selector: 'app-title-bar-component',
   templateUrl: './app.title.bar.component.component.html',
   styleUrls: ['./app.title.bar.component.component.css']
 })
