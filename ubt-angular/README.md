@@ -25,3 +25,8 @@ Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protrac
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+
+## To test the app
+Install node.js version 10.4.1 (latest at 06/18/2018)
+Run `npm install` to install the requirements
+Run `ng serve` to run the server for the app 
