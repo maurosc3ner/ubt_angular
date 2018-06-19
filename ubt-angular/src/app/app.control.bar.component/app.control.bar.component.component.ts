@@ -5,11 +5,5 @@ import { Component, OnInit } from '@angular/core';
   templateUrl: './app.control.bar.component.component.html',
   styleUrls: ['./app.control.bar.component.component.css']
 })
-export class App.Control.Bar.ComponentComponent implements OnInit {
-
-  constructor() { }
-
-  ngOnInit() {
-  }
-
+export class AppControlBarComponent {
 }
