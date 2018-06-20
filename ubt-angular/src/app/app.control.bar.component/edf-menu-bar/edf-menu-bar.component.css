@@ -18,16 +18,21 @@
       left: 50%;
       transform: translate(-50%, -50%);
       -ms-transform: translate(-50%, -50%);
-      background-color: #000;
+      background-color: black;
       color: white;
       font-size: 6px;
-      padding: 0px 0px;
-      border: none;
+      padding: 1px 1px;
+      border: 1px solid white;
       cursor: pointer;
-      border-radius: 0px;
-      width: 30px;
-      height: 30px;
+      border-radius: 0%;
+      width: 35px;
+      height: 35px;
     }
+
+    .container .btn:hover {
+      border: 1px solid red;
+    }
+
     .container .row {
         height: 28px;
       }
