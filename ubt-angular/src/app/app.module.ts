@@ -16,6 +16,8 @@ import { EdfControlButtonsComponent } from './app.control.bar.component/edf-cont
 import { PlaneViewComponent } from './app.principal.content.component/plane-view/plane-view.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
+import {MatProgressBarModule} from '@angular/material';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -34,7 +36,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
   ],
   imports: [
     BrowserModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    MatProgressBarModule
   ],
   providers: [],
   bootstrap: [AppComponent]
