@@ -1,3 +1,9 @@
 .title-bar {
   background-color: rgb(20, 20, 20);
 }
+
+.logo {
+  background-color: transparent;
+  width: 120px;
+  height: 70px;
+}

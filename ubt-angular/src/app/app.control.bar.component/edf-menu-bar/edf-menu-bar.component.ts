@@ -1,15 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-edf-menu-bar',
   templateUrl: './edf-menu-bar.component.html',
   styleUrls: ['./edf-menu-bar.component.css']
 })
-export class EdfMenuBarComponent implements OnInit {
+export class EdfMenuBarComponent {
+  @Output() esiclick = new EventEmitter();
 
-  constructor() { }
-
-  ngOnInit() {
+  ESILoad(event) {
+    this.esiclick.emit(event);
   }
-
 }

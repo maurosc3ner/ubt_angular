@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-control-bar-component',
@@ -6,4 +6,10 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./app.control.bar.component.component.css']
 })
 export class AppControlBarComponent {
+  @Output() ESIEvent = new EventEmitter();
+  ESIToggle: Boolean = false;
+  onESILoad(event) {
+    if (this.ESIToggle === true) { this.ESIToggle = false; } else { this.ESIToggle = true; }
+    this.ESIEvent.emit(this.ESIToggle);
+  }
 }

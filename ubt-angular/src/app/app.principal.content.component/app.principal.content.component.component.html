@@ -1,7 +1,16 @@
 <div class="container content-panel">
   <div class="row main-container">
-      <div class="col-6 col-md-6">
-
+      <div class="container-fluid eeg-content-container" *ngIf="EEGstatus" [ngClass]="{'test-class':ESIstatus === true}">
+        <app-eeg-content></app-eeg-content>
+      </div>
+      <div class="container-fluid topo-plot-container" *ngIf="topoPlotStatus">
+        <app-topo-plot></app-topo-plot>
+      </div>
+      <div class="container-fluid td-content-container" *ngIf="ESIstatus" [ngClass]="{'test-class':ESIstatus === true}">
+        <app-td-content [ESIstatus_td]='ESIstatus'></app-td-content>
+      </div>
+      <div class="container-fluid plane-view-container" *ngIf="planeView">
+        <app-plane-view></app-plane-view>
       </div>
   </div>
 </div>

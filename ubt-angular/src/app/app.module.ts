@@ -14,6 +14,7 @@ import { EdfControlBarComponent } from './app.control.bar.component/edf-control-
 import { EdfMenuBarComponent } from './app.control.bar.component/edf-menu-bar/edf-menu-bar.component';
 import { EdfControlButtonsComponent } from './app.control.bar.component/edf-control-buttons/edf-control-buttons.component';
 import { PlaneViewComponent } from './app.principal.content.component/plane-view/plane-view.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { PlaneViewComponent } from './app.principal.content.component/plane-view
     PlaneViewComponent
   ],
   imports: [
-    BrowserModule
+    BrowserModule,
+    BrowserAnimationsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
