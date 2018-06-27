@@ -6,5 +6,5 @@ import { Component, Input } from '@angular/core';
   styleUrls: ['./eeg-content.component.css']
 })
 export class EegContentComponent {
-  @Input() EEG_Status: Boolean;
+  @Input() EEG_Status_eeg: Boolean;
 }

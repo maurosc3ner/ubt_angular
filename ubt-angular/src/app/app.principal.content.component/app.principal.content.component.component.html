@@ -1,7 +1,7 @@
 <div class="container-fluid content-panel">
   <div class="row main-container" style="height:1000px">
       <div class="container-fluid eeg-content-container" *ngIf="EEGstatus" [ngClass]="{'test-class':ESIstatus === true}">
-        <app-eeg-content></app-eeg-content>
+        <app-eeg-content [EEG_Status_eeg]='EEGstatus'></app-eeg-content>
       </div>
       <div class="container-fluid topo-plot-container" *ngIf="topoPlotStatus">
         <app-topo-plot></app-topo-plot>
