@@ -6,26 +6,42 @@ import { Component, Input, OnInit, OnChanges } from '@angular/core';
   styleUrls: ['./app.principal.content.component.component.css']
 })
 export class AppPrincipalContentComponent implements OnInit, OnChanges {
-  @Input() EEGstatus: Boolean;
-  @Input() topoPlotStatus: Boolean;
-  @Input() ESIstatus: Boolean;
-  @Input() planeView: Boolean;
+  @Input() Status: Number;
 
-  sortcomponents: String;
+  visAnno: Boolean;
+  visEEG: Boolean;
+  visESI: Boolean;
+  visTopoPLot: Boolean;
+  visPlane: Boolean;
 
-  constructor() {
-  }
+  srcImageSagital: String = 'Imagen Sagital';
+  srcImageAxial: String = 'Imagen Axial';
+  srcImageCoronal: String = 'Imagen Coronal';
 
   ngOnInit() {
-    this.EEGstatus = true;
-    this.topoPlotStatus = false;
-    this.ESIstatus = false;
-    this.planeView = false;
+    this.Status = 0;
+    this.visAnno = false;
+    this.visEEG = true;
+    this.visESI = false;
+    this.visTopoPLot = false;
+    this.visPlane = false;
   }
 
   ngOnChanges() {
-    if (this.ESIstatus === true) {
-      this.sortcomponents = '50%';
+    if (this.Status === 0) {
+      this.visEEG = true;
+      this.visESI = false;
+      this.visPlane = false;
+    }
+    if (this.Status === 1) {
+      this.visEEG = true;
+      this.visESI = true;
+      this.visPlane = false;
+    }
+    if (this.Status === 2) {
+      this.visEEG = false;
+      this.visESI = true;
+      this.visPlane = true;
     }
   }
 }

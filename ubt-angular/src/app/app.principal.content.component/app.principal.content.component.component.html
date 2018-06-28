@@ -1,16 +1,24 @@
-<div class="container-fluid content-panel">
-  <div class="row main-container" style="height:1000px">
-      <div class="container-fluid eeg-content-container" *ngIf="EEGstatus" [ngClass]="{'test-class':ESIstatus === true}">
-        <app-eeg-content [EEG_Status_eeg]='EEGstatus'></app-eeg-content>
-      </div>
-      <div class="container-fluid topo-plot-container" *ngIf="topoPlotStatus">
-        <app-topo-plot></app-topo-plot>
-      </div>
-      <div class="container-fluid td-content-container" *ngIf="ESIstatus" [ngClass]="{'test-class':ESIstatus === true}">
-        <app-td-content [ESIstatus_td]='ESIstatus'></app-td-content>
-      </div>
-      <div class="container-fluid plane-view-container" *ngIf="planeView">
-        <app-plane-view></app-plane-view>
-      </div>
+<div class="container content-panel">
+  <div class="row main-container" [ngClass]="{'layout-2-1':Status === 2}">
+    <div class="col plane-view-container" *ngIf="visPlane">
+        <app-plane-view [srcImage]="srcImageSagital"></app-plane-view>
+    </div>
+    <div class="container-fluid eeg-content-container" *ngIf="visEEG" [ngClass]="{'layout1-0':Status === 1}">
+      <app-eeg-content></app-eeg-content>
+    </div>
+    <div class="col topo-plot-container" *ngIf="visTopoPLot">
+      <app-topo-plot></app-topo-plot>
+    </div>
+    <div class="col td-content-container" *ngIf="visESI">
+      <app-td-content></app-td-content>
+    </div>
+  </div>
+  <div class="row main-container" *ngIf="visPlane">
+    <div class="col plane-view-container">
+        <app-plane-view [srcImage]="srcImageAxial"></app-plane-view>
+    </div>
+    <div class="col plane-view-container">
+        <app-plane-view [srcImage]="srcImageCoronal"></app-plane-view>
+    </div>
   </div>
 </div>

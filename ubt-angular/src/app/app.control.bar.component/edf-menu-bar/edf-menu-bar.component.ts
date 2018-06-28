@@ -7,8 +7,18 @@ import { Component, Output, EventEmitter } from '@angular/core';
 })
 export class EdfMenuBarComponent {
   @Output() esiclick = new EventEmitter();
+  @Output() planeclick = new EventEmitter();
+  @Output() annoclick = new EventEmitter();
 
   ESILoad(event) {
     this.esiclick.emit(event);
+  }
+
+  PlaneLoad(event) {
+    this.planeclick.emit(event);
+  }
+
+  AnnoLoad(event) {
+    this.annoclick.emit(event);
   }
 }

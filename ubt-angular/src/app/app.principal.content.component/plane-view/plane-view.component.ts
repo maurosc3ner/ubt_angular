@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
   selector: 'app-plane-view',
@@ -6,8 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./plane-view.component.css']
 })
 export class PlaneViewComponent implements OnInit {
-
-  constructor() { }
+  @Input() srcImage: String;
 
   ngOnInit() {
   }
