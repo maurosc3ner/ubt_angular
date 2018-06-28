@@ -14,9 +14,9 @@ export class AppPrincipalContentComponent implements OnInit, OnChanges {
   visTopoPLot: Boolean;
   visPlane: Boolean;
 
-  srcImageSagital: String = 'Imagen Sagital';
-  srcImageAxial: String = 'Imagen Axial';
-  srcImageCoronal: String = 'Imagen Coronal';
+  srcImageSagital: String = './assets/brain-dummy/MRISagital.png';
+  srcImageAxial: String = './assets/brain-dummy/MRIAxial.png';
+  srcImageCoronal: String = './assets/brain-dummy/MRICoronal_2.jpg';
 
   ngOnInit() {
     this.Status = 0;

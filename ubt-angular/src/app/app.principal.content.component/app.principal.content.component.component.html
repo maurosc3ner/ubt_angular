@@ -1,7 +1,7 @@
 <div class="container content-panel">
   <div class="row main-container" [ngClass]="{'layout-2-1':Status === 2}">
     <div class="col plane-view-container" *ngIf="visPlane">
-        <app-plane-view [srcImage]="srcImageSagital"></app-plane-view>
+        <app-plane-view [srcImage]="srcImageAxial"></app-plane-view>
     </div>
     <div class="container-fluid eeg-content-container" *ngIf="visEEG" [ngClass]="{'layout1-0':Status === 1}">
       <app-eeg-content></app-eeg-content>
@@ -15,7 +15,7 @@
   </div>
   <div class="row main-container" *ngIf="visPlane">
     <div class="col plane-view-container">
-        <app-plane-view [srcImage]="srcImageAxial"></app-plane-view>
+        <app-plane-view [srcImage]="srcImageSagital"></app-plane-view>
     </div>
     <div class="col plane-view-container">
         <app-plane-view [srcImage]="srcImageCoronal"></app-plane-view>
