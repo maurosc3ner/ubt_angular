@@ -7,3 +7,49 @@ html body {
 body { 
   margin: 0;
 }
+
+/* D3 Styles are called from the main style header*/
+.axis--x path, .axis--y path, .axis--x text, .axis--x line {
+  stroke: rgb(255, 255, 255);
+}
+
+.axis--y text, .axis--y line {
+  display: none;
+}
+
+
+.line_eeg_1 {
+  fill: none;
+  stroke: red;
+  stroke-width: 1.5px;
+}
+
+.line_eeg_2 {
+  fill: none;
+  stroke: blue;
+  stroke-width: 1.5px;
+}
+
+.line_eeg_3 {
+  fill: none;
+  stroke:greenyellow;
+  stroke-width: 1.5px;
+}
+
+.line_eeg_4 {
+  fill: none;
+  stroke: white;
+  stroke-width: 1.5px;
+}
+
+.line_eeg_5 {
+  fill: none;
+  stroke: yellow;
+  stroke-width: 1.5px;
+}
+
+.line_eeg_6 {
+  fill: none;
+  stroke: purple;
+  stroke-width: 1.5px;
+}

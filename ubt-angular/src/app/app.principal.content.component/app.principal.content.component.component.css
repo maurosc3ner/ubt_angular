@@ -3,7 +3,7 @@
 }
 
 .eeg-content-container {
-  background-color: rgb(50, 50, 50);
+  background-color: rgb(20, 20, 20);
 }
 
 .topo-plot-container {
@@ -31,9 +31,9 @@
 
 .layout1-0 {
   width: 40%;
-  height: 350px;
+  height: 530px;
 }
 
 .layout-2-1 {
-  height: 350px;
+  height: 530px;
 }
