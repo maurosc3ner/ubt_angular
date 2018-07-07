@@ -75,5 +75,6 @@ export class EegContentComponent implements AfterContentInit {
             .on('start', tick);
         // Pop the old data point off the front.
         data.shift();
-  }
+        }
+    }
 }

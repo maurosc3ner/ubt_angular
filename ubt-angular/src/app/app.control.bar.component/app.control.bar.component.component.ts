@@ -1,4 +1,5 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import {D3Service } from '../app.services/d3/d3.service';
 
 @Component({
   selector: 'app-control-bar-component',
@@ -7,13 +8,16 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 })
 export class AppControlBarComponent {
   @Output() StatusEvent = new EventEmitter();
+  status: Number = 0;
+
+  constructor(private d3Service: D3Service) {
+    this.status = -1;
+  }
 
   ESIToggle: Boolean = false;
   PlaneToggle: Boolean = false;
   AnnotToggle: Boolean = false;
   TopoPlotToggle: Boolean = false;
-
-  status: Number = 0;
 
   checkStatus(ESIToggle, PlaneToggle, AnnotToggle, TopoPlotToggle) {
     if (PlaneToggle === true) {
@@ -43,4 +47,5 @@ export class AppControlBarComponent {
     this.status = this.checkStatus(this.ESIToggle, this.PlaneToggle, this.AnnotToggle, this.TopoPlotToggle);
     this.StatusEvent.emit(this.status);
   }
+
 }
