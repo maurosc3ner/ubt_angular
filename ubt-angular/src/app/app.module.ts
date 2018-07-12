@@ -16,6 +16,8 @@ import { EdfControlButtonsComponent } from './app.control.bar.component/edf-cont
 import { PlaneViewComponent } from './app.principal.content.component/plane-view/plane-view.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
+import { HttpModule } from '@angular/http';
+
 import { D3Service } from './app.services/d3/d3.service';
 
 import {
@@ -43,7 +45,8 @@ import {
     BrowserModule,
     BrowserAnimationsModule,
     MatProgressBarModule,
-    MatToolbarModule
+    MatToolbarModule,
+    HttpModule
   ],
   providers: [ D3Service ],
   bootstrap: [AppComponent]

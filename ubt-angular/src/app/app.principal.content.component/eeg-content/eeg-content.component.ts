@@ -18,7 +18,6 @@ export class EegContentComponent implements AfterContentInit {
     const channel4 = d3.select('#channel4');
     const channel5 = d3.select('#channel5');
     const channel6 = d3.select('#channel6');
-
     this.DrawChannel(channel1, 'line_eeg_1');
     this.DrawChannel(channel2, 'line_eeg_2');
     this.DrawChannel(channel3, 'line_eeg_3');
