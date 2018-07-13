@@ -117,4 +117,5 @@ export class EegContentComponent implements AfterContentInit {
     .attr('class', class_eeg)
     .attr('d', line);
     }
+    }
 }
