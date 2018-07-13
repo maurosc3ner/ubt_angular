@@ -17,7 +17,7 @@ export class EegContentComponent implements AfterContentInit {
 
   DrawChannel (channel, class_eeg, data_eeg, start_time: number = 0, duration: string = '0') {
     if (data_eeg.length !== 0) {
-        const channel_data = data_eeg.data;
+        const channel_data: Array<JSON> = data_eeg.data;
         let i = 0;
         const time_parse      =   d3.timeParse( '%S' );
         const time_format     =   d3.timeFormat( '%S' );
@@ -29,35 +29,35 @@ export class EegContentComponent implements AfterContentInit {
         const padding         =   50;
         for (const sample of channel_data) {
             const sample_time: number = Math.round(1000 * i * (1 / data_eeg.samplefrequency))  / 1000;
-            sample.time = sample_time;
+            sample['time'] = sample_time;
             i++;
         }
         const x_scale = d3.scaleLinear()
         .domain([
-            0, 
+            0,
             d3.max(channel_data, function(d) {
-            return d.time;
+            return d['time'];
             })
         ]).range([padding, chart_width - padding]);
 
         const y_scale = d3.scaleLinear()
         .domain(
-            [ 
-                d3.min(channel_data, function(d) { 
-                    return d.value 
-                }), 
-                d3.max(channel_data, function(d) { 
-                    return d.value 
+            [
+                d3.min(channel_data, function(d) {
+                    return d['value'];
+                }),
+                d3.max(channel_data, function(d) {
+                    return d['value'];
                 })
             ])
         .range([chart_height - padding, padding]);
 
     const line = d3.line()
     .x(function(d) {
-        return x_scale(d.time);
+        return x_scale(d['time']);
     })
     .y(function(d) {
-        return y_scale(d.value);
+        return y_scale(d['value']);
     });
 
     channel
