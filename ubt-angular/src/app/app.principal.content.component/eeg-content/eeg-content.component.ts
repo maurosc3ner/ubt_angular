@@ -1,5 +1,6 @@
 import { Component, Input, AfterContentInit } from '@angular/core';
 import { D3Service } from '../../app.services/d3/d3.service';
+import { Response } from '@angular/http';
 import * as d3 from 'd3';
 
 @Component({
@@ -10,6 +11,9 @@ import * as d3 from 'd3';
 
 export class EegContentComponent implements AfterContentInit {
   @Input() EEG_Status_eeg: Boolean;
+  channel_1: any;
+
+  constructor(private d3service: D3Service) {}
 
   ngAfterContentInit() {
     const channel1 = d3.select('#channel1');
@@ -18,6 +22,15 @@ export class EegContentComponent implements AfterContentInit {
     const channel4 = d3.select('#channel4');
     const channel5 = d3.select('#channel5');
     const channel6 = d3.select('#channel6');
+    this.channel_1 = this.d3service.getPatientData('id_patient', 0).subscribe(
+        (response: Response) => {
+          const data = response.json();
+          console.log(data);
+        },
+        (err) => {
+          console.log(err);
+        }
+        );
     this.DrawChannel(channel1, 'line_eeg_1');
     this.DrawChannel(channel2, 'line_eeg_2');
     this.DrawChannel(channel3, 'line_eeg_3');
@@ -36,9 +49,10 @@ export class EegContentComponent implements AfterContentInit {
     const g = channel.append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
     const x = d3.scaleLinear().domain([0, n - 1]).range([0, width]);
     const y = d3.scaleLinear().domain([-1, 1]).range([height, 0]);
+
     const line = d3.line()
-    .x(function(d, i) { return x(i); })
-    .y(function(d, i) { return y(d); });
+    .x(function(d, i) { return x( i ); })
+    .y(function(d, i) { return y( d ); });
     g.append('defs').append('clipPath')
         .attr('id', 'clip')
         .append('rect')
@@ -56,24 +70,6 @@ export class EegContentComponent implements AfterContentInit {
         .append('path')
         .datum(data)
         .attr('class', class_eeg)
-        .transition()
-        .duration(600)
-        .ease(d3.easeLinear)
-        .on('start', tick);
-      function tick() {
-        // Push a new data point onto the back.
-        data.push(random());
-        // Redraw the line.
-        d3.select(this)
-            .attr('d', line)
-            .attr('transform', null);
-        // Slide it to the left.
-        d3.active(this)
-            .attr('transform', 'translate(' + x(-1) + ',0)')
-            .transition()
-            .on('start', tick);
-        // Pop the old data point off the front.
-        data.shift();
-        }
+        .attr('d', line);
     }
 }
