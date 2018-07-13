@@ -15,48 +15,15 @@ export class EegContentComponent implements AfterContentInit {
 
   constructor(private d3service: D3Service) {}
 
-  ngAfterContentInit() {
-    const channel1 = d3.select('#channel1');
-    const channel2 = d3.select('#channel2');
-    const channel3 = d3.select('#channel3');
-    const channel4 = d3.select('#channel4');
-    const channel5 = d3.select('#channel5');
-    const channel6 = d3.select('#channel6');
-    this.handle_data = this.d3service.getPatientData('id_patient', 0).subscribe(
-        (response: Response) => {
-          const data = response.json();
-          const duration = data.patientInfo.duration;
-          const array_channel_0 = data.channels[0];
-          const array_channel_1 = data.channels[1];
-          const array_channel_2 = data.channels[2];
-          const array_channel_3 = data.channels[3];
-          const array_channel_4 = data.channels[4];
-          const array_channel_5 = data.channels[5];
-          const array_channel_6 = data.channels[6];
-          this.DrawChannel(channel1, 'line_eeg_1', array_channel_0, 0, duration);
-          this.DrawChannel(channel2, 'line_eeg_2', array_channel_1, 0, duration);
-          this.DrawChannel(channel3, 'line_eeg_3', array_channel_2, 0, duration);
-          this.DrawChannel(channel4, 'line_eeg_4', array_channel_3, 0, duration);
-          this.DrawChannel(channel5, 'line_eeg_5', array_channel_4, 0, duration);
-          this.DrawChannel(channel6, 'line_eeg_6', array_channel_5, 0, duration);
-
-        },
-        (err) => {
-          console.log(err);
-        }
-        );
-  }
-
-  DrawChannel (channel: any, class_eeg: String, data_eeg = [], start_time: number = 0, duration: string = '0') {
-    if (data_eeg.length === 0) {
-    } else {
+  DrawChannel (channel, class_eeg, data_eeg, start_time: number = 0, duration: string = '0') {
+    if (data_eeg.length !== 0) {
         const channel_data = data_eeg.data;
         let i = 0;
         const time_parse      =   d3.timeParse( '%S' );
         const time_format     =   d3.timeFormat( '%S' );
 //        const chart_width     =   +channel.attr('width');
 //        const chart_height    =   +channel.attr('height');
-        console.log(+channel.attr('width'));
+
         const chart_width     =   +channel.attr('width');
         const chart_height    =   150;
         const padding         =   50;
@@ -67,12 +34,11 @@ export class EegContentComponent implements AfterContentInit {
         }
         const x_scale = d3.scaleLinear()
         .domain([
-            0,
+            0, 
             d3.max(channel_data, function(d) {
-                return d.time;
+            return d.time;
             })
-        ])
-        .range([padding, chart_width - padding]);
+        ]).range([padding, chart_width - padding]);
 
         const y_scale = d3.scaleLinear()
         .domain(
@@ -87,10 +53,10 @@ export class EegContentComponent implements AfterContentInit {
         .range([chart_height - padding, padding]);
 
     const line = d3.line()
-    .x(function(d){
+    .x(function(d) {
         return x_scale(d.time);
     })
-    .y(function(d){
+    .y(function(d) {
         return y_scale(d.value);
     });
 
@@ -118,4 +84,36 @@ export class EegContentComponent implements AfterContentInit {
     .attr('d', line);
     }
     }
+
+  ngAfterContentInit() {
+    const channel1 = d3.select('#channel1');
+    const channel2 = d3.select('#channel2');
+    const channel3 = d3.select('#channel3');
+    const channel4 = d3.select('#channel4');
+    const channel5 = d3.select('#channel5');
+    const channel6 = d3.select('#channel6');
+    this.handle_data = this.d3service.getPatientData('id_patient', 0).subscribe(
+        (response: Response) => {
+          const data = response.json();
+          const duration = data.patientInfo.duration;
+          const array_channel_0 = data.channels[0];
+          const array_channel_1 = data.channels[1];
+          const array_channel_2 = data.channels[2];
+          const array_channel_3 = data.channels[3];
+          const array_channel_4 = data.channels[4];
+          const array_channel_5 = data.channels[5];
+          const array_channel_6 = data.channels[6];
+          this.DrawChannel(channel1, 'line_eeg_1', array_channel_0, 0, duration);
+          this.DrawChannel(channel2, 'line_eeg_2', array_channel_1, 0, duration);
+          this.DrawChannel(channel3, 'line_eeg_3', array_channel_2, 0, duration);
+          this.DrawChannel(channel4, 'line_eeg_4', array_channel_3, 0, duration);
+          this.DrawChannel(channel5, 'line_eeg_5', array_channel_4, 0, duration);
+          this.DrawChannel(channel6, 'line_eeg_6', array_channel_5, 0, duration);
+
+        },
+        (err) => {
+            console.log(err);
+        }
+        );
+  }
 }
