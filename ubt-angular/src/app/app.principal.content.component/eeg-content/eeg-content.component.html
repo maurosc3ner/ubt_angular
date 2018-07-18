@@ -1,6 +1,9 @@
-<svg id="channel1" width="350" height="80"></svg>
-<svg id="channel2" width="350" height="80"></svg>
-<svg id="channel3" width="350" height="80"></svg>
-<svg id="channel4" width="350" height="80"></svg>
-<svg id="channel5" width="350" height="80"></svg>
-<svg id="channel6" width="350" height="80"></svg>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col">
+            <button mat-stroked-button>+</button><button mat-stroked-button>-</button>
+        </div>
+    </div>
+    <svg id="channel1" width="800" height="20"></svg>
+    <svg *ngFor="let c of channel_num" id="channel{{c}}"></svg>
+</div>
