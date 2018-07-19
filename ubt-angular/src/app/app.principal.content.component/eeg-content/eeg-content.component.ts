@@ -182,7 +182,7 @@ export class EegContentComponent implements AfterContentInit {
                 .datum(channel_data)
                 .attr('fill', 'none')
                 .attr('class', 'line_eeg_1')
-                .attr('stroke', color_scale[color_pos-1])
+                .attr('stroke', color_scale[color_pos - 1])
                 .attr('d', line);
             }
         }
