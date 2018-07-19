@@ -1,8 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
-import { MatButtonModule } from '@angular/material';
-
 import { AppComponent } from './app.component';
 import { AppTitleBarComponent } from './app.title.bar.component/app.title.bar.component.component';
 import { AppPrincipalContentComponent } from './app.principal.content.component/app.principal.content.component.component';
@@ -24,7 +22,9 @@ import { D3Service } from './app.services/d3/d3.service';
 
 import {
   MatProgressBarModule,
-  MatToolbarModule
+  MatToolbarModule,
+  MatButtonModule,
+  MatIconModule
 } from '@angular/material';
 
 @NgModule({
@@ -49,7 +49,8 @@ import {
     MatProgressBarModule,
     MatToolbarModule,
     HttpModule,
-    MatButtonModule
+    MatButtonModule,
+    MatIconModule
   ],
   providers: [ D3Service ],
   bootstrap: [AppComponent]
