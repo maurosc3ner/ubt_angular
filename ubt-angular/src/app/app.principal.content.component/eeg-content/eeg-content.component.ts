@@ -1,4 +1,4 @@
-import { Component, Input, AfterContentInit } from '@angular/core';
+import { Component, Input, AfterContentInit, OnChanges } from '@angular/core';
 import { D3Service } from '../../app.services/d3/d3.service';
 import { Response } from '@angular/http';
 import * as d3 from 'd3';
@@ -9,57 +9,40 @@ import * as d3 from 'd3';
   styleUrls: ['./eeg-content.component.css']
 })
 
-export class EegContentComponent implements AfterContentInit {
+export class EegContentComponent implements AfterContentInit, OnChanges {
   @Input() EEG_Status_eeg: Boolean;
   handle_data: any;
   channel_num: Array<number> = [2, 3, 4];
   scale_multiplier = [20, 50, 200];
   multiplier_pos = 0;
   color_scale: Array<string> = [
-      'yellow',
-      'blue',
-      'red',
-      'green',
-      'gray',
-      'yellow',
-      'blue',
-      'red',
-      'green',
-      'gray',
-      'yellow',
-      'blue',
-      'red',
-      'green',
-      'gray',
-      'yellow',
-      'blue',
-      'red',
-      'green',
-      'gray'
+      '#be01ae',
+      '#046102',
+      '#036105',
+      '#0604ae',
+      '#be6105',
+      '#066107',
+      '#be07ae',
+      '#086108',
+      '#0961ae',
+      '#be10ae',
+      '#be6111',
+      '#1261ae',
+      '#be13ae',
+      '#be6114',
+      '#1561ae',
+      '#be16ae',
+      '#be6117',
+      '#1861ae',
+      '#be19ae',
+      '#be6120'
   ];
   constructor(private d3service: D3Service) {
   }
   ngAfterContentInit() {
-    const channel_array: Array<any> = [];
-    for (let n = 1 ; n < 2; n++) {
-        channel_array.push(d3.select('#channel' + n));
-        }
-        this.handle_data = this.d3service.getPatientData('id_patient', 0).subscribe(
-            (response: Response) => {
-              const data = response.json();
-              const duration = data.patientInfo.duration;
-              let x_axis  = false;
-              for (const sample of channel_array) {
-                for (let j = 0 ; j < data.channels.length; j++) {
-                    if (j === 0) {x_axis = true; } else { x_axis = false; }
-                   this.DrawChannel(sample, 'line_eeg_1', data.channels[j], 0, duration, x_axis, false, j);
-                }
-              }
-            },
-            (err) => {
-                console.log(err);
-            }
-        );
+        this.paint_eeg();
+    }
+    ngOnChanges() {
     }
 
     click_multiplier(event, direction: boolean) {
@@ -77,6 +60,10 @@ export class EegContentComponent implements AfterContentInit {
                 this.multiplier_pos--;
             }
         }
+        this.paint_eeg();
+    }
+
+    paint_eeg() {
         const channel_array: Array<any> = [];
         for (let n = 1 ; n < 2; n++) {
             d3.select('#channel' + n).selectAll('path').remove();
@@ -88,10 +75,11 @@ export class EegContentComponent implements AfterContentInit {
                   const data = response.json();
                   const duration = data.patientInfo.duration;
                   let x_axis  = false;
+                  let y_axis  = false;
                   for (const sample of channel_array) {
                     for (let j = 0 ; j < data.channels.length; j++) {
-                        if (j === 0) {x_axis = true; } else { x_axis = false; }
-                       this.DrawChannel(sample, 'line_eeg_1', data.channels[j], 0, duration, x_axis, false, j);
+                        if (j === 0) {x_axis = true; y_axis = true; } else { x_axis = false; y_axis = false; }
+                       this.DrawChannel(sample, 'line_eeg_1', data.channels[j], 0, duration, x_axis, y_axis, j);
                     }
                   }
                 },
@@ -111,7 +99,9 @@ export class EegContentComponent implements AfterContentInit {
         y_axis_status: boolean = true,
         multiplier: number = 1,
         scale_multiplier = this.scale_multiplier[this.multiplier_pos],
-        color_scale = this.color_scale) {
+        color_scale = this.color_scale,
+        width = 1100,
+        height = 600) {
             if (data_eeg.length !== 0) {
                 const channel_data: Array<JSON> = data_eeg.data;
                 let i = 0;
@@ -122,8 +112,8 @@ export class EegContentComponent implements AfterContentInit {
                 console.log(color_pos);
                 //        const chart_width     =   +channel.attr('width');
                 //        const chart_height    =   +channel.attr('height');
-                const chart_width     =   +channel.attr('width');
-                const chart_height    =   600;
+                const chart_width     =   width;
+                const chart_height    =   height;
                 const padding         =   20;
                 for (const sample of channel_data) {
                     const sample_time: number = Math.round(1000 * i * (1 / data_eeg.samplefrequency))  / 1000;
@@ -144,12 +134,12 @@ export class EegContentComponent implements AfterContentInit {
                             return d['value'] * 2;
                         }),
                         d3.max(channel_data, function(d) {
-                            return d['value'] * scale_multiplier;
+                            return d['value'] * scale_multiplier * 0.8;
                         })
                     ])
                 .range([chart_height - padding, padding]);
                 for (const sample of channel_data) {
-                    sample['value'] = sample['value'] + multiplier * 1.1 * scale_multiplier;
+                    sample['value'] = sample['value'] + multiplier * scale_multiplier;
                 }
                 const line = d3.line()
                 .x(function(d) {
