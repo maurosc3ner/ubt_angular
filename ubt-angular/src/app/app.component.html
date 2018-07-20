@@ -8,10 +8,10 @@
 </div>
 <div class="row main-container">
   <div class="col">
-      <app-principal-content-component [Status]='StatusControl'></app-principal-content-component>
+      <app-principal-content-component [Status]='StatusControl' [Command]='CommandControl'></app-principal-content-component>
   </div>
 </div>
 <div class="row main-container" style="padding: 10px 0px 0px 0px">
   <div class="col">
-    <app-control-bar-component (StatusEvent)='onChangeStatus($event)'></app-control-bar-component>
+    <app-control-bar-component (StatusEvent)='onChangeStatus($event)'  (CoomandEvent)='onCommandReceived($event)'></app-control-bar-component>
 </div>

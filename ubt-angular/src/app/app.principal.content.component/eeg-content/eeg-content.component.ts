@@ -10,41 +10,50 @@ import * as d3 from 'd3';
 })
 
 export class EegContentComponent implements AfterContentInit, OnChanges {
-  @Input() EEG_Status_eeg: Boolean;
-  handle_data: any;
-  channel_num: Array<number> = [2, 3, 4];
-  scale_multiplier = [20, 50, 200];
-  multiplier_pos = 0;
-  color_scale: Array<string> = [
-      '#be01ae',
-      '#046102',
-      '#036105',
-      '#0604ae',
-      '#be6105',
-      '#066107',
-      '#be07ae',
-      '#086108',
-      '#0961ae',
-      '#be10ae',
-      '#be6111',
-      '#1261ae',
-      '#be13ae',
-      '#be6114',
-      '#1561ae',
-      '#be16ae',
-      '#be6117',
-      '#1861ae',
-      '#be19ae',
-      '#be6120'
-  ];
-  constructor(private d3service: D3Service) {
-  }
-  ngAfterContentInit() {
-        this.paint_eeg();
+    @Input() EEG_Status_eeg: boolean;
+    @Input() Command_eeg: Array<number>;
+
+    handle_data: any;
+    channel_num: Array<number> = [2, 3, 4];
+    scale_multiplier = [20, 50, 200];
+    multiplier_pos = 0;
+    color_scale: Array<string> = [
+        '#be01ae',
+        '#046102',
+        '#036105',
+        '#0604ae',
+        '#be6105',
+        '#066107',
+        '#be07ae',
+        '#086108',
+        '#0961ae',
+        '#be10ae',
+        '#be6111',
+        '#1261ae',
+        '#be13ae',
+        '#be6114',
+        '#1561ae',
+        '#be16ae',
+        '#be6117',
+        '#1861ae',
+        '#be19ae',
+        '#be6120'
+    ];
+    constructor(private d3service: D3Service) {
+    }
+    ngAfterContentInit() {
     }
     ngOnChanges() {
+        if (this.Command_eeg == null) {} else {
+            console.log(this.Command_eeg[0] , this.Command_eeg[1]);
+            if (this.Command_eeg[0] === 1 ) {
+                for (let n = 1 ; n < 2; n++) {
+                    d3.select('#channel' + n).selectAll('path').remove();
+                    d3.select('#channel' + n).selectAll('g').remove();
+                }
+            }
+        }
     }
-
     click_multiplier(event, direction: boolean) {
         if (direction) {
             if (this.multiplier_pos === 2) {
@@ -62,7 +71,6 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
         }
         this.paint_eeg();
     }
-
     paint_eeg() {
         const channel_array: Array<any> = [];
         for (let n = 1 ; n < 2; n++) {
@@ -88,7 +96,6 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
                 }
             );
     }
-
     DrawChannel (
         channel,
         class_eeg,
@@ -109,7 +116,6 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
                 const time_format     =   d3.timeFormat( '%S' );
                 let color_pos = 0;
                 if (color_scale.length <= multiplier) {color_pos = color_scale.length; } else {color_pos = multiplier; }
-                console.log(color_pos);
                 //        const chart_width     =   +channel.attr('width');
                 //        const chart_height    =   +channel.attr('height');
                 const chart_width     =   width;

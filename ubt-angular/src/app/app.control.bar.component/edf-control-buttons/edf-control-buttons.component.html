@@ -1,28 +1,28 @@
 <div class="container">
   <div class="row main-container">
     <div class="col-3 col-md-3">
-      <button class="btn">
+      <button class="btn" (click)="Backward($event)">
         <img src="assets/control-bar/back.png" alt="Rewind">
       </button>
     </div>
     <div class="col-3 col-md-3">
-      <button class="btn">
+      <button class="btn" (click)="Forward($event)">
         <img src="assets/control-bar/next.png" alt="Rewind">
       </button>
     </div>
     <div class="col-3 col-md-3">
-      <button class="btn">
+      <button class="btn" (click)="changeStep($event, false)">
         <img src="assets/control-bar/minus.png" alt="Rewind">
       </button>
     </div>
     <div class="col-3 col-md-3">
-        <button class="btn">
+        <button class="btn" (click)="changeStep($event, true)">
           <img src="assets/control-bar/plus.png" alt="Rewind">
         </button>
       </div>
   </div>
   <div class="row main-container">
     <div class="col-6 col-md-6 text-center"><p class="speed">move control</p></div>
-    <div class="col-6 col-md-6 text-center"><p class="speed">10x</p></div>
+    <div class="col-6 col-md-6 text-center"><p class="speed">{{this.step[this.stepPos]}}x</p></div>
   </div>
 </div>
