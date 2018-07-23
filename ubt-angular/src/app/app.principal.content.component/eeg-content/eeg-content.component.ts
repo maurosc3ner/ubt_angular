@@ -42,6 +42,10 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
     constructor(private d3service: D3Service) {
     }
     ngAfterContentInit() {
+        this.handle_data = this.d3service.getServerData('id_patient', 0).subscribe(
+            (response: Response) => {
+                console.log(response);
+            });
     }
     ngOnChanges() {
         if (this.Command_eeg == null) {} else {
