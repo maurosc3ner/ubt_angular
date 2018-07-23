@@ -9,16 +9,25 @@ export class EdfMenuBarComponent {
   @Output() esiclick = new EventEmitter();
   @Output() planeclick = new EventEmitter();
   @Output() annoclick = new EventEmitter();
-
+  @Output() clearclick = new EventEmitter();
+  @Output() filterclick = new EventEmitter();
+  @Output() openclick = new EventEmitter();
   ESILoad(event) {
     this.esiclick.emit(event);
   }
-
   PlaneLoad(event) {
     this.planeclick.emit(event);
   }
-
   AnnoLoad(event) {
     this.annoclick.emit(event);
+  }
+  Clear(event) {
+    this.clearclick.emit(event);
+  }
+  Filter(event) {
+    this.filterclick.emit(event);
+  }
+  OpenEDF(event) {
+    this.openclick.emit(event);
   }
 }

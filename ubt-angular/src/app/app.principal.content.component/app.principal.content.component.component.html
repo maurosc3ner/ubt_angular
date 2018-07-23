@@ -4,7 +4,7 @@
         <app-plane-view [srcImage]="srcImageAxial"></app-plane-view>
     </div>
     <div class="container-fluid eeg-content-container" *ngIf="visEEG" [ngClass]="{'layout1-0':Status === 1}">
-      <app-eeg-content></app-eeg-content>
+      <app-eeg-content  [Command_eeg]='Command_Control'></app-eeg-content>
     </div>
     <div class="col topo-plot-container" *ngIf="visTopoPLot">
       <app-topo-plot></app-topo-plot>

@@ -6,13 +6,15 @@ import { Component, Input, OnInit, OnChanges } from '@angular/core';
   styleUrls: ['./app.principal.content.component.component.css']
 })
 export class AppPrincipalContentComponent implements OnInit, OnChanges {
-  @Input() Status: Number;
+  @Input() Status: number;
+  @Input() Command = -1;
 
-  visAnno: Boolean;
-  visEEG: Boolean;
-  visESI: Boolean;
-  visTopoPLot: Boolean;
-  visPlane: Boolean;
+  visAnno: boolean;
+  visEEG: boolean;
+  visESI: boolean;
+  visTopoPLot: boolean;
+  visPlane: boolean;
+  Command_Control: number;
 
   srcImageSagital: String = './assets/brain-dummy/MRISagital.png';
   srcImageAxial: String = './assets/brain-dummy/MRIAxial.png';
@@ -28,6 +30,7 @@ export class AppPrincipalContentComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges() {
+    if (this.Command !== -1) {this.Command_Control = this.Command; }
     if (this.Status === 0) {
       this.visEEG = true;
       this.visESI = false;
@@ -39,6 +42,11 @@ export class AppPrincipalContentComponent implements OnInit, OnChanges {
       this.visPlane = false;
     }
     if (this.Status === 2) {
+      this.visEEG = false;
+      this.visESI = true;
+      this.visPlane = true;
+    }
+    if (this.Status === 3) {
       this.visEEG = false;
       this.visESI = true;
       this.visPlane = true;

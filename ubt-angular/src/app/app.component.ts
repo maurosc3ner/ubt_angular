@@ -7,8 +7,13 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'app';
-  public StatusControl: Number;
+  public StatusControl = 0;
+  public CommandControl;
+
   onChangeStatus(event) {
     this.StatusControl = event;
+  }
+  onCommandReceived(event) {
+    this.CommandControl = event;
   }
 }
