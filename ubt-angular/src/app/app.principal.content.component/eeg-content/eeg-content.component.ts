@@ -49,11 +49,16 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
                 console.log(response.json());
             });
         */
+       this.paint_eeg('sujeto_base');
     }
 
     ngOnChanges() {
-        this.delete_channel();
-        this.paint_eeg('sujeto_base');
+        if (this.Command_eeg == null) {} else {
+            console.log(this.Command_eeg[0] , this.Command_eeg[1]);
+            if (this.Command_eeg[0] === 1 ) {
+                this.delete_channel();
+            }
+        }
     }
     click_multiplier(event, direction: boolean) {
         if (direction) {
@@ -73,14 +78,9 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
         this.paint_eeg('sujeto_base');
     }
     delete_channel() {
-        if (this.Command_eeg == null) {} else {
-        console.log(this.Command_eeg[0] , this.Command_eeg[1]);
-        if (this.Command_eeg[0] === 1 ) {
             for (let n = 1 ; n < 2; n++) {
                 d3.select('#channel' + n).selectAll('path').remove();
                 d3.select('#channel' + n).selectAll('g').remove();
-            }
-        }
         }
     }
     paint_eeg(filename: string) {
