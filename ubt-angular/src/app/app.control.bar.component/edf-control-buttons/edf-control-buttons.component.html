@@ -1,28 +1,37 @@
 <div class="container">
   <div class="row main-container">
     <div class="col-3 col-md-3">
-      <button class="btn" (click)="Backward($event)">
-        <img src="assets/control-bar/back.png" alt="Rewind">
+      <button mat-stroked-button (click)="Backward($event)" class="material-cust-small-button">
+        <mat-icon class="material-cust-small-button-icon">arrow_back</mat-icon>
       </button>
     </div>
     <div class="col-3 col-md-3">
-      <button class="btn" (click)="Forward($event)">
-        <img src="assets/control-bar/next.png" alt="Rewind">
+      <button mat-stroked-button (click)="Forward($event)" class="material-cust-small-button">
+        <mat-icon class="material-cust-small-button-icon">arrow_forward</mat-icon>
       </button>
     </div>
     <div class="col-3 col-md-3">
-      <button class="btn" (click)="changeStep($event, false)">
-        <img src="assets/control-bar/minus.png" alt="Rewind">
-      </button>
+        <button mat-stroked-button (click)="changeStep($event, false)" class="material-cust-small-button">
+            <mat-icon class="material-cust-small-button-icon">remove</mat-icon>
+          </button>
     </div>
     <div class="col-3 col-md-3">
-        <button class="btn" (click)="changeStep($event, true)">
-          <img src="assets/control-bar/plus.png" alt="Rewind">
-        </button>
+        <button mat-stroked-button (click)="changeStep($event, true)" class="material-cust-small-button">
+            <mat-icon class="material-cust-small-button-icon">add</mat-icon>
+          </button>
       </div>
   </div>
   <div class="row main-container">
-    <div class="col-6 col-md-6 text-center"><p class="speed">move control</p></div>
-    <div class="col-6 col-md-6 text-center"><p class="speed">{{this.step[this.stepPos]}}x</p></div>
+    <div class="col-6 col-md-6 text-center"><p class="speed"></p></div>
+    <div class="col-6 col-md-6 text-center">
+      <p class="speed">
+        {{this.step[this.stepPos]}}x</p>
+    </div>
   </div>
 </div>
+
+
+
+
+
+ 

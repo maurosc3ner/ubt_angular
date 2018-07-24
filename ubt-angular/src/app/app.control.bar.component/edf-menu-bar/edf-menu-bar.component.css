@@ -33,10 +33,21 @@
       border: 1px solid red;
     }
 
-    .container .row {
-        height: 28px;
-      }
+  .speed p{
+      font-size: 8px;
+      text-align: justify;
+      padding-left: 50%;
+      height: 15px;
+    }
 
-  .speed {
-      font-size: 9px;
-  }
+    .material-cust-small-button {
+      width: auto;
+      min-width: 1%;
+      vertical-align: middle;
+    }
+    
+    .material-cust-small-button-icon {
+      width: auto;
+      min-width: 1%;
+      vertical-align: middle;
+    }

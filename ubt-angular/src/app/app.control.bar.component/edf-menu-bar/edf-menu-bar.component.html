@@ -1,54 +1,54 @@
 <div class="container">
-  <div class="row main-container align-items-center">
-    <div class="col-2 col-md-2">
-      <p class="speed text-center">View Anno</p>
+  <div class="row">
+    <div class="col-2 col-md-2 speed">
+      <p>View Anno</p>
     </div>
-    <div class="col-2 col-md-2">
-      <p class="speed text-center">Open EDF</p>
+    <div class="col-2 col-md-2 speed">
+      <p class="speed">Open EDF</p>
     </div>
-    <div class="col-2 col-md-2">
-      <p class="speed text-center">Clear</p>
+    <div class="col-2 col-md-2 speed">
+      <p>Clear</p>
     </div>
-    <div class="col-2 col-md-2"> 
-      <p class="speed text-center">Filter</p>
+    <div class="col-2 col-md-2 speed"> 
+      <p>Filter</p>
     </div>
-    <div class="col-2 col-md-2">
-      <p class="speed text-center">ESI</p>
+    <div class="col-2 col-md-2 speed">
+      <p>ESI</p>
     </div>
-    <div class="col-2 col-md-2">
-        <p class="speed text-center">Load MRI</p>
+    <div class="col-2 col-md-2 speed">
+      <p>Load MRI</p>
     </div>
   </div>
   <div class="row main-container">
     <div class="col-2 col-md-2">
-      <button class="btn" (click)="AnnoLoad()">
-        <img src="assets/control-bar/if_1976055.png" alt="Rewind">
+      <button mat-stroked-button (click)="AnnoLoad()" class="material-cust-small-button">
+        <mat-icon class="material-cust-small-button-icon">edit</mat-icon>
       </button>
     </div>
     <div class="col-2 col-md-2">
-      <button class="btn" (click)="OpenEDF()">
-        <img src="assets/control-bar/if_file-upload_326640.png" alt="Rewind">
+      <button mat-stroked-button (click)="OpenEDF()" class="material-cust-small-button">
+        <mat-icon class="material-cust-small-button-icon">folder_open</mat-icon>
       </button>
     </div>
     <div class="col-2 col-md-2">
-      <button class="btn" (click)="Clear()">
-        <img src="assets/control-bar/if_CircledMinus_183317.png" alt="Rewind">
+      <button mat-stroked-button (click)="Clear()" class="material-cust-small-button">
+        <mat-icon class="material-cust-small-button-icon">remove</mat-icon>
       </button>
     </div>
     <div class="col-2 col-md-2">
-      <button class="btn" (click)="Filter()">
-        <img src="assets/control-bar/if_filter_383135.png" alt="Rewind">
+      <button mat-stroked-button (click)="Filter()" class="material-cust-small-button">
+        <mat-icon class="material-cust-small-button-icon">filter</mat-icon>
       </button>
     </div>
     <div class="col-2 col-md-2">
-      <button class="btn" (click)="ESILoad()">
-        <img src="assets/control-bar/brain.png" alt="Rewind">
+      <button mat-stroked-button (click)="ESILoad()" class="material-cust-small-button">
+        <mat-icon class="material-cust-small-button-icon">image_search</mat-icon>
       </button>
     </div>
     <div class="col-2 col-md-2">
-        <button class="btn" (click)="PlaneLoad()">
-          <img src="assets/control-bar/mri.png" alt="Rewind">
-        </button>
+      <button mat-stroked-button (click)="PlaneLoad()" class="material-cust-small-button">
+        <mat-icon class="material-cust-small-button-icon">image</mat-icon>
+      </button>
     </div>  
   </div>
 </div>
