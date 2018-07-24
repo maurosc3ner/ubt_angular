@@ -21,6 +21,9 @@ import { HttpModule } from '@angular/http';
 
 import { D3Service } from './app.services/d3/d3.service';
 
+import { NgIoModule, NgIoConfig } from 'ng-io';
+const config: NgIoConfig = { url: 'http://localhost:3300', options: {} };
+
 import {
   MatProgressBarModule,
   MatToolbarModule,
@@ -52,7 +55,8 @@ import {
     HttpClientModule,
     MatButtonModule,
     MatIconModule,
-    HttpModule
+    HttpModule,
+    NgIoModule.forRoot(config)
   ],
   providers: [ D3Service ],
   bootstrap: [AppComponent]

@@ -12,7 +12,6 @@ import * as d3 from 'd3';
 export class EegContentComponent implements AfterContentInit, OnChanges {
     @Input() EEG_Status_eeg: boolean;
     @Input() Command_eeg: Array<number>;
-
     handle_data: any;
     channel_num: Array<number> = [2, 3, 4];
     scale_multiplier = [20, 50, 200];
@@ -42,11 +41,10 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
     constructor(private d3service: D3Service) {
     }
     ngAfterContentInit() {
-        this.handle_data = this.d3service.getServerData('id_patient', 0).subscribe(
-            (response: Response) => {
-                console.log(response);
-            });
+//        this.handle_data = this.d3service.getServerData('id_patient', 0).subscribe((response: Response) => {console.log(response); });
+        this.paint_eeg('sujeto_base');
     }
+
     ngOnChanges() {
         if (this.Command_eeg == null) {} else {
             console.log(this.Command_eeg[0] , this.Command_eeg[1]);
@@ -73,25 +71,26 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
                 this.multiplier_pos--;
             }
         }
-        this.paint_eeg();
+        this.paint_eeg('sujeto_base');
     }
-    paint_eeg() {
+    paint_eeg(filename: string) {
         const channel_array: Array<any> = [];
         for (let n = 1 ; n < 2; n++) {
             d3.select('#channel' + n).selectAll('path').remove();
             d3.select('#channel' + n).selectAll('g').remove();
             channel_array.push(d3.select('#channel' + n));
         }
-            this.handle_data = this.d3service.getPatientData('id_patient', 0).subscribe(
+//        this.handle_data = this.d3service.getPatientData('id_patient', 0).subscribe(
+        this.handle_data = this.d3service.getPatientInfo(filename).subscribe(
                 (response: Response) => {
-                  const data = response.json();
-                  const duration = data.patientInfo.duration;
+                  const data = response;
+                  const duration = data['patientInfo']['duration'];
                   let x_axis  = false;
                   let y_axis  = false;
                   for (const sample of channel_array) {
-                    for (let j = 0 ; j < data.channels.length; j++) {
+                    for (let j = 0 ; j < data['channels'].length; j++) {
                         if (j === 0) {x_axis = true; y_axis = true; } else { x_axis = false; y_axis = false; }
-                       this.DrawChannel(sample, 'line_eeg_1', data.channels[j], 0, duration, x_axis, y_axis, j);
+                       this.DrawChannel(sample, 'line_eeg_1', data['channels'][j], 0, duration, x_axis, y_axis, j);
                     }
                   }
                 },
