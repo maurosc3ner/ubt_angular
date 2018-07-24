@@ -41,20 +41,19 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
     constructor(private d3service: D3Service) {
     }
     ngAfterContentInit() {
-//        this.handle_data = this.d3service.getServerData('id_patient', 0).subscribe((response: Response) => {console.log(response); });
-        this.paint_eeg('sujeto_base');
+        /*
+        this.handle_data = this.d3service.getPatientData('id_patient', 0)
+        .subscribe(
+            (response: Response) => {
+                console.log('getpatient');
+                console.log(response.json());
+            });
+        */
     }
 
     ngOnChanges() {
-        if (this.Command_eeg == null) {} else {
-            console.log(this.Command_eeg[0] , this.Command_eeg[1]);
-            if (this.Command_eeg[0] === 1 ) {
-                for (let n = 1 ; n < 2; n++) {
-                    d3.select('#channel' + n).selectAll('path').remove();
-                    d3.select('#channel' + n).selectAll('g').remove();
-                }
-            }
-        }
+        this.delete_channel();
+        this.paint_eeg('sujeto_base');
     }
     click_multiplier(event, direction: boolean) {
         if (direction) {
@@ -73,6 +72,17 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
         }
         this.paint_eeg('sujeto_base');
     }
+    delete_channel() {
+        if (this.Command_eeg == null) {} else {
+        console.log(this.Command_eeg[0] , this.Command_eeg[1]);
+        if (this.Command_eeg[0] === 1 ) {
+            for (let n = 1 ; n < 2; n++) {
+                d3.select('#channel' + n).selectAll('path').remove();
+                d3.select('#channel' + n).selectAll('g').remove();
+            }
+        }
+        }
+    }
     paint_eeg(filename: string) {
         const channel_array: Array<any> = [];
         for (let n = 1 ; n < 2; n++) {
@@ -80,9 +90,9 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
             d3.select('#channel' + n).selectAll('g').remove();
             channel_array.push(d3.select('#channel' + n));
         }
-//        this.handle_data = this.d3service.getPatientData('id_patient', 0).subscribe(
         this.handle_data = this.d3service.getPatientInfo(filename).subscribe(
                 (response: Response) => {
+                  console.log(response);
                   const data = response;
                   const duration = data['patientInfo']['duration'];
                   let x_axis  = false;
@@ -93,6 +103,7 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
                        this.DrawChannel(sample, 'line_eeg_1', data['channels'][j], 0, duration, x_axis, y_axis, j);
                     }
                   }
+                  this.handle_data.unsubscribe();
                 },
                 (err) => {
                     console.log(err);
