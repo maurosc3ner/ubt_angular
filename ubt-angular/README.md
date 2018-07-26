@@ -32,7 +32,10 @@ Run `npm install` to install the requirements
 Run `ng serve` to run the server for the app 
 
 ## To test the app with backend
-Run `npm install` to install updated requirements
-Run `ng build` to update last changes of the app
-Run `npm run start:server` to run the node server and the angular app
-go to `http:localhost:3300` in the browser to use the app
+Run `npm install` to install updated requirements. 
+
+Run `ng build` to update last changes of the app. 
+
+Run `npm run start:server` to run the node server and the angular app.
+
+go to `http:localhost:3300` in the browser to use the app.
