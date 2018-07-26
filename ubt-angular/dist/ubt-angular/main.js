@@ -862,6 +862,7 @@ var EegContentComponent = /** @class */ (function () {
             if (this.Command_eeg[0] === 1) {
                 this.delete_channel();
             }
+            this.Command_eeg = null;
         }
     };
     EegContentComponent.prototype.click_multiplier = function (event, direction) {

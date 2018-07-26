@@ -58,6 +58,7 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
             if (this.Command_eeg[0] === 1 ) {
                 this.delete_channel();
             }
+            this.Command_eeg = null;
         }
     }
     click_multiplier(event, direction: boolean) {
