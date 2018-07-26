@@ -669,7 +669,7 @@ var AppModule = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = ".content-panel {\r\n  background-color: rgb(25, 25, 25);\r\n}\r\n\r\n.eeg-content-container {\r\n  background-color: rgb(25, 25, 25);\r\n}\r\n\r\n.topo-plot-container {\r\n  background-color: rgb(255, 0, 255);\r\n}\r\n\r\n.td-content-container {\r\n  background-color: rgb(50, 50, 50);\r\n  border-style: solid;\r\n  border-width: 1px;\r\n  border-color: blue;\r\n}\r\n\r\n.plane-view-container {\r\n  background-color: rgb(0, 0, 0);\r\n  border-style: solid;\r\n  border-width: 1px;\r\n  border-color: red;\r\n}\r\n\r\n.layout0 {\r\n  width: 100%;\r\n  height: 350px;\r\n}\r\n\r\n.layout1-0 {\r\n  width: 40%;\r\n  height: 530px;\r\n}\r\n\r\n.layout-2-1 {\r\n  height: 530px;\r\n}"
+module.exports = ".content-panel {\r\n  background-color: rgb(25, 25, 25);\r\n}\r\n\r\n.eeg-content-container {\r\n  background-color: rgb(25, 25, 25);\r\n}\r\n\r\n.topo-plot-container {\r\n  background-color: rgb(255, 0, 255);\r\n}\r\n\r\n.td-content-container {\r\n  background-color: rgb(50, 50, 50);\r\n  border-style: solid;\r\n  border-width: 1px;\r\n  border-color: blue;\r\n}\r\n\r\n.plane-view-container {\r\n  background-color: rgb(0, 0, 0);\r\n  border-style: solid;\r\n  border-width: 1px;\r\n  border-color: red;\r\n}\r\n\r\n.layout0 {\r\n  width: 100%;\r\n  height: 530px;\r\n}\r\n\r\n.layout1-0 {\r\n  width: 40%;\r\n  height: 530px;\r\n}\r\n\r\n.layout-2-1 {\r\n  height: 530px;\r\n}"
 
 /***/ }),
 
@@ -680,7 +680,7 @@ module.exports = ".content-panel {\r\n  background-color: rgb(25, 25, 25);\r\n}\
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container content-panel\">\r\n  <div class=\"row main-container\" [ngClass]=\"{'layout-2-1':Status === 2}\">\r\n    <div class=\"col plane-view-container\" *ngIf=\"visPlane\">\r\n        <app-plane-view [srcImage]=\"srcImageAxial\"></app-plane-view>\r\n    </div>\r\n    <div class=\"container-fluid eeg-content-container\" *ngIf=\"visEEG\" [ngClass]=\"{'layout1-0':Status === 1}\">\r\n      <app-eeg-content  [Command_eeg]='Command_Control'></app-eeg-content>\r\n    </div>\r\n    <div class=\"col topo-plot-container\" *ngIf=\"visTopoPLot\">\r\n      <app-topo-plot></app-topo-plot>\r\n    </div>\r\n    <div class=\"col td-content-container\" *ngIf=\"visESI\">\r\n      <app-td-content></app-td-content>\r\n    </div>\r\n  </div>\r\n  <div class=\"row main-container\" *ngIf=\"visPlane\">\r\n    <div class=\"col plane-view-container\">\r\n        <app-plane-view [srcImage]=\"srcImageSagital\"></app-plane-view>\r\n    </div>\r\n    <div class=\"col plane-view-container\">\r\n        <app-plane-view [srcImage]=\"srcImageCoronal\"></app-plane-view>\r\n    </div>\r\n  </div>\r\n</div>"
+module.exports = "<div class=\"container content-panel\">\r\n  <div class=\"row main-container\" [ngClass]=\"{'layout-2-1':Status === 2}\">\r\n    <div class=\"col plane-view-container\" *ngIf=\"visPlane\">\r\n        <app-plane-view [srcImage]=\"srcImageAxial\"></app-plane-view>\r\n    </div>\r\n    <div class=\"container-fluid eeg-content-container\" *ngIf=\"visEEG\" [ngClass]=\"{'layout1-0':Status === 1}\">\r\n      <app-eeg-content  [Command_eeg]='Command_Control' [EEG_Status_eeg]='Status'></app-eeg-content>\r\n    </div>\r\n    <div class=\"col topo-plot-container\" *ngIf=\"visTopoPLot\">\r\n      <app-topo-plot></app-topo-plot>\r\n    </div>\r\n    <div class=\"col td-content-container\" *ngIf=\"visESI\">\r\n      <app-td-content></app-td-content>\r\n    </div>\r\n  </div>\r\n  <div class=\"row main-container\" *ngIf=\"visPlane\">\r\n    <div class=\"col plane-view-container\">\r\n        <app-plane-view [srcImage]=\"srcImageSagital\"></app-plane-view>\r\n    </div>\r\n    <div class=\"col plane-view-container\">\r\n        <app-plane-view [srcImage]=\"srcImageCoronal\"></app-plane-view>\r\n    </div>\r\n  </div>\r\n</div>"
 
 /***/ }),
 
@@ -852,10 +852,11 @@ var EegContentComponent = /** @class */ (function () {
                 console.log(response.json());
             });
         */
-        this.paint_eeg('sujeto_base');
     };
     EegContentComponent.prototype.ngOnChanges = function () {
-        if (this.Command_eeg == null) { }
+        if (this.Command_eeg == null) {
+            this.paint_eeg('sujeto_base', this.CheckStatus()[0], this.CheckStatus()[1]);
+        }
         else {
             console.log(this.Command_eeg[0], this.Command_eeg[1]);
             if (this.Command_eeg[0] === 1) {
@@ -880,7 +881,7 @@ var EegContentComponent = /** @class */ (function () {
                 this.multiplier_pos--;
             }
         }
-        this.paint_eeg('sujeto_base');
+        this.paint_eeg('sujeto_base', this.CheckStatus()[0], this.CheckStatus()[1]);
     };
     EegContentComponent.prototype.delete_channel = function () {
         for (var n = 1; n < 2; n++) {
@@ -888,8 +889,10 @@ var EegContentComponent = /** @class */ (function () {
             d3__WEBPACK_IMPORTED_MODULE_2__["select"]('#channel' + n).selectAll('g').remove();
         }
     };
-    EegContentComponent.prototype.paint_eeg = function (filename) {
+    EegContentComponent.prototype.paint_eeg = function (filename, width, height) {
         var _this = this;
+        if (width === void 0) { width = 1100; }
+        if (height === void 0) { height = 600; }
         var channel_array = [];
         for (var n = 1; n < 2; n++) {
             d3__WEBPACK_IMPORTED_MODULE_2__["select"]('#channel' + n).selectAll('path').remove();
@@ -913,7 +916,7 @@ var EegContentComponent = /** @class */ (function () {
                         x_axis = false;
                         y_axis = false;
                     }
-                    _this.DrawChannel(sample, 'line_eeg_1', data['channels'][j], 0, duration, x_axis, y_axis, j);
+                    _this.DrawChannel(sample, 'line_eeg_1', data['channels'][j], 0, duration, x_axis, y_axis, j, _this.scale_multiplier[_this.multiplier_pos], _this.color_scale, width, height);
                 }
             }
             _this.handle_data.unsubscribe();
@@ -927,10 +930,6 @@ var EegContentComponent = /** @class */ (function () {
         if (x_axis_status === void 0) { x_axis_status = false; }
         if (y_axis_status === void 0) { y_axis_status = true; }
         if (multiplier === void 0) { multiplier = 1; }
-        if (scale_multiplier === void 0) { scale_multiplier = this.scale_multiplier[this.multiplier_pos]; }
-        if (color_scale === void 0) { color_scale = this.color_scale; }
-        if (width === void 0) { width = 1100; }
-        if (height === void 0) { height = 600; }
         if (data_eeg.length !== 0) {
             var channel_data = data_eeg.data;
             var i = 0;
@@ -1010,9 +1009,24 @@ var EegContentComponent = /** @class */ (function () {
                 .attr('d', line);
         }
     };
+    EegContentComponent.prototype.CheckStatus = function () {
+        console.log(this.EEG_Status_eeg);
+        if (this.EEG_Status_eeg === 0) {
+            return [1100, 530];
+        }
+        if (this.EEG_Status_eeg === 1) {
+            return [430, 480];
+        }
+        if (this.EEG_Status_eeg === 2) {
+            return [1100, 530];
+        }
+        if (this.EEG_Status_eeg === 3) {
+            return [1100, 530];
+        }
+    };
     __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
-        __metadata("design:type", Boolean)
+        __metadata("design:type", Number)
     ], EegContentComponent.prototype, "EEG_Status_eeg", void 0);
     __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
@@ -1347,7 +1361,8 @@ var D3Service = /** @class */ (function () {
             'fileName': msg
         };
         this.socket.emit('load_edf', payload);
-        return this.socket.fromEvent('load_edf');
+        var response = this.socket.fromEvent('load_edf');
+        return response;
     };
     D3Service = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"])(),

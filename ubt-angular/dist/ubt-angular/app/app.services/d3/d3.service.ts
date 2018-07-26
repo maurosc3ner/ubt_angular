@@ -32,6 +32,7 @@ export class D3Service {
             'fileName': msg
         };
          this.socket.emit('load_edf', payload);
-         return this.socket.fromEvent('load_edf');
+         const response = this.socket.fromEvent('load_edf');
+         return response;
     }
 }
