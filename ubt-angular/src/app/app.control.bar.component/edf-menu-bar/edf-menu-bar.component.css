@@ -51,3 +51,14 @@
       min-width: 1%;
       vertical-align: middle;
     }
+
+    .material-cust-small-input .inputfile + label {
+      width: 100px;
+      min-width: 1%;
+      vertical-align: middle;
+      opacity: 100%;
+    }
+
+    .inputfile + label {
+      display: none;
+    }

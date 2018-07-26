@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-edf-menu-bar',
@@ -12,6 +12,8 @@ export class EdfMenuBarComponent {
   @Output() clearclick = new EventEmitter();
   @Output() filterclick = new EventEmitter();
   @Output() openclick = new EventEmitter();
+  @ViewChild('fileinput') fileinput;
+
   ESILoad(event) {
     this.esiclick.emit(event);
   }
@@ -28,6 +30,9 @@ export class EdfMenuBarComponent {
     this.filterclick.emit(event);
   }
   OpenEDF(event) {
-    this.openclick.emit(event);
+    this.openclick.emit(event['target']['value']);
+  }
+  SelectFiles(event) {
+    event.click();
   }
 }

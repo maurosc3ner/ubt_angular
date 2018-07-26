@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, ViewChild } from '@angular/core';
 import {D3Service } from '../app.services/d3/d3.service';
 
 @Component({
@@ -10,7 +10,6 @@ export class AppControlBarComponent {
   @Output() StatusEvent = new EventEmitter();
   @Output() CoomandEvent = new EventEmitter();
   status: Number = 0;
-
   constructor(private d3Service: D3Service) {
     this.status = -1;
   }
@@ -57,7 +56,7 @@ export class AppControlBarComponent {
     this.CoomandEvent.emit([1, 0]);
   }
   onOpenEDF(event) {
-    this.CoomandEvent.emit([2, 0]);
+    this.CoomandEvent.emit([2, event]);
   }
   onGoBack(event) {
     this.CoomandEvent.emit([3, event]);

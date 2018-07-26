@@ -28,7 +28,7 @@ import {
   MatProgressBarModule,
   MatToolbarModule,
   MatButtonModule,
-  MatIconModule
+  MatIconModule,
 } from '@angular/material';
 
 @NgModule({

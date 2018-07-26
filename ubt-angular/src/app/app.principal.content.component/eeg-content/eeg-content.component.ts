@@ -16,6 +16,7 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
     channel_num: Array<number> = [2, 3, 4];
     scale_multiplier = [20, 50, 200];
     multiplier_pos = 0;
+    patientfile: string;
     color_scale: Array<string> = [
         '#be01ae',
         '#046102',
@@ -57,6 +58,9 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
             console.log(this.Command_eeg[0] , this.Command_eeg[1]);
             if (this.Command_eeg[0] === 1 ) {
                 this.delete_channel();
+            }
+            if (this.Command_eeg[0] === 2 ) {
+
             }
             this.Command_eeg = null;
         }

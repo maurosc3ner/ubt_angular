@@ -198,7 +198,7 @@ var AppControlBarComponent = /** @class */ (function () {
         this.CoomandEvent.emit([1, 0]);
     };
     AppControlBarComponent.prototype.onOpenEDF = function (event) {
-        this.CoomandEvent.emit([2, 0]);
+        this.CoomandEvent.emit([2, event]);
     };
     AppControlBarComponent.prototype.onGoBack = function (event) {
         this.CoomandEvent.emit([3, event]);
@@ -397,7 +397,7 @@ var EdfControlButtonsComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "/* Container needed to position the button. Adjust the width as needed */\r\n.container {\r\n    position: relative;\r\n    width: 100%;\r\n    height: 100%;\r\n  }\r\n/* Make the image responsive */\r\n.container img {\r\n    width: 100%;\r\n    height: 100%;\r\n  }\r\n/* Style the button and place it in the middle of the container/image */\r\n.container .btn {\r\n      position: relative;\r\n      top: 50%;\r\n      left: 50%;\r\n      -webkit-transform: translate(-50%, -50%);\r\n              transform: translate(-50%, -50%);\r\n      -ms-transform: translate(-50%, -50%);\r\n      background-color: black;\r\n      color: white;\r\n      font-size: 6px;\r\n      padding: 1px 1px;\r\n      border: 1px solid white;\r\n      cursor: pointer;\r\n      border-radius: 0%;\r\n      width: 35px;\r\n      height: 35px;\r\n    }\r\n.container .btn:hover {\r\n      border: 1px solid red;\r\n    }\r\n.speed p{\r\n      font-size: 8px;\r\n      text-align: justify;\r\n      padding-left: 50%;\r\n      height: 15px;\r\n    }\r\n.material-cust-small-button {\r\n      width: auto;\r\n      min-width: 1%;\r\n      vertical-align: middle;\r\n    }\r\n.material-cust-small-button-icon {\r\n      width: auto;\r\n      min-width: 1%;\r\n      vertical-align: middle;\r\n    }"
+module.exports = "/* Container needed to position the button. Adjust the width as needed */\r\n.container {\r\n    position: relative;\r\n    width: 100%;\r\n    height: 100%;\r\n  }\r\n/* Make the image responsive */\r\n.container img {\r\n    width: 100%;\r\n    height: 100%;\r\n  }\r\n/* Style the button and place it in the middle of the container/image */\r\n.container .btn {\r\n      position: relative;\r\n      top: 50%;\r\n      left: 50%;\r\n      -webkit-transform: translate(-50%, -50%);\r\n              transform: translate(-50%, -50%);\r\n      -ms-transform: translate(-50%, -50%);\r\n      background-color: black;\r\n      color: white;\r\n      font-size: 6px;\r\n      padding: 1px 1px;\r\n      border: 1px solid white;\r\n      cursor: pointer;\r\n      border-radius: 0%;\r\n      width: 35px;\r\n      height: 35px;\r\n    }\r\n.container .btn:hover {\r\n      border: 1px solid red;\r\n    }\r\n.speed p{\r\n      font-size: 8px;\r\n      text-align: justify;\r\n      padding-left: 50%;\r\n      height: 15px;\r\n    }\r\n.material-cust-small-button {\r\n      width: auto;\r\n      min-width: 1%;\r\n      vertical-align: middle;\r\n    }\r\n.material-cust-small-button-icon {\r\n      width: auto;\r\n      min-width: 1%;\r\n      vertical-align: middle;\r\n    }\r\n.material-cust-small-input .inputfile + label {\r\n      width: 100px;\r\n      min-width: 1%;\r\n      vertical-align: middle;\r\n      opacity: 100%;\r\n    }\r\n.inputfile + label {\r\n      display: none;\r\n    }"
 
 /***/ }),
 
@@ -408,7 +408,7 @@ module.exports = "/* Container needed to position the button. Adjust the width a
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container\">\r\n  <div class=\"row\">\r\n    <div class=\"col-2 col-md-2 speed\">\r\n      <p>View Anno</p>\r\n    </div>\r\n    <div class=\"col-2 col-md-2 speed\">\r\n      <p class=\"speed\">Open EDF</p>\r\n    </div>\r\n    <div class=\"col-2 col-md-2 speed\">\r\n      <p>Clear</p>\r\n    </div>\r\n    <div class=\"col-2 col-md-2 speed\"> \r\n      <p>Filter</p>\r\n    </div>\r\n    <div class=\"col-2 col-md-2 speed\">\r\n      <p>ESI</p>\r\n    </div>\r\n    <div class=\"col-2 col-md-2 speed\">\r\n      <p>Load MRI</p>\r\n    </div>\r\n  </div>\r\n  <div class=\"row main-container\">\r\n    <div class=\"col-2 col-md-2\">\r\n      <button mat-stroked-button (click)=\"AnnoLoad()\" class=\"material-cust-small-button\">\r\n        <mat-icon class=\"material-cust-small-button-icon\">edit</mat-icon>\r\n      </button>\r\n    </div>\r\n    <div class=\"col-2 col-md-2\">\r\n      <button mat-stroked-button (click)=\"OpenEDF()\" class=\"material-cust-small-button\">\r\n        <mat-icon class=\"material-cust-small-button-icon\">folder_open</mat-icon>\r\n      </button>\r\n    </div>\r\n    <div class=\"col-2 col-md-2\">\r\n      <button mat-stroked-button (click)=\"Clear()\" class=\"material-cust-small-button\">\r\n        <mat-icon class=\"material-cust-small-button-icon\">remove</mat-icon>\r\n      </button>\r\n    </div>\r\n    <div class=\"col-2 col-md-2\">\r\n      <button mat-stroked-button (click)=\"Filter()\" class=\"material-cust-small-button\">\r\n        <mat-icon class=\"material-cust-small-button-icon\">filter</mat-icon>\r\n      </button>\r\n    </div>\r\n    <div class=\"col-2 col-md-2\">\r\n      <button mat-stroked-button (click)=\"ESILoad()\" class=\"material-cust-small-button\">\r\n        <mat-icon class=\"material-cust-small-button-icon\">image_search</mat-icon>\r\n      </button>\r\n    </div>\r\n    <div class=\"col-2 col-md-2\">\r\n      <button mat-stroked-button (click)=\"PlaneLoad()\" class=\"material-cust-small-button\">\r\n        <mat-icon class=\"material-cust-small-button-icon\">image</mat-icon>\r\n      </button>\r\n    </div>  \r\n  </div>\r\n</div>\r\n  "
+module.exports = "<div class=\"container\">\r\n  <div class=\"row\">\r\n    <div class=\"col-2 col-md-2 speed\">\r\n      <p>View Anno</p>\r\n    </div>\r\n    <div class=\"col-2 col-md-2 speed\">\r\n      <p class=\"speed\">Open EDF</p>\r\n    </div>\r\n    <div class=\"col-2 col-md-2 speed\">\r\n      <p>Clear</p>\r\n    </div>\r\n    <div class=\"col-2 col-md-2 speed\"> \r\n      <p>Filter</p>\r\n    </div>\r\n    <div class=\"col-2 col-md-2 speed\">\r\n      <p>ESI</p>\r\n    </div>\r\n    <div class=\"col-2 col-md-2 speed\">\r\n      <p>Load MRI</p>\r\n    </div>\r\n  </div>\r\n  <div class=\"row main-container\">\r\n    <div class=\"col-2 col-md-2\">\r\n      <button mat-stroked-button (click)=\"AnnoLoad()\" class=\"material-cust-small-button\">\r\n        <mat-icon class=\"material-cust-small-button-icon\">edit</mat-icon>\r\n      </button>\r\n    </div>\r\n    <div class=\"col-2 col-md-2\">\r\n      <input id=\"fileInput\" name=\"file\" type=\"file\" (change)=\"OpenEDF($event)\" [hidden]=\"true\" #fileinput>\r\n      <button mat-stroked-button (click)=\"SelectFiles(fileinput)\" class=\"material-cust-small-button\">\r\n          <mat-icon class=\"material-cust-small-button-icon\">folder_open</mat-icon>\r\n        </button>\r\n    </div>\r\n    <div class=\"col-2 col-md-2\">\r\n      <button mat-stroked-button (click)=\"Clear()\" class=\"material-cust-small-button\">\r\n        <mat-icon class=\"material-cust-small-button-icon\">remove</mat-icon>\r\n      </button>\r\n    </div>\r\n    <div class=\"col-2 col-md-2\">\r\n      <button mat-stroked-button (click)=\"Filter()\" class=\"material-cust-small-button\">\r\n        <mat-icon class=\"material-cust-small-button-icon\">filter</mat-icon>\r\n      </button>\r\n    </div>\r\n    <div class=\"col-2 col-md-2\">\r\n      <button mat-stroked-button (click)=\"ESILoad()\" class=\"material-cust-small-button\">\r\n        <mat-icon class=\"material-cust-small-button-icon\">image_search</mat-icon>\r\n      </button>\r\n    </div>\r\n    <div class=\"col-2 col-md-2\">\r\n      <button mat-stroked-button (click)=\"PlaneLoad()\" class=\"material-cust-small-button\">\r\n        <mat-icon class=\"material-cust-small-button-icon\">image</mat-icon>\r\n      </button>\r\n    </div>  \r\n  </div>\r\n</div>\r\n  "
 
 /***/ }),
 
@@ -458,7 +458,10 @@ var EdfMenuBarComponent = /** @class */ (function () {
         this.filterclick.emit(event);
     };
     EdfMenuBarComponent.prototype.OpenEDF = function (event) {
-        this.openclick.emit(event);
+        this.openclick.emit(event['target']['value']);
+    };
+    EdfMenuBarComponent.prototype.SelectFiles = function (event) {
+        event.click();
     };
     __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Output"])(),
@@ -484,6 +487,10 @@ var EdfMenuBarComponent = /** @class */ (function () {
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Output"])(),
         __metadata("design:type", Object)
     ], EdfMenuBarComponent.prototype, "openclick", void 0);
+    __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ViewChild"])('fileinput'),
+        __metadata("design:type", Object)
+    ], EdfMenuBarComponent.prototype, "fileinput", void 0);
     EdfMenuBarComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
             selector: 'app-edf-menu-bar',
@@ -861,6 +868,8 @@ var EegContentComponent = /** @class */ (function () {
             console.log(this.Command_eeg[0], this.Command_eeg[1]);
             if (this.Command_eeg[0] === 1) {
                 this.delete_channel();
+            }
+            if (this.Command_eeg[0] === 2) {
             }
             this.Command_eeg = null;
         }

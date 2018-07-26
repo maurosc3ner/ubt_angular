@@ -26,9 +26,10 @@
       </button>
     </div>
     <div class="col-2 col-md-2">
-      <button mat-stroked-button (click)="OpenEDF()" class="material-cust-small-button">
-        <mat-icon class="material-cust-small-button-icon">folder_open</mat-icon>
-      </button>
+      <input id="fileInput" name="file" type="file" (change)="OpenEDF($event)" [hidden]="true" #fileinput>
+      <button mat-stroked-button (click)="SelectFiles(fileinput)" class="material-cust-small-button">
+          <mat-icon class="material-cust-small-button-icon">folder_open</mat-icon>
+        </button>
     </div>
     <div class="col-2 col-md-2">
       <button mat-stroked-button (click)="Clear()" class="material-cust-small-button">
