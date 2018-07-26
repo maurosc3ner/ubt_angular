@@ -103,7 +103,7 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
                        this.DrawChannel(sample, 'line_eeg_1', data['channels'][j], 0, duration, x_axis, y_axis, j);
                     }
                   }
-                  this.handle_data.unsubscribe();
+                this.handle_data.unsubscribe();
                 },
                 (err) => {
                     console.log(err);
