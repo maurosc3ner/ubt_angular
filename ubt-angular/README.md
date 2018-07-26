@@ -30,3 +30,9 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 Install node.js version 10.4.1 (latest at 06/18/2018)
 Run `npm install` to install the requirements
 Run `ng serve` to run the server for the app 
+
+## To test the app with backend
+Run `npm install` to install updated requirements
+Run `ng build` to update last changes of the app
+Run `npm run start:server` to run the node server and the angular app
+go to `http:localhost:3300` in the browser to use the app
