@@ -827,6 +827,7 @@ var EegContentComponent = /** @class */ (function () {
         this.channel_num = [2, 3, 4];
         this.scale_multiplier = [20, 50, 200];
         this.multiplier_pos = 0;
+        this.current_data = null;
         this.color_scale = [
             '#be01ae',
             '#046102',
@@ -862,19 +863,28 @@ var EegContentComponent = /** @class */ (function () {
     };
     EegContentComponent.prototype.ngOnChanges = function () {
         if (this.Command_eeg == null) {
-            this.paint_eeg('sujeto_base', this.CheckStatus()[0], this.CheckStatus()[1]);
+            if (this.current_data !== null) {
+                this.paint_eeg('sujeto_base', this.CheckStatus()[0], this.CheckStatus()[1]);
+            }
         }
         else {
             console.log(this.Command_eeg[0], this.Command_eeg[1]);
             if (this.Command_eeg[0] === 1) {
                 this.delete_channel();
+                this.current_data = null;
             }
             if (this.Command_eeg[0] === 2) {
+                this.assignData('sujeto_base');
             }
             this.Command_eeg = null;
         }
     };
     EegContentComponent.prototype.click_multiplier = function (event, direction) {
+        if (this.current_data === null) {
+            console.log('please load patient first');
+            return 0;
+        }
+        //        console.log(this.current_data);
         if (direction) {
             if (this.multiplier_pos === 2) {
                 this.multiplier_pos = 2;
@@ -900,39 +910,32 @@ var EegContentComponent = /** @class */ (function () {
         }
     };
     EegContentComponent.prototype.paint_eeg = function (filename, width, height) {
-        var _this = this;
         if (width === void 0) { width = 1100; }
         if (height === void 0) { height = 600; }
+        var data = JSON.parse(this.current_data);
         var channel_array = [];
         for (var n = 1; n < 2; n++) {
             d3__WEBPACK_IMPORTED_MODULE_2__["select"]('#channel' + n).selectAll('path').remove();
             d3__WEBPACK_IMPORTED_MODULE_2__["select"]('#channel' + n).selectAll('g').remove();
             channel_array.push(d3__WEBPACK_IMPORTED_MODULE_2__["select"]('#channel' + n));
         }
-        this.handle_data = this.d3service.getPatientInfo(filename).subscribe(function (response) {
-            console.log(response);
-            var data = response;
-            var duration = data['patientInfo']['duration'];
-            var x_axis = false;
-            var y_axis = false;
-            for (var _i = 0, channel_array_1 = channel_array; _i < channel_array_1.length; _i++) {
-                var sample = channel_array_1[_i];
-                for (var j = 0; j < data['channels'].length; j++) {
-                    if (j === 0) {
-                        x_axis = true;
-                        y_axis = true;
-                    }
-                    else {
-                        x_axis = false;
-                        y_axis = false;
-                    }
-                    _this.DrawChannel(sample, 'line_eeg_1', data['channels'][j], 0, duration, x_axis, y_axis, j, _this.scale_multiplier[_this.multiplier_pos], _this.color_scale, width, height);
+        var duration = data['patientInfo']['duration'];
+        var x_axis = false;
+        var y_axis = false;
+        for (var _i = 0, channel_array_1 = channel_array; _i < channel_array_1.length; _i++) {
+            var sample = channel_array_1[_i];
+            for (var j = 0; j < data['channels'].length; j++) {
+                if (j === 0) {
+                    x_axis = true;
+                    y_axis = true;
                 }
+                else {
+                    x_axis = false;
+                    y_axis = false;
+                }
+                this.DrawChannel(sample, 'line_eeg_1', data['channels'][j], 0, duration, x_axis, y_axis, j, this.scale_multiplier[this.multiplier_pos], this.color_scale, width, height);
             }
-            _this.handle_data.unsubscribe();
-        }, function (err) {
-            console.log(err);
-        });
+        }
     };
     EegContentComponent.prototype.DrawChannel = function (channel, class_eeg, data_eeg, start_time, duration, x_axis_status, y_axis_status, multiplier, scale_multiplier, color_scale, width, height) {
         if (start_time === void 0) { start_time = 0; }
@@ -1033,6 +1036,15 @@ var EegContentComponent = /** @class */ (function () {
         if (this.EEG_Status_eeg === 3) {
             return [1100, 530];
         }
+    };
+    EegContentComponent.prototype.assignData = function (filename) {
+        var _this = this;
+        this.d3service.getPatientInfo(filename, this.current_data).subscribe(function (response) {
+            _this.current_data = JSON.stringify(response);
+            _this.paint_eeg('sujeto_base', _this.CheckStatus()[0], _this.CheckStatus()[1]);
+        }, function (err) {
+            console.log(err);
+        });
     };
     __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
@@ -1365,14 +1377,13 @@ var D3Service = /** @class */ (function () {
         var route = id_patient;
         return this.http.get('http://localhost:3000/tests');
     };
-    D3Service.prototype.getPatientInfo = function (msg) {
+    D3Service.prototype.getPatientInfo = function (msg, current_data) {
         var payload = {
             'command': 'load_edf',
             'fileName': msg
         };
         this.socket.emit('load_edf', payload);
-        var response = this.socket.fromEvent('load_edf');
-        return response;
+        return this.socket.fromEvent('load_edf');
     };
     D3Service = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"])(),

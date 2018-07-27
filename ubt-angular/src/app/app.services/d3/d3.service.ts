@@ -13,7 +13,9 @@ const handleJSONFile = function (err, data) {
 
 @Injectable()
 export class D3Service {
-    constructor(private http: HttpClient, private httptest: Http, private socket: SocketIo) {}
+    current_data: any;
+    constructor(private http: HttpClient, private httptest: Http, private socket: SocketIo) {
+    }
     getPatientData(id_patient: string, initial_time: number) {
         const headers = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' });
         const route = id_patient;
@@ -26,13 +28,12 @@ export class D3Service {
         return this.http.get('http://localhost:3000/tests');
     }
 
-    getPatientInfo(msg: string) {
+    getPatientInfo(msg: string, current_data: any): any {
         const payload = {
             'command': 'load_edf',
             'fileName': msg
         };
          this.socket.emit('load_edf', payload);
-         const response = this.socket.fromEvent('load_edf');
-         return response;
+         return this.socket.fromEvent('load_edf');
     }
 }

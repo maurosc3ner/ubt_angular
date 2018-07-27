@@ -17,6 +17,7 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
     scale_multiplier = [20, 50, 200];
     multiplier_pos = 0;
     patientfile: string;
+    current_data: any = null;
     color_scale: Array<string> = [
         '#be01ae',
         '#046102',
@@ -53,19 +54,27 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
     }
     ngOnChanges() {
         if (this.Command_eeg == null) {
-            this.paint_eeg('sujeto_base', this.CheckStatus()[0], this.CheckStatus()[1]);
+            if (this.current_data !== null) {
+                this.paint_eeg('sujeto_base', this.CheckStatus()[0], this.CheckStatus()[1]);
+            }
         } else {
             console.log(this.Command_eeg[0] , this.Command_eeg[1]);
             if (this.Command_eeg[0] === 1 ) {
                 this.delete_channel();
+                this.current_data = null;
             }
             if (this.Command_eeg[0] === 2 ) {
-
+                this.assignData('sujeto_base');
             }
             this.Command_eeg = null;
         }
     }
     click_multiplier(event, direction: boolean) {
+        if (this.current_data === null) {
+            console.log('please load patient first');
+            return 0;
+        }
+//        console.log(this.current_data);
         if (direction) {
             if (this.multiplier_pos === 2) {
                 this.multiplier_pos = 2;
@@ -92,44 +101,35 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
     width = 1100,
     height = 600
     ) {
+        const data = JSON.parse(this.current_data);
         const channel_array: Array<any> = [];
         for (let n = 1 ; n < 2; n++) {
             d3.select('#channel' + n).selectAll('path').remove();
             d3.select('#channel' + n).selectAll('g').remove();
             channel_array.push(d3.select('#channel' + n));
         }
-        this.handle_data = this.d3service.getPatientInfo(filename).subscribe(
-                (response: Response) => {
-                  console.log(response);
-                  const data = response;
-                  const duration = data['patientInfo']['duration'];
-                  let x_axis  = false;
-                  let y_axis  = false;
-                  for (const sample of channel_array) {
-                    for (let j = 0 ; j < data['channels'].length; j++) {
-                        if (j === 0) {x_axis = true; y_axis = true; } else { x_axis = false; y_axis = false; }
-                       this.DrawChannel(
-                           sample,
-                           'line_eeg_1',
-                           data['channels'][j],
-                           0,
-                           duration,
-                           x_axis,
-                           y_axis,
-                           j,
-                           this.scale_multiplier[this.multiplier_pos],
-                           this.color_scale,
-                           width,
-                           height
-                        );
-                    }
-                  }
-                this.handle_data.unsubscribe();
-                },
-                (err) => {
-                    console.log(err);
-                }
-            );
+        const duration = data['patientInfo']['duration'];
+        let x_axis  = false;
+        let y_axis  = false;
+        for (const sample of channel_array) {
+        for (let j = 0 ; j < data['channels'].length; j++) {
+            if (j === 0) {x_axis = true; y_axis = true; } else { x_axis = false; y_axis = false; }
+            this.DrawChannel(
+                sample,
+                'line_eeg_1',
+                data['channels'][j],
+                0,
+                duration,
+                x_axis,
+                y_axis,
+                j,
+                this.scale_multiplier[this.multiplier_pos],
+                this.color_scale,
+                width,
+                height
+                );
+            }
+        }
     }
     DrawChannel (
         channel,
@@ -231,5 +231,15 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
         if (this.EEG_Status_eeg === 3) {
             return [1100, 530];
         }
+    }
+    assignData(filename) {
+        this.d3service.getPatientInfo(filename, this.current_data).subscribe(
+            (response: Response) => {
+                this.current_data = JSON.stringify(response);
+                this.paint_eeg('sujeto_base', this.CheckStatus()[0], this.CheckStatus()[1]);
+            },
+        (err) => {
+            console.log(err);
+        });
     }
 }
