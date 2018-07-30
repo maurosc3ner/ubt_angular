@@ -690,7 +690,7 @@ module.exports = ""
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<li *ngFor=\"let annotation of annotations.items\">\n {{annotation.onset}} - {{annotation.description}} \n</li>"
+module.exports = "<li *ngFor=\"let annotation of annotations\">\n {{annotation.onset}} - {{annotation.description}} \n</li>"
 
 /***/ }),
 
@@ -717,17 +717,28 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 var AnnotationContentComponent = /** @class */ (function () {
     function AnnotationContentComponent() {
+        this.current_data = null;
     }
     AnnotationContentComponent.prototype.ngOnChanges = function () {
-        if (this.current_data == null) { }
+        if (this.current_data == null) {
+            return 0;
+        }
         else {
-            this.annotations = JSON.parse(this.current_data)['annotations'];
+            this.annotations = JSON.parse(this.current_data)['annotations']['items'];
         }
     };
     __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
         __metadata("design:type", Object)
     ], AnnotationContentComponent.prototype, "current_data", void 0);
+    __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
+        __metadata("design:type", Object)
+    ], AnnotationContentComponent.prototype, "EEG_Status_eeg", void 0);
+    __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
+        __metadata("design:type", Object)
+    ], AnnotationContentComponent.prototype, "Command_eeg", void 0);
     AnnotationContentComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
             selector: 'app-annotation-content',
@@ -760,7 +771,7 @@ module.exports = ".content-panel {\r\n  background-color: rgb(25, 25, 25);\r\n}\
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container content-panel\">\r\n  <div class=\"row main-container\" [ngClass]=\"{'layout-2-1':Status === 2}\">\r\n    <div class=\"col plane-view-container\" *ngIf=\"visAnno\">\r\n      <app-annotation-content [current_data]='patient_current_data'></app-annotation-content>\r\n    </div>\r\n    <div class=\"col plane-view-container\" *ngIf=\"visPlane\">\r\n        <app-plane-view [srcImage]=\"srcImageAxial\"></app-plane-view>\r\n    </div>\r\n    <div class=\"container-fluid eeg-content-container\" *ngIf=\"visEEG\" [ngClass]=\"{'layout1-0':Status === 1}\">\r\n      <app-eeg-content  [Command_eeg]='Command_Control' [EEG_Status_eeg]='Status' [current_data]='patient_current_data'></app-eeg-content>\r\n    </div>\r\n    <div class=\"col topo-plot-container\" *ngIf=\"visTopoPLot\">\r\n      <app-topo-plot></app-topo-plot>\r\n    </div>\r\n    <div class=\"col td-content-container\" *ngIf=\"visESI\">\r\n      <app-td-content></app-td-content>\r\n    </div>\r\n  </div>\r\n  <div class=\"row main-container\" *ngIf=\"visPlane\">\r\n    <div class=\"col plane-view-container\">\r\n        <app-plane-view [srcImage]=\"srcImageSagital\"></app-plane-view>\r\n    </div>\r\n    <div class=\"col plane-view-container\">\r\n        <app-plane-view [srcImage]=\"srcImageCoronal\"></app-plane-view>\r\n    </div>\r\n  </div>\r\n</div>"
+module.exports = "<div class=\"container content-panel\">\r\n  <div class=\"row main-container\" [ngClass]=\"{'layout-2-1':Status === 2}\">\r\n    <div class=\"col plane-view-container\" *ngIf=\"visAnno\">\r\n      <app-annotation-content [Command_eeg]='Command_Control' [EEG_Status_eeg]='Status' [current_data]='patient_current_data'></app-annotation-content>\r\n    </div>\r\n    <div class=\"col plane-view-container\" *ngIf=\"visPlane\">\r\n        <app-plane-view [srcImage]=\"srcImageAxial\"></app-plane-view>\r\n    </div>\r\n    <div class=\"container-fluid eeg-content-container\" *ngIf=\"visEEG\" [ngClass]=\"{'layout1-0':Status === 1}\">\r\n      <app-eeg-content  [Command_eeg]='Command_Control' [EEG_Status_eeg]='Status' [current_data]='patient_current_data'></app-eeg-content>\r\n    </div>\r\n    <div class=\"col topo-plot-container\" *ngIf=\"visTopoPLot\">\r\n      <app-topo-plot></app-topo-plot>\r\n    </div>\r\n    <div class=\"col td-content-container\" *ngIf=\"visESI\">\r\n      <app-td-content></app-td-content>\r\n    </div>\r\n  </div>\r\n  <div class=\"row main-container\" *ngIf=\"visPlane\">\r\n    <div class=\"col plane-view-container\">\r\n        <app-plane-view [srcImage]=\"srcImageSagital\"></app-plane-view>\r\n    </div>\r\n    <div class=\"col plane-view-container\">\r\n        <app-plane-view [srcImage]=\"srcImageCoronal\"></app-plane-view>\r\n    </div>\r\n  </div>\r\n</div>"
 
 /***/ }),
 

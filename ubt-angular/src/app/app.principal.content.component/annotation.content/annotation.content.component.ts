@@ -6,13 +6,17 @@ import { Component, Input, OnChanges } from '@angular/core';
   styleUrls: ['./annotation.content.component.css']
 })
 export class AnnotationContentComponent implements OnChanges {
-  @Input() current_data;
+  @Input() current_data = null;
+  @Input() EEG_Status_eeg;
+  @Input() Command_eeg;
 
   annotations;
 
   ngOnChanges() {
-    if (this.current_data == null) {} else {
-    this.annotations = JSON.parse(this.current_data)['annotations'];
+    if (this.current_data == null) {
+      return 0;
+    } else {
+    this.annotations = JSON.parse(this.current_data)['annotations']['items'];
     }
   }
 }

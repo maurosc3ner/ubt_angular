@@ -1,7 +1,7 @@
 <div class="container content-panel">
   <div class="row main-container" [ngClass]="{'layout-2-1':Status === 2}">
     <div class="col plane-view-container" *ngIf="visAnno">
-      <app-annotation-content [current_data]='patient_current_data'></app-annotation-content>
+      <app-annotation-content [Command_eeg]='Command_Control' [EEG_Status_eeg]='Status' [current_data]='patient_current_data'></app-annotation-content>
     </div>
     <div class="col plane-view-container" *ngIf="visPlane">
         <app-plane-view [srcImage]="srcImageAxial"></app-plane-view>
