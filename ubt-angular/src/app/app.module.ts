@@ -14,6 +14,8 @@ import { EdfControlBarComponent } from './app.control.bar.component/edf-control-
 import { EdfMenuBarComponent } from './app.control.bar.component/edf-menu-bar/edf-menu-bar.component';
 import { EdfControlButtonsComponent } from './app.control.bar.component/edf-control-buttons/edf-control-buttons.component';
 import { PlaneViewComponent } from './app.principal.content.component/plane-view/plane-view.component';
+import { AnnotationContentComponent } from './app.principal.content.component/annotation.content/annotation.content.component';
+
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { HttpClientModule } from '@angular/common/http';
@@ -31,6 +33,7 @@ import {
   MatIconModule,
 } from '@angular/material';
 
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -45,7 +48,8 @@ import {
     EdfControlBarComponent,
     EdfMenuBarComponent,
     EdfControlButtonsComponent,
-    PlaneViewComponent
+    PlaneViewComponent,
+    AnnotationContentComponent
   ],
   imports: [
     BrowserModule,

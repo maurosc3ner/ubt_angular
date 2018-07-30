@@ -41,7 +41,7 @@ module.exports = ".main-container {\r\n  color: white;\r\n}\r\n"
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<!--The content below is only a placeholder and can be replaced.-->\r\n<!-- Stack the columns on mobile by making one full-width and the other half-width -->\r\n<div class=\"container-fluid\">\r\n<div class=\"row main-container\" >\r\n  <div class=\"col-12 col-md-12\">\r\n      <app-title-bar-component></app-title-bar-component>\r\n  </div>\r\n</div>\r\n<div class=\"row main-container\">\r\n  <div class=\"col\">\r\n      <app-principal-content-component [Status]='StatusControl' [Command]='CommandControl'></app-principal-content-component>\r\n  </div>\r\n</div>\r\n<div class=\"row main-container\" style=\"padding: 10px 0px 0px 0px\">\r\n  <div class=\"col\">\r\n    <app-control-bar-component (StatusEvent)='onChangeStatus($event)'  (CoomandEvent)='onCommandReceived($event)'></app-control-bar-component>\r\n</div>\r\n"
+module.exports = "<!--The content below is only a placeholder and can be replaced.-->\r\n<!-- Stack the columns on mobile by making one full-width and the other half-width -->\r\n<div class=\"container-fluid\">\r\n<div class=\"row main-container\" >\r\n  <div class=\"col-12 col-md-12\">\r\n      <app-title-bar-component></app-title-bar-component>\r\n  </div>\r\n</div>\r\n<div class=\"row main-container\">\r\n  <div class=\"col\">\r\n      <app-principal-content-component [Status]='StatusControl' [Command_Control]='CommandControl'></app-principal-content-component>\r\n  </div>\r\n</div>\r\n<div class=\"row main-container\" style=\"padding: 10px 0px 0px 0px\">\r\n  <div class=\"col\">\r\n    <app-control-bar-component (StatusEvent)='onChangeStatus($event)'  (CoomandEvent)='onCommandReceived($event)'></app-control-bar-component>\r\n</div>\r\n"
 
 /***/ }),
 
@@ -593,18 +593,20 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _app_control_bar_component_edf_menu_bar_edf_menu_bar_component__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./app.control.bar.component/edf-menu-bar/edf-menu-bar.component */ "./src/app/app.control.bar.component/edf-menu-bar/edf-menu-bar.component.ts");
 /* harmony import */ var _app_control_bar_component_edf_control_buttons_edf_control_buttons_component__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./app.control.bar.component/edf-control-buttons/edf-control-buttons.component */ "./src/app/app.control.bar.component/edf-control-buttons/edf-control-buttons.component.ts");
 /* harmony import */ var _app_principal_content_component_plane_view_plane_view_component__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./app.principal.content.component/plane-view/plane-view.component */ "./src/app/app.principal.content.component/plane-view/plane-view.component.ts");
-/* harmony import */ var _angular_platform_browser_animations__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! @angular/platform-browser/animations */ "./node_modules/@angular/platform-browser/fesm5/animations.js");
-/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
-/* harmony import */ var _angular_http__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! @angular/http */ "./node_modules/@angular/http/fesm5/http.js");
-/* harmony import */ var _app_services_d3_d3_service__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./app.services/d3/d3.service */ "./src/app/app.services/d3/d3.service.ts");
-/* harmony import */ var ng_io__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ng-io */ "./node_modules/ng-io/fesm5/ng-io.js");
-/* harmony import */ var _angular_material__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! @angular/material */ "./node_modules/@angular/material/esm5/material.es5.js");
+/* harmony import */ var _app_principal_content_component_annotation_content_annotation_content_component__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./app.principal.content.component/annotation.content/annotation.content.component */ "./src/app/app.principal.content.component/annotation.content/annotation.content.component.ts");
+/* harmony import */ var _angular_platform_browser_animations__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! @angular/platform-browser/animations */ "./node_modules/@angular/platform-browser/fesm5/animations.js");
+/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
+/* harmony import */ var _angular_http__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! @angular/http */ "./node_modules/@angular/http/fesm5/http.js");
+/* harmony import */ var _app_services_d3_d3_service__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./app.services/d3/d3.service */ "./src/app/app.services/d3/d3.service.ts");
+/* harmony import */ var ng_io__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ng-io */ "./node_modules/ng-io/fesm5/ng-io.js");
+/* harmony import */ var _angular_material__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! @angular/material */ "./node_modules/@angular/material/esm5/material.es5.js");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
 
 
 
@@ -645,24 +647,95 @@ var AppModule = /** @class */ (function () {
                 _app_control_bar_component_edf_control_bar_edf_control_bar_component__WEBPACK_IMPORTED_MODULE_11__["EdfControlBarComponent"],
                 _app_control_bar_component_edf_menu_bar_edf_menu_bar_component__WEBPACK_IMPORTED_MODULE_12__["EdfMenuBarComponent"],
                 _app_control_bar_component_edf_control_buttons_edf_control_buttons_component__WEBPACK_IMPORTED_MODULE_13__["EdfControlButtonsComponent"],
-                _app_principal_content_component_plane_view_plane_view_component__WEBPACK_IMPORTED_MODULE_14__["PlaneViewComponent"]
+                _app_principal_content_component_plane_view_plane_view_component__WEBPACK_IMPORTED_MODULE_14__["PlaneViewComponent"],
+                _app_principal_content_component_annotation_content_annotation_content_component__WEBPACK_IMPORTED_MODULE_15__["AnnotationContentComponent"]
             ],
             imports: [
                 _angular_platform_browser__WEBPACK_IMPORTED_MODULE_0__["BrowserModule"],
-                _angular_platform_browser_animations__WEBPACK_IMPORTED_MODULE_15__["BrowserAnimationsModule"],
-                _angular_material__WEBPACK_IMPORTED_MODULE_20__["MatProgressBarModule"],
-                _angular_material__WEBPACK_IMPORTED_MODULE_20__["MatToolbarModule"],
-                _angular_common_http__WEBPACK_IMPORTED_MODULE_16__["HttpClientModule"],
-                _angular_material__WEBPACK_IMPORTED_MODULE_20__["MatButtonModule"],
-                _angular_material__WEBPACK_IMPORTED_MODULE_20__["MatIconModule"],
-                _angular_http__WEBPACK_IMPORTED_MODULE_17__["HttpModule"],
-                ng_io__WEBPACK_IMPORTED_MODULE_19__["NgIoModule"].forRoot(config)
+                _angular_platform_browser_animations__WEBPACK_IMPORTED_MODULE_16__["BrowserAnimationsModule"],
+                _angular_material__WEBPACK_IMPORTED_MODULE_21__["MatProgressBarModule"],
+                _angular_material__WEBPACK_IMPORTED_MODULE_21__["MatToolbarModule"],
+                _angular_common_http__WEBPACK_IMPORTED_MODULE_17__["HttpClientModule"],
+                _angular_material__WEBPACK_IMPORTED_MODULE_21__["MatButtonModule"],
+                _angular_material__WEBPACK_IMPORTED_MODULE_21__["MatIconModule"],
+                _angular_http__WEBPACK_IMPORTED_MODULE_18__["HttpModule"],
+                ng_io__WEBPACK_IMPORTED_MODULE_20__["NgIoModule"].forRoot(config)
             ],
-            providers: [_app_services_d3_d3_service__WEBPACK_IMPORTED_MODULE_18__["D3Service"]],
+            providers: [_app_services_d3_d3_service__WEBPACK_IMPORTED_MODULE_19__["D3Service"]],
             bootstrap: [_app_component__WEBPACK_IMPORTED_MODULE_2__["AppComponent"]]
         })
     ], AppModule);
     return AppModule;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/app.principal.content.component/annotation.content/annotation.content.component.css":
+/*!*****************************************************************************************************!*\
+  !*** ./src/app/app.principal.content.component/annotation.content/annotation.content.component.css ***!
+  \*****************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = ""
+
+/***/ }),
+
+/***/ "./src/app/app.principal.content.component/annotation.content/annotation.content.component.html":
+/*!******************************************************************************************************!*\
+  !*** ./src/app/app.principal.content.component/annotation.content/annotation.content.component.html ***!
+  \******************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<li *ngFor=\"let annotation of annotations.items\">\n {{annotation.onset}} - {{annotation.description}} \n</li>"
+
+/***/ }),
+
+/***/ "./src/app/app.principal.content.component/annotation.content/annotation.content.component.ts":
+/*!****************************************************************************************************!*\
+  !*** ./src/app/app.principal.content.component/annotation.content/annotation.content.component.ts ***!
+  \****************************************************************************************************/
+/*! exports provided: AnnotationContentComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AnnotationContentComponent", function() { return AnnotationContentComponent; });
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (undefined && undefined.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+var AnnotationContentComponent = /** @class */ (function () {
+    function AnnotationContentComponent() {
+    }
+    AnnotationContentComponent.prototype.ngOnChanges = function () {
+        if (this.current_data == null) { }
+        else {
+            this.annotations = JSON.parse(this.current_data)['annotations'];
+        }
+    };
+    __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
+        __metadata("design:type", Object)
+    ], AnnotationContentComponent.prototype, "current_data", void 0);
+    AnnotationContentComponent = __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
+            selector: 'app-annotation-content',
+            template: __webpack_require__(/*! ./annotation.content.component.html */ "./src/app/app.principal.content.component/annotation.content/annotation.content.component.html"),
+            styles: [__webpack_require__(/*! ./annotation.content.component.css */ "./src/app/app.principal.content.component/annotation.content/annotation.content.component.css")]
+        })
+    ], AnnotationContentComponent);
+    return AnnotationContentComponent;
 }());
 
 
@@ -687,7 +760,7 @@ module.exports = ".content-panel {\r\n  background-color: rgb(25, 25, 25);\r\n}\
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container content-panel\">\r\n  <div class=\"row main-container\" [ngClass]=\"{'layout-2-1':Status === 2}\">\r\n    <div class=\"col plane-view-container\" *ngIf=\"visPlane\">\r\n        <app-plane-view [srcImage]=\"srcImageAxial\"></app-plane-view>\r\n    </div>\r\n    <div class=\"container-fluid eeg-content-container\" *ngIf=\"visEEG\" [ngClass]=\"{'layout1-0':Status === 1}\">\r\n      <app-eeg-content  [Command_eeg]='Command_Control' [EEG_Status_eeg]='Status'></app-eeg-content>\r\n    </div>\r\n    <div class=\"col topo-plot-container\" *ngIf=\"visTopoPLot\">\r\n      <app-topo-plot></app-topo-plot>\r\n    </div>\r\n    <div class=\"col td-content-container\" *ngIf=\"visESI\">\r\n      <app-td-content></app-td-content>\r\n    </div>\r\n  </div>\r\n  <div class=\"row main-container\" *ngIf=\"visPlane\">\r\n    <div class=\"col plane-view-container\">\r\n        <app-plane-view [srcImage]=\"srcImageSagital\"></app-plane-view>\r\n    </div>\r\n    <div class=\"col plane-view-container\">\r\n        <app-plane-view [srcImage]=\"srcImageCoronal\"></app-plane-view>\r\n    </div>\r\n  </div>\r\n</div>"
+module.exports = "<div class=\"container content-panel\">\r\n  <div class=\"row main-container\" [ngClass]=\"{'layout-2-1':Status === 2}\">\r\n    <div class=\"col plane-view-container\" *ngIf=\"visAnno\">\r\n      <app-annotation-content [current_data]='patient_current_data'></app-annotation-content>\r\n    </div>\r\n    <div class=\"col plane-view-container\" *ngIf=\"visPlane\">\r\n        <app-plane-view [srcImage]=\"srcImageAxial\"></app-plane-view>\r\n    </div>\r\n    <div class=\"container-fluid eeg-content-container\" *ngIf=\"visEEG\" [ngClass]=\"{'layout1-0':Status === 1}\">\r\n      <app-eeg-content  [Command_eeg]='Command_Control' [EEG_Status_eeg]='Status' [current_data]='patient_current_data'></app-eeg-content>\r\n    </div>\r\n    <div class=\"col topo-plot-container\" *ngIf=\"visTopoPLot\">\r\n      <app-topo-plot></app-topo-plot>\r\n    </div>\r\n    <div class=\"col td-content-container\" *ngIf=\"visESI\">\r\n      <app-td-content></app-td-content>\r\n    </div>\r\n  </div>\r\n  <div class=\"row main-container\" *ngIf=\"visPlane\">\r\n    <div class=\"col plane-view-container\">\r\n        <app-plane-view [srcImage]=\"srcImageSagital\"></app-plane-view>\r\n    </div>\r\n    <div class=\"col plane-view-container\">\r\n        <app-plane-view [srcImage]=\"srcImageCoronal\"></app-plane-view>\r\n    </div>\r\n  </div>\r\n</div>"
 
 /***/ }),
 
@@ -702,6 +775,7 @@ module.exports = "<div class=\"container content-panel\">\r\n  <div class=\"row 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AppPrincipalContentComponent", function() { return AppPrincipalContentComponent; });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _app_services_d3_d3_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../app.services/d3/d3.service */ "./src/app/app.services/d3/d3.service.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -712,14 +786,16 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 
+
 var AppPrincipalContentComponent = /** @class */ (function () {
-    function AppPrincipalContentComponent() {
-        this.Command = -1;
+    function AppPrincipalContentComponent(d3service) {
+        this.d3service = d3service;
         this.srcImageSagital = './assets/brain-dummy/MRISagital.png';
         this.srcImageAxial = './assets/brain-dummy/MRIAxial.png';
         this.srcImageCoronal = './assets/brain-dummy/MRICoronal_2.jpg';
     }
     AppPrincipalContentComponent.prototype.ngOnInit = function () {
+        this.Command_Control = null;
         this.Status = 0;
         this.visAnno = false;
         this.visEEG = true;
@@ -728,29 +804,49 @@ var AppPrincipalContentComponent = /** @class */ (function () {
         this.visPlane = false;
     };
     AppPrincipalContentComponent.prototype.ngOnChanges = function () {
-        if (this.Command !== -1) {
-            this.Command_Control = this.Command;
+        console.log(this.Command_Control);
+        if (this.Command_Control == null) { }
+        else {
+            if (this.Command_Control[0] === 1) {
+                this.patient_current_data = null;
+            }
+            if (this.Command_Control[0] === 2) {
+                this.assignData('sujeto_base');
+            }
+            this.Command_Control = null;
         }
         if (this.Status === 0) {
+            this.visAnno = false;
             this.visEEG = true;
             this.visESI = false;
             this.visPlane = false;
         }
         if (this.Status === 1) {
+            this.visAnno = false;
             this.visEEG = true;
             this.visESI = true;
             this.visPlane = false;
         }
         if (this.Status === 2) {
+            this.visAnno = false;
             this.visEEG = false;
             this.visESI = true;
             this.visPlane = true;
         }
         if (this.Status === 3) {
+            this.visAnno = true;
             this.visEEG = false;
-            this.visESI = true;
-            this.visPlane = true;
+            this.visESI = false;
+            this.visPlane = false;
         }
+    };
+    AppPrincipalContentComponent.prototype.assignData = function (filename) {
+        var _this = this;
+        this.d3service.getPatientInfo(filename, this.patient_current_data).subscribe(function (response) {
+            _this.patient_current_data = JSON.stringify(response);
+        }, function (err) {
+            console.log(err);
+        });
     };
     __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
@@ -759,13 +855,14 @@ var AppPrincipalContentComponent = /** @class */ (function () {
     __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
         __metadata("design:type", Object)
-    ], AppPrincipalContentComponent.prototype, "Command", void 0);
+    ], AppPrincipalContentComponent.prototype, "Command_Control", void 0);
     AppPrincipalContentComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
             selector: 'app-principal-content-component',
             template: __webpack_require__(/*! ./app.principal.content.component.component.html */ "./src/app/app.principal.content.component/app.principal.content.component.component.html"),
             styles: [__webpack_require__(/*! ./app.principal.content.component.component.css */ "./src/app/app.principal.content.component/app.principal.content.component.component.css")]
-        })
+        }),
+        __metadata("design:paramtypes", [_app_services_d3_d3_service__WEBPACK_IMPORTED_MODULE_1__["D3Service"]])
     ], AppPrincipalContentComponent);
     return AppPrincipalContentComponent;
 }());
@@ -824,10 +921,10 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 var EegContentComponent = /** @class */ (function () {
     function EegContentComponent(d3service) {
         this.d3service = d3service;
+        this.current_data = null;
         this.channel_num = [2, 3, 4];
         this.scale_multiplier = [20, 50, 200];
         this.multiplier_pos = 0;
-        this.current_data = null;
         this.color_scale = [
             '#be01ae',
             '#046102',
@@ -863,24 +960,22 @@ var EegContentComponent = /** @class */ (function () {
     };
     EegContentComponent.prototype.ngOnChanges = function () {
         if (this.Command_eeg == null) {
-            if (this.current_data !== null) {
+            if (this.current_data == null) {
+                this.delete_channel();
+            }
+            else {
                 this.paint_eeg('sujeto_base', this.CheckStatus()[0], this.CheckStatus()[1]);
             }
         }
         else {
-            console.log(this.Command_eeg[0], this.Command_eeg[1]);
             if (this.Command_eeg[0] === 1) {
                 this.delete_channel();
-                this.current_data = null;
-            }
-            if (this.Command_eeg[0] === 2) {
-                this.assignData('sujeto_base');
             }
             this.Command_eeg = null;
         }
     };
     EegContentComponent.prototype.click_multiplier = function (event, direction) {
-        if (this.current_data === null) {
+        if (this.current_data == null) {
             console.log('please load patient first');
             return 0;
         }
@@ -1023,7 +1118,6 @@ var EegContentComponent = /** @class */ (function () {
         }
     };
     EegContentComponent.prototype.CheckStatus = function () {
-        console.log(this.EEG_Status_eeg);
         if (this.EEG_Status_eeg === 0) {
             return [1100, 530];
         }
@@ -1037,15 +1131,6 @@ var EegContentComponent = /** @class */ (function () {
             return [1100, 530];
         }
     };
-    EegContentComponent.prototype.assignData = function (filename) {
-        var _this = this;
-        this.d3service.getPatientInfo(filename, this.current_data).subscribe(function (response) {
-            _this.current_data = JSON.stringify(response);
-            _this.paint_eeg('sujeto_base', _this.CheckStatus()[0], _this.CheckStatus()[1]);
-        }, function (err) {
-            console.log(err);
-        });
-    };
     __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
         __metadata("design:type", Number)
@@ -1054,6 +1139,10 @@ var EegContentComponent = /** @class */ (function () {
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
         __metadata("design:type", Array)
     ], EegContentComponent.prototype, "Command_eeg", void 0);
+    __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
+        __metadata("design:type", Object)
+    ], EegContentComponent.prototype, "current_data", void 0);
     EegContentComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
             selector: 'app-eeg-content',

@@ -12,12 +12,11 @@ import * as d3 from 'd3';
 export class EegContentComponent implements AfterContentInit, OnChanges {
     @Input() EEG_Status_eeg: number;
     @Input() Command_eeg: Array<number>;
+    @Input() current_data: any = null;
     handle_data: any;
     channel_num: Array<number> = [2, 3, 4];
     scale_multiplier = [20, 50, 200];
     multiplier_pos = 0;
-    patientfile: string;
-    current_data: any = null;
     color_scale: Array<string> = [
         '#be01ae',
         '#046102',
@@ -54,23 +53,21 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
     }
     ngOnChanges() {
         if (this.Command_eeg == null) {
-            if (this.current_data !== null) {
+            if (this.current_data == null) {
+                this.delete_channel();
+             } else {
                 this.paint_eeg('sujeto_base', this.CheckStatus()[0], this.CheckStatus()[1]);
             }
         } else {
-            console.log(this.Command_eeg[0] , this.Command_eeg[1]);
             if (this.Command_eeg[0] === 1 ) {
                 this.delete_channel();
-                this.current_data = null;
-            }
-            if (this.Command_eeg[0] === 2 ) {
-                this.assignData('sujeto_base');
             }
             this.Command_eeg = null;
         }
     }
+
     click_multiplier(event, direction: boolean) {
-        if (this.current_data === null) {
+        if (this.current_data == null) {
             console.log('please load patient first');
             return 0;
         }
@@ -91,12 +88,14 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
         }
         this.paint_eeg('sujeto_base', this.CheckStatus()[0], this.CheckStatus()[1]);
     }
+
     delete_channel() {
             for (let n = 1 ; n < 2; n++) {
                 d3.select('#channel' + n).selectAll('path').remove();
                 d3.select('#channel' + n).selectAll('g').remove();
         }
     }
+
     paint_eeg(filename: string,
     width = 1100,
     height = 600
@@ -218,7 +217,6 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
             }
         }
     CheckStatus() {
-        console.log(this.EEG_Status_eeg);
         if (this.EEG_Status_eeg === 0) {
             return [1100, 530];
         }
@@ -231,15 +229,5 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
         if (this.EEG_Status_eeg === 3) {
             return [1100, 530];
         }
-    }
-    assignData(filename) {
-        this.d3service.getPatientInfo(filename, this.current_data).subscribe(
-            (response: Response) => {
-                this.current_data = JSON.stringify(response);
-                this.paint_eeg('sujeto_base', this.CheckStatus()[0], this.CheckStatus()[1]);
-            },
-        (err) => {
-            console.log(err);
-        });
     }
 }
