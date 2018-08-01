@@ -1,9 +1,9 @@
 .content-panel {
-  background-color: rgb(25, 25, 25);
+  background-color: rgb(0, 0, 0);
 }
 
 .eeg-content-container {
-  background-color: rgb(25, 25, 25);
+  background-color: rgb(0, 0, 0);
 }
 
 .topo-plot-container {
@@ -11,7 +11,7 @@
 }
 
 .td-content-container {
-  background-color: rgb(50, 50, 50);
+  background-color: rgb(0, 0, 0);
   border-style: solid;
   border-width: 1px;
   border-color: blue;

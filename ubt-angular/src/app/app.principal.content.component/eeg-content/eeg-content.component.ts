@@ -18,27 +18,28 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
     scale_multiplier = [20, 50, 200];
     multiplier_pos = 0;
     color_scale: Array<string> = [
-        '#be01ae',
-        '#046102',
-        '#036105',
-        '#0604ae',
-        '#be6105',
-        '#066107',
-        '#be07ae',
-        '#086108',
-        '#0961ae',
-        '#be10ae',
-        '#be6111',
-        '#1261ae',
-        '#be13ae',
-        '#be6114',
-        '#1561ae',
-        '#be16ae',
-        '#be6117',
-        '#1861ae',
-        '#be19ae',
-        '#be6120'
+        '#e6194b',
+        '#3cb44b',
+        '#ffe119',
+        '#0082c8',
+        '#f58231',
+        '#911eb4',
+        '#46f0f0',
+        '#f032e6',
+        '#d2f53c',
+        '#FFFFFF',
+        '#e6194b',
+        '#3cb44b',
+        '#ffe119',
+        '#0082c8',
+        '#f58231',
+        '#911eb4',
+        '#46f0f0',
+        '#f032e6',
+        '#d2f53c',
+        '#FFFFFF'
     ];
+
     constructor(private d3service: D3Service) {
     }
     ngAfterContentInit() {
