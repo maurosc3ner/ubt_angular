@@ -2,19 +2,17 @@ import { Component, Input, AfterContentInit, OnChanges } from '@angular/core';
 import { D3Service } from '../../app.services/d3/d3.service';
 import { Response } from '@angular/http';
 import * as d3 from 'd3';
-
 @Component({
   selector: 'app-eeg-content',
   templateUrl: './eeg-content.component.html',
   styleUrls: ['./eeg-content.component.css']
 })
-
 export class EegContentComponent implements AfterContentInit, OnChanges {
     @Input() EEG_Status_eeg: number;
     @Input() Command_eeg: Array<number>;
     @Input() current_data: any = null;
     handle_data: any;
-    channel_num: Array<number> = [2, 3, 4];
+    channel_num: Array<any>;
     scale_multiplier = [20, 50, 200];
     multiplier_pos = 0;
     color_scale: Array<string> = [
@@ -39,7 +37,6 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
         '#d2f53c',
         '#FFFFFF'
     ];
-
     constructor(private d3service: D3Service) {
     }
     ngAfterContentInit() {
@@ -55,13 +52,15 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
     ngOnChanges() {
         if (this.Command_eeg == null) {
             if (this.current_data == null) {
-                this.delete_channel();
+                this.delete_channel(true);
              } else {
-                this.paint_eeg('sujeto_base', this.CheckStatus()[0], this.CheckStatus()[1]);
+                this.delete_channel(true);
+                this.channel_num = this.init_channels();
+                this.create_channels('sujeto_base', this.CheckStatus()[0], this.CheckStatus()[1], this.channel_num);
             }
         } else {
             if (this.Command_eeg[0] === 1 ) {
-                this.delete_channel();
+                this.delete_channel(true);
             }
             this.Command_eeg = null;
         }
@@ -72,7 +71,6 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
             console.log('please load patient first');
             return 0;
         }
-//        console.log(this.current_data);
         if (direction) {
             if (this.multiplier_pos === 2) {
                 this.multiplier_pos = 2;
@@ -87,27 +85,29 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
                 this.multiplier_pos--;
             }
         }
-        this.paint_eeg('sujeto_base', this.CheckStatus()[0], this.CheckStatus()[1]);
+        this.update_channel( this.CheckStatus()[0], this.CheckStatus()[1], this.channel_num);
     }
-
-    delete_channel() {
+    delete_channel(command = false) {
             for (let n = 1 ; n < 2; n++) {
-                d3.select('#channel' + n).selectAll('path').remove();
+                if (command ) { d3.select('#channel' + n).selectAll('path').remove(); }
                 d3.select('#channel' + n).selectAll('g').remove();
         }
     }
-
-    paint_eeg(filename: string,
-    width = 1100,
-    height = 600
-    ) {
-        const data = JSON.parse(this.current_data);
+    init_channels() {
         const channel_array: Array<any> = [];
         for (let n = 1 ; n < 2; n++) {
-            d3.select('#channel' + n).selectAll('path').remove();
-            d3.select('#channel' + n).selectAll('g').remove();
-            channel_array.push(d3.select('#channel' + n));
+            const current_channel = d3.select('#channel' + n);
+            channel_array.push(current_channel);
+            return channel_array;
         }
+    }
+    create_channels(
+        filename: string,
+        width = 1100,
+        height = 600,
+        channel_array,
+    ) {
+        const data = JSON.parse(this.current_data);
         const duration = data['patientInfo']['duration'];
         let x_axis  = false;
         let y_axis  = false;
@@ -126,24 +126,58 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
                 this.scale_multiplier[this.multiplier_pos],
                 this.color_scale,
                 width,
-                height
+                height,
+                false
+                );
+            }
+        }
+    }
+    update_channel(
+        width,
+        height,
+        channel_array
+    ) {
+        let x_axis  = false;
+        let y_axis  = false;
+        const data = JSON.parse(this.current_data);
+        this.delete_channel(false);
+        const duration = data['patientInfo']['duration'];
+        for (const sample of channel_array) {
+        for (let j = 0 ; j < data['channels'].length; j++) {
+            if (j === 0) {x_axis = true; y_axis = true; } else { x_axis = false; y_axis = false; }
+            this.DrawChannel(
+                sample,
+                'line_eeg_1',
+                data['channels'][j],
+                0,
+                duration,
+                x_axis,
+                y_axis,
+                j,
+                this.scale_multiplier[this.multiplier_pos],
+                this.color_scale,
+                width,
+                height,
+                true
                 );
             }
         }
     }
     DrawChannel (
-        channel,
+        current_channel,
         class_eeg,
         data_eeg,
         start_time: number = 0,
         duration: string = '0',
         x_axis_status: boolean = false,
         y_axis_status: boolean = true,
-        multiplier: number = 1,
+        multiplier: any = 1,
         scale_multiplier,
         color_scale,
         width,
-        height) {
+        height,
+        updating = false
+    ) {
             if (data_eeg.length !== 0) {
                 const channel_data: Array<JSON> = data_eeg.data;
                 let i = 0;
@@ -189,7 +223,7 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
                 .y(function(d) {
                     return y_scale(d['value']);
                 });
-                channel
+                current_channel
                 .attr('width', chart_width)
                 .attr('height', chart_height);
                 // Create Axes
@@ -198,25 +232,40 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
                 const y_axis = d3.axisLeft(y_scale)
                 .ticks(12);
                 if (x_axis_status) {
-                    channel.append('g')
+                    current_channel.append('g')
                     .attr('class', 'axis axis--x')
                     .attr('transform', 'translate(0,' + (chart_height - padding) + ')')
                     .call(x_axis);
                 }
                 if (y_axis_status) {
-                    channel.append('g')
+                    current_channel.append('g')
                     .attr('class', 'axis axis--y')
                     .attr('transform', 'translate(' + padding + ',0)')
                     .call(y_axis);
                 }
-                channel.append('path')
+                if ( updating ) {
+                    current_channel
+                    .select( '#id_' + <string>multiplier )
+                    .datum(channel_data)
+                    .transition()
+                    .duration(1000)
+                    .attr('d', line)
+                    .attr('transform', null)
+                    .attr('fill', 'none')
+                    .attr('class', 'line_eeg_1')
+                    .attr('stroke', color_scale[color_pos - 1]);
+                } else {
+                current_channel.append('path')
                 .datum(channel_data)
+                .attr('d', line)
+                .attr('id', 'id_' + <string>multiplier )
+                .attr('transform', null)
                 .attr('fill', 'none')
                 .attr('class', 'line_eeg_1')
-                .attr('stroke', color_scale[color_pos - 1])
-                .attr('d', line);
+                .attr('stroke', color_scale[color_pos - 1]);
+                }
             }
-        }
+    }
     CheckStatus() {
         if (this.EEG_Status_eeg === 0) {
             return [1100, 530];
