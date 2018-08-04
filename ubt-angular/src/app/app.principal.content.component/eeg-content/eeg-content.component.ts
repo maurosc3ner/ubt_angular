@@ -40,14 +40,7 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
     constructor(private d3service: D3Service) {
     }
     ngAfterContentInit() {
-        /*
-        this.handle_data = this.d3service.getPatientData('id_patient', 0)
-        .subscribe(
-            (response: Response) => {
-                console.log('getpatient');
-                console.log(response.json());
-            });
-        */
+
     }
     ngOnChanges() {
         if (this.Command_eeg == null) {
@@ -56,7 +49,7 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
              } else {
                 this.delete_channel(true);
                 this.channel_num = this.init_channels();
-                this.create_channels('sujeto_base', this.CheckStatus()[0], this.CheckStatus()[1], this.channel_num);
+                this.create_channels(this.CheckStatus()[0], this.CheckStatus()[1], this.channel_num, false);
             }
         } else {
             if (this.Command_eeg[0] === 1 ) {
@@ -85,7 +78,7 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
                 this.multiplier_pos--;
             }
         }
-        this.update_channel( this.CheckStatus()[0], this.CheckStatus()[1], this.channel_num);
+        this.create_channels( this.CheckStatus()[0], this.CheckStatus()[1], this.channel_num, true);
     }
     delete_channel(command = false) {
             for (let n = 1 ; n < 2; n++) {
@@ -102,10 +95,10 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
         }
     }
     create_channels(
-        filename: string,
         width = 1100,
         height = 600,
         channel_array,
+        updating = false
     ) {
         const data = JSON.parse(this.current_data);
         const duration = data['patientInfo']['duration'];
@@ -127,38 +120,7 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
                 this.color_scale,
                 width,
                 height,
-                false
-                );
-            }
-        }
-    }
-    update_channel(
-        width,
-        height,
-        channel_array
-    ) {
-        let x_axis  = false;
-        let y_axis  = false;
-        const data = JSON.parse(this.current_data);
-        this.delete_channel(false);
-        const duration = data['patientInfo']['duration'];
-        for (const sample of channel_array) {
-        for (let j = 0 ; j < data['channels'].length; j++) {
-            if (j === 0) {x_axis = true; y_axis = true; } else { x_axis = false; y_axis = false; }
-            this.DrawChannel(
-                sample,
-                'line_eeg_1',
-                data['channels'][j],
-                0,
-                duration,
-                x_axis,
-                y_axis,
-                j,
-                this.scale_multiplier[this.multiplier_pos],
-                this.color_scale,
-                width,
-                height,
-                true
+                updating
                 );
             }
         }
