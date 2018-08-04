@@ -15,6 +15,7 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
     channel_num: Array<any>;
     scale_multiplier = [20, 50, 200];
     multiplier_pos = 0;
+    current_cursor = 0;
     color_scale: Array<string> = [
         '#e6194b',
         '#3cb44b',
@@ -206,16 +207,16 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
                     .call(y_axis);
                 }
                 if ( updating ) {
-                    current_channel
-                    .select( '#id_' + <string>multiplier )
-                    .datum(channel_data)
-                    .transition()
-                    .duration(1000)
-                    .attr('d', line)
-                    .attr('transform', null)
-                    .attr('fill', 'none')
-                    .attr('class', 'line_eeg_1')
-                    .attr('stroke', color_scale[color_pos - 1]);
+                current_channel
+                .select( '#id_' + <string>multiplier )
+                .datum(channel_data)
+                .transition()
+                .duration(1000)
+                .attr('d', line)
+                .attr('transform', null)
+                .attr('fill', 'none')
+                .attr('class', 'line_eeg_1')
+                .attr('stroke', color_scale[color_pos - 1]);
                 } else {
                 current_channel.append('path')
                 .datum(channel_data)
@@ -226,6 +227,23 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
                 .attr('class', 'line_eeg_1')
                 .attr('stroke', color_scale[color_pos - 1]);
                 }
+                current_channel.on('click', function(d) {
+                    this.current_cursor = d3.mouse(this)[0];
+                    if (!current_channel.select('#cursor').empty()) {
+                        current_channel.select('#cursor')
+                        .remove();
+                    }
+                    current_channel
+                    .append('line')
+                    .attr('id', 'cursor')
+                    .attr('r', 5)
+                    .attr('x1' , d3.mouse(this)[0])
+                    .attr('x2' , d3.mouse(this)[0])
+                    .attr('y1' , 0)
+                    .attr('y2' , chart_height)
+                    .attr('stroke' , '#FF0000')
+                    .attr('stroke-width' , 2);
+                });
             }
     }
     CheckStatus() {
