@@ -229,12 +229,14 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
                 }
                 current_channel.on('click', function(d) {
                     this.current_cursor = d3.mouse(this)[0];
-                    if (!current_channel.select('#cursor').empty()) {
-                        current_channel.select('#cursor')
-                        .remove();
+                    let cursor;
+                    if (current_channel.select('#cursor').empty()) {
+                        cursor = current_channel.append('line');
+                    } else {
+                        cursor = current_channel.select('#cursor');
                     }
-                    current_channel
-                    .append('line')
+                    cursor.transition()
+                    .duration(1000)
                     .attr('id', 'cursor')
                     .attr('r', 5)
                     .attr('x1' , d3.mouse(this)[0])
