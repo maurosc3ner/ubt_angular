@@ -29,11 +29,15 @@ export class D3Service {
     }
 
     getPatientInfo(msg: string, current_data: any): any {
+        const debug = {};
+        debug['command'] = 'load_edf';
+        debug['fileName'] = msg;
         const payload = {
-            'command': 'load_edf',
-            'fileName': msg
+            'debug' : debug
         };
-         this.socket.emit('load_edf', payload);
-         return this.socket.fromEvent('load_edf');
+        this.socket.emit('load_edf', payload);
+        const response = this.socket.fromEvent('load_edf');
+        console.log(response);
+        return response;
     }
 }

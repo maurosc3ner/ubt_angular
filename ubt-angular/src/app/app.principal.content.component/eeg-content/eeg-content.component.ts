@@ -102,26 +102,27 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
         updating = false
     ) {
         const data = JSON.parse(this.current_data);
+        console.log(data);
         const duration = data['patientInfo']['duration'];
         let x_axis  = false;
         let y_axis  = false;
         for (const sample of channel_array) {
-        for (let j = 0 ; j < data['channels'].length; j++) {
-            if (j === 0) {x_axis = true; y_axis = true; } else { x_axis = false; y_axis = false; }
-            this.DrawChannel(
-                sample,
-                'line_eeg_1',
-                data['channels'][j],
-                0,
-                duration,
-                x_axis,
-                y_axis,
-                j,
-                this.scale_multiplier[this.multiplier_pos],
-                this.color_scale,
-                width,
-                height,
-                updating
+            for (let j = 0 ; j < data['channels'].length; j++) {
+                if (j === 0) {x_axis = true; y_axis = true; } else { x_axis = false; y_axis = false; }
+                this.DrawChannel(
+                    sample,
+                    'line_eeg_1',
+                    data['channels'][j],
+                    0,
+                    duration,
+                    x_axis,
+                    y_axis,
+                    j,
+                    this.scale_multiplier[this.multiplier_pos],
+                    this.color_scale,
+                    width,
+                    height,
+                    updating
                 );
             }
         }

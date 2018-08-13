@@ -41,7 +41,7 @@ export class AppPrincipalContentComponent implements OnInit, OnChanges {
             this.patient_current_data = null;
         }
         if (this.Command_Control[0] === 2 ) {
-            this.assignData('sujeto_base');
+            this.assignData(this.Command_Control[1]);
         }
         this.Command_Control = null;
     }
@@ -74,6 +74,7 @@ export class AppPrincipalContentComponent implements OnInit, OnChanges {
     this.d3service.getPatientInfo(filename, this.patient_current_data).subscribe(
         (response: Response) => {
             this.patient_current_data = JSON.stringify(response);
+            console.log(response);
         },
     (err) => {
         console.log(err);

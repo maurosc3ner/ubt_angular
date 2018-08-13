@@ -10,14 +10,13 @@ var actSockets = 0;
 var interval;
 var shell;
 
-function fileFound(filename) {
-    console.log('-- found: ', filename);
+function openEDFScript(filename) {
     //Aqui va llamado a rutina de python
     //TODO
-    console.log('-- calling python edfReader.py');
+    console.log('-EC- calling python edfReader.py');
     var options = {
 	  mode: 'json',
-	  args: [filename]
+	  args: [filename,0]
 	};
     PythonShell.run('/backend/pythonscripts/edfReader.py', options, function (err, results) {
 		if (err) console.log(err);
@@ -25,44 +24,70 @@ function fileFound(filename) {
 	  	// write only for dev
 	  	// fs.writeFile ("output.json", JSON.stringify(results[0]), function(err) {
 		  //   if (err) console.log(err);
-		    
 	   //  	console.log('lecture complete');
 	   //  });
-	    console.log('-- end of exec edfReader');
-	    io.emit("load_edf", results[0]);
-	    console.log('-- response to client...');
+        console.log('-EC- end of exec edfReader');
+        results[0].debug.time.index=0;
+        results[0].debug.time.currentTime=results[0].debug.time.startTime;
+        console.log(results[0].debug);
+        console.log('-EC- updating time object [index, currentTime]');
+        io.emit("load_edf", results[0]);
+	    console.log('-EC- response to client...');
 	});
 };
 
-function fromDir(startPath, filter) {
+/// recursive for filesearch in directories
+// function fromDir(startPath, filter) {
+//     console.log("startPath: ",startPath);
+//     var results = [];
+//     if (!fs.existsSync(__dirname + startPath)) {
+//         console.log("no dir ", startPath);
+//         //return;
+//     } else {
+//         console.log("exist ", startPath);
+//     }
+
+//     var files = fs.readdirSync(__dirname+startPath);
+//     console.log(files);
+//     for (var i = 0; i < files.length; i++) {
+//         var filename = path.join(__dirname+startPath, files[i]);
+//         var stat = fs.lstatSync(filename);
+//         if (stat.isDirectory()) {
+//             console.log("is a dir ...recursing");
+//             fromDir(startPath+'/'+files[i], filter); //recurse
+//         } else if (filter.test(filename)) {
+//             //fileFound(filename);
+//             console.log("File found "+filename);
+//             break;
+//         } else console.log("File not found");
+//     };
+// };
+
+function edfFromFile(startPath, file) {
+    console.log("startPath: ",startPath);
     var results = [];
-    //console.log('Starting from dir '+startPath+'/'+filter);
-
-    if (!fs.existsSync(__dirname + '/backend/server_data')) {
+    if (!fs.existsSync(__dirname + startPath)) {
         console.log("no dir ", startPath);
-        return;
+        //return;
+    } else {
+        console.log("exist ", startPath);
+        var filename = path.join(__dirname+startPath, file);
+        console.log('-EC- file found: ', filename);
+        openEDFScript(filename);
     }
-
-    var files = fs.readdirSync(startPath);
-    for (var i = 0; i < files.length; i++) {
-        var filename = path.join(startPath, files[i]);
-        var stat = fs.lstatSync(filename);
-        if (stat.isDirectory()) {
-            fromDir(filename, filter); //recurse
-        } else if (filter.test(filename)) {
-            fileFound(filename);
-            break;
-        } else console.log("File not found");
-    };
 };
 
 io.on('connection', function(socket) {
     actSockets++;
     console.log('a user connected');
+
     socket.on('load_edf', function(msg) {
-        var re = new RegExp(msg.fileName);
-        //fromDir('./test',/\.edf$/,function(filename){
-        fromDir('./backend/server_data', re);
+
+        console.log(msg.debug);
+        //var re = new RegExp(msg.debug.fileName);
+        //fromDir('./test',/\.edf$/,function(filename)
+         
+        edfFromFile('/backend/server_data', msg.debug.fileName);
         response = {
             "command": "load_edf",
             "status": "ERR: file not found",
@@ -70,8 +95,6 @@ io.on('connection', function(socket) {
             "type": "RESP",
             "subrecords": [] //A list of available subrecords labels.
         }
-        console.log(msg);
-        
     });
 
     socket.on('disconnect', function() {

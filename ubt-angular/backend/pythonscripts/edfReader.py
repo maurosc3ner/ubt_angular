@@ -11,10 +11,13 @@ if __name__ == '__main__':
     data = {}
     data['patientInfo']={}
     data['annotations']={}
+    data['debug']={}
+
 
     path = './'
     # f = pyedflib.EdfReader('sujeto_base.edf')
     f = pyedflib.EdfReader(sys.argv[1])
+    currentIndex = int(sys.argv[2])
     
   
     # print("file duration: %i seconds" % f.file_duration)
@@ -111,11 +114,11 @@ if __name__ == '__main__':
         
         # print("samplefrequency: %f" % f.getSampleFrequency(channel))
         channelObj['samplefrequency']=int(f.getSampleFrequency(channel))
-        
+        currentFreq =int(f.getSampleFrequency(channel))
         channelObj['data']=[]
         # para proposito de la demo arranco
         #  en el minuto 9:53:29 para ver variacion
-        buf = f.readSignal(channel,232250,2500)
+        buf = f.readSignal(channel,currentIndex,2500)
         n = 2500
         # print("\nread %i samples\n" % n)
         for i in np.arange(n):
@@ -124,9 +127,18 @@ if __name__ == '__main__':
             channelObj['data'].append(d)
         # print(result)
         data['channels'].append(channelObj)
+        
+        ### debug info
+        data['debug']['time']={}
+        data['debug']['time']['startTime']=f.getStartdatetime().timestamp()
+        # data['debug']['time']['currentTime']=f.getStartdatetime().timestamp()
+        # # current idex of file + freq by window analysis frame (10 seconds)
+        # data['debug']['time']['index']=currentIndex + currentFreq*10 
 
     f._close()
     del f
     
+    # use print with pythonshell
     print(json.dumps(data))
+    #use stdout with spawn
     # sys.stdout.flush()
