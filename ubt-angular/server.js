@@ -47,6 +47,8 @@ function jumpEDFScript(filename,debug) {
         results[0]['debug'].fileName = debug.fileName;
         results[0]['debug']['time'] = {};
         results[0]['debug']['time']['index'] = debug.time.index;
+        results[0].debug.time.startTime=debug.time.startTime;
+        results[0].debug.time.currentTime=debug.time.startTime+debug.time.index;
         
         io.emit("jump_edf", results[0]);
         console.log('-EC-jumpEDFScript- response to client...');

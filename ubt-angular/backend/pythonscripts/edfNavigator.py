@@ -10,7 +10,6 @@ from pathlib import Path
 if __name__ == '__main__':
     fileName = 'sujeto_base'
     data = {}
-    data['patientInfo']={}
     data['annotations']={}
     data['debug']={}
 
@@ -25,7 +24,6 @@ if __name__ == '__main__':
     currentIndex = int(sys.argv[2])
     visWindow = int(sys.argv[3])
     
-    data['patientInfo']['fileDuration']= f.file_duration
    
     data['channels']=[]
    # print (range(int(f.signals_in_file)))
