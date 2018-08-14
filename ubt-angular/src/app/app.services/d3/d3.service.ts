@@ -44,16 +44,18 @@ export class D3Service {
     }
 
     getJump(current_data: any): any {
-        let debug = current_data['debug'];
-        debug['command'] = 'jump_edf';
-        const payload = {
-            'debug' : debug
-        };
+        current_data['debug']['command'] = 'jump_edf';
+        const payload = current_data;
         this.socket.emit('jump_edf', payload);
         const response = this.socket.fromEvent('jump_edf');
-        console.log(response);
         return response;
     }
 
-
+    getFilter(current_data: any): any {
+        current_data['debug']['command'] = 'jump_edf';
+        const payload = current_data;
+        this.socket.emit('jump_edf', payload);
+        const response = this.socket.fromEvent('jump_edf');
+        return response;
+    }
 }

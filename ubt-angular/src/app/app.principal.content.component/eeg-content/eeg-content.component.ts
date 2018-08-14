@@ -44,6 +44,7 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
 
     }
     ngOnChanges() {
+        console.log('AMHOnchangeseegcomponent', this.current_data, this.Command_eeg);
         if (this.Command_eeg == null) {
             if (this.current_data == null) {
                 this.delete_channel(true);
@@ -52,11 +53,6 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
                 this.channel_num = this.init_channels();
                 this.create_channels(this.CheckStatus()[0], this.CheckStatus()[1], this.channel_num, false);
             }
-        } else {
-            if (this.Command_eeg[0] === 1 ) {
-                this.delete_channel(true);
-            }
-            this.Command_eeg = null;
         }
     }
 

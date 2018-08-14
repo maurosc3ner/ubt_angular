@@ -10,9 +10,6 @@ from pathlib import Path
 if __name__ == '__main__':
     fileName = 'sujeto_base'
     data = {}
-    data['annotations']={}
-    data['debug']={}
-
 
     path = './'
     my_file = Path(sys.argv[1])

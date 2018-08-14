@@ -35,8 +35,12 @@ export class AppPrincipalContentComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges() {
-      console.log(this.Command_Control);
+    console.log(this.Command_Control);
       if (this.Command_Control == null) { } else {
+        if (this.Command_Control[0] === 0 ) {
+          this.patient_current_data['debug']['time']['index'] = this.patient_current_data['debug']['time']['index'] + 10 * this.patient_current_data['channels'][0]['samplefrequency'];
+          this.Filter();
+        }
         if (this.Command_Control[0] === 1 ) {
             this.patient_current_data = null;
             this.patientfile = null;
@@ -46,17 +50,12 @@ export class AppPrincipalContentComponent implements OnInit, OnChanges {
             this.assignData();
         }
         if (this.Command_Control[0] === 3 ) {
-          const currentTimePar = this.patient_current_data;
-          const timeIndex = currentTimePar['debug']['time']['index'];
-          currentTimePar['debug']['time']['index'] = this.Command_Control[1] * 10 - timeIndex;
-          this.patient_current_data = currentTimePar;
+          this.patient_current_data['debug']['time']['index'] = this.patient_current_data['debug']['time']['index'] - this.Command_Control[1] * 10 * this.patient_current_data['channels'][0]['samplefrequency'];
           this.Jump();
-          console.log('jump backward');
         }
         if (this.Command_Control[0] === 4 ) {
-          this.patient_current_data['debug']['time']['index'] = this.Command_Control[1] * 10 + this.patient_current_data['debug']['time']['index'];
+          this.patient_current_data['debug']['time']['index'] = this.patient_current_data['debug']['time']['index'] + this.Command_Control[1] * 10 * this.patient_current_data['channels'][0]['samplefrequency'];
           this.Jump();
-          console.log('-AH-ngOnChanges-jump forward', this.patient_current_data);
         }
         this.Command_Control = null;
     }
@@ -89,7 +88,6 @@ export class AppPrincipalContentComponent implements OnInit, OnChanges {
     this.d3service.getPatientInfo(this.patientfile, this.patient_current_data).subscribe(
         (response: Response) => {
             this.patient_current_data = JSON.parse(JSON.stringify(response));
-            console.log(response);
         },
     (err) => {
         console.log(err);
@@ -99,9 +97,16 @@ export class AppPrincipalContentComponent implements OnInit, OnChanges {
   Jump() {
     this.d3service.getJump(this.patient_current_data).subscribe(
         (response: Response) => {
-            console.log(JSON.parse(JSON.stringify(response)));
-            this.patient_current_data['channels'] = JSON.parse(JSON.stringify(response));
-            console.log(response);
+            this.patient_current_data = JSON.parse(JSON.stringify(response));
+        },
+    (err) => {
+        console.log(err);
+    });
+  }
+  Filter() {
+    this.d3service.getFilter(this.patient_current_data).subscribe(
+        (response: Response) => {
+            this.patient_current_data = JSON.parse(JSON.stringify(response));
         },
     (err) => {
         console.log(err);
