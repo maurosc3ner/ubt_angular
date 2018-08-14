@@ -6,6 +6,8 @@ import pyedflib
 import sys
 import json
 
+from pathlib import Path
+
 if __name__ == '__main__':
     fileName = 'sujeto_base'
     data = {}
@@ -16,7 +18,15 @@ if __name__ == '__main__':
 
     path = './'
     # f = pyedflib.EdfReader('sujeto_base.edf')
-    f = pyedflib.EdfReader(sys.argv[1])
+
+    from pathlib import Path
+
+    my_file = Path(sys.argv[1])
+    if my_file.is_file():
+    # file exists
+        f = pyedflib.EdfReader(sys.argv[1])
+    else:
+        print ("Either the file is missing or not readable")
     currentIndex = int(sys.argv[2])
     
   
