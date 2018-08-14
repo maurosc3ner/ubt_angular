@@ -13,10 +13,10 @@ var shell;
 function openEDFScript(filename) {
     //Aqui va llamado a rutina de python
     //TODO
-    console.log('-EC- calling python edfReader.py');
+    console.log('-EC-openEDFScript- calling python edfReader.py');
     var options = {
 	  mode: 'json',
-	  args: [filename,0]
+	  args: [filename,0] 
 	};
     PythonShell.run('/backend/pythonscripts/edfReader.py', options, function (err, results) {
 		if (err) console.log(err);
@@ -26,13 +26,33 @@ function openEDFScript(filename) {
 		  //   if (err) console.log(err);
 	   //  	console.log('lecture complete');
 	   //  });
-        console.log('-EC- end of exec edfReader');
+        console.log('-EC-openEDFScript- end of exec edfReader');
         results[0].debug.time.index=0;
         results[0].debug.time.currentTime=results[0].debug.time.startTime;
         console.log(results[0].debug);
-        console.log('-EC- updating time object [index, currentTime]');
+        console.log('-EC-openEDFScript- updating time object [index, currentTime]');
         io.emit("load_edf", results[0]);
-	    console.log('-EC- response to client...');
+        console.log('-EC-openEDFScript- response to client...');
+        return true;
+	});
+};
+
+function jumpEDFScript(filename,time) {
+    //Aqui va llamado a rutina de python
+    //TODO
+    console.log('-EC-jumpEDFScript- calling python edfReader.py');
+    var options = {
+	  mode: 'json',
+	  args: [filename,time.index,10] 
+	};
+    PythonShell.run('/backend/pythonscripts/edfNavigator.py', options, function (err, results) {
+		if (err) console.log(err);
+        console.log('-EC-jumpEDFScript- end of exec edfReader');
+       
+        console.log(results[0].debug);
+        io.emit("load_edf", results[0]);
+        console.log('-EC-jumpEDFScript- response to client...');
+        return true;
 	});
 };
 
@@ -63,17 +83,20 @@ function openEDFScript(filename) {
 //     };
 // };
 
-function edfFromFile(startPath, file) {
-    console.log("startPath: ",startPath);
+function edfFromFile(startPath, file, debug) {
+    console.log("-EC-eff- startPath: ",startPath);
     var results = [];
     if (!fs.existsSync(__dirname + startPath)) {
-        console.log("no dir ", startPath);
+        console.log("-EC-eff- no dir ", startPath);
         //return;
     } else {
-        console.log("exist ", startPath);
+        console.log("-EC-eff- exist ", startPath);
         var filename = path.join(__dirname+startPath, file);
-        console.log('-EC- file found: ', filename);
-        openEDFScript(filename);
+        console.log('-EC-eff- file found: ', filename);
+        if (debug.command == "load_edf")
+            return openEDFScript(filename);
+        else if (debug.command == "jump_edf")
+            return jumpEDFScript(filename,debug.time);
     }
 };
 
@@ -86,15 +109,19 @@ io.on('connection', function(socket) {
         console.log(msg.debug);
         //var re = new RegExp(msg.debug.fileName);
         //fromDir('./test',/\.edf$/,function(filename)
-         
-        edfFromFile('/backend/server_data', msg.debug.fileName);
-        response = {
-            "command": "load_edf",
-            "status": "ERR: file not found",
-            "origin": "UBT Server",
-            "type": "RESP",
-            "subrecords": [] //A list of available subrecords labels.
-        }
+        //since it is an async call, io.emit should go into the python-shell callback
+        if (!edfFromFile('/backend/server_data', msg.debug.fileName,msg.debug))
+            console.log('-EC-lf- ups something happen');
+        
+    });
+
+    socket.on('jump_edf', function(msg) {
+
+        console.log(msg.debug);
+        
+        if (!edfFromFile('/backend/server_data', msg.debug.fileName))
+            console.log('-EC-lf- ups something happen');
+        
     });
 
     socket.on('disconnect', function() {

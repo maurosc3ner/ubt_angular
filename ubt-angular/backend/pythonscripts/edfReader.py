@@ -116,24 +116,23 @@ if __name__ == '__main__':
         channelObj['samplefrequency']=int(f.getSampleFrequency(channel))
         currentFreq =int(f.getSampleFrequency(channel))
         channelObj['data']=[]
-        # para proposito de la demo arranco
-        #  en el minuto 9:53:29 para ver variacion
-        buf = f.readSignal(channel,currentIndex,2500)
-        n = 2500
-        # print("\nread %i samples\n" % n)
-        for i in np.arange(n):
+
+
+        nSamples = channelObj['samplefrequency']*10
+
+        if (currentIndex+nSamples) > channelObj['samples'] :
+            nSamples=channelObj['samples']-currentIndex
+        buf = f.readSignal(channel,currentIndex,nSamples)
+        for i in np.arange(nSamples):
             d={}
             d['value']=float(buf[i])
             channelObj['data'].append(d)
-        # print(result)
         data['channels'].append(channelObj)
         
         ### debug info
         data['debug']['time']={}
         data['debug']['time']['startTime']=f.getStartdatetime().timestamp()
-        # data['debug']['time']['currentTime']=f.getStartdatetime().timestamp()
-        # # current idex of file + freq by window analysis frame (10 seconds)
-        # data['debug']['time']['index']=currentIndex + currentFreq*10 
+
 
     f._close()
     del f
