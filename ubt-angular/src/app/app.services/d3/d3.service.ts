@@ -32,6 +32,8 @@ export class D3Service {
         const debug = {};
         debug['command'] = 'load_edf';
         debug['fileName'] = msg;
+        debug['index'] = 0;
+        debug['visWindow'] = 10;
         const payload = {
             'debug' : debug
         };
@@ -40,4 +42,18 @@ export class D3Service {
         console.log(response);
         return response;
     }
+
+    getJump(current_data: any): any {
+        let debug = current_data['debug'];
+        debug['command'] = 'jump_edf';
+        const payload = {
+            'debug' : debug
+        };
+        this.socket.emit('jump_edf', payload);
+        const response = this.socket.fromEvent('jump_edf');
+        console.log(response);
+        return response;
+    }
+
+
 }

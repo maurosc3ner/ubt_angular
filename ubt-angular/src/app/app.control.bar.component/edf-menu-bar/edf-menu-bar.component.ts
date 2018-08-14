@@ -32,7 +32,6 @@ export class EdfMenuBarComponent {
   OpenEDF(event) {
     console.log(event['target']['files'][0]['name']);
     this.openclick.emit(event['target']['files'][0]['name']);
-    //this.openclick.emit(event['target']['files'][]['value']);
   }
   SelectFiles(event) {
     event.click();

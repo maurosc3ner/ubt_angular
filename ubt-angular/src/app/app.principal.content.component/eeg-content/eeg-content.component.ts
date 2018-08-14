@@ -101,8 +101,7 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
         channel_array,
         updating = false
     ) {
-        const data = JSON.parse(this.current_data);
-        console.log(data);
+        const data = this.current_data;
         const duration = data['patientInfo']['duration'];
         let x_axis  = false;
         let y_axis  = false;

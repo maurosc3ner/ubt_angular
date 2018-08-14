@@ -5,6 +5,7 @@ import numpy as np
 import pyedflib
 import sys
 import json
+from pathlib import Path
 
 if __name__ == '__main__':
     fileName = 'sujeto_base'
@@ -15,15 +16,20 @@ if __name__ == '__main__':
 
 
     path = './'
-    # f = pyedflib.EdfReader('sujeto_base.edf')
-    f = pyedflib.EdfReader(sys.argv[1])
+    my_file = Path(sys.argv[1])
+    if my_file.is_file():
+    # file exists
+        f = pyedflib.EdfReader(sys.argv[1])
+    else:
+        print ("Either the file is missing or not readable")
     currentIndex = int(sys.argv[2])
     visWindow = int(sys.argv[3])
     
     data['patientInfo']['fileDuration']= f.file_duration
    
     data['channels']=[]
-    for channel in range(int(data['patientInfo']['edfSignals'])):
+   # print (range(int(f.signals_in_file)))
+    for channel in range(int(f.signals_in_file)):
         
         channelObj={}
         channelObj['id']=channel
@@ -51,9 +57,10 @@ if __name__ == '__main__':
         channelObj['data']=[]
 
         nSamples = channelObj['samplefrequency']*visWindow
-
+        
         if (currentIndex+nSamples > channelObj['samples'] ):
             nSamples=channelObj['samples']-currentIndex
+       # print( nSamples )
         buf = f.readSignal(channel,currentIndex,nSamples)
         for i in np.arange(nSamples):
             d={}
@@ -65,6 +72,8 @@ if __name__ == '__main__':
     f._close()
     del f
     
+    #print (data)
+
     # use print with pythonshell
     print(json.dumps(data))
     #use stdout with spawn

@@ -16,12 +16,12 @@ export class AppPrincipalContentComponent implements OnInit, OnChanges {
   visTopoPLot: boolean;
   visPlane: boolean;
   patientfile: string;
-  patient_current_data: string;
+  patient_current_data: JSON;
   srcImageSagital: String = './assets/brain-dummy/MRISagital.png';
   srcImageAxial: String = './assets/brain-dummy/MRIAxial.png';
   srcImageCoronal: String = './assets/brain-dummy/MRICoronal_2.jpg';
-  constructor(private d3service: D3Service) {
 
+  constructor(private d3service: D3Service) {
   }
 
   ngOnInit() {
@@ -39,9 +39,24 @@ export class AppPrincipalContentComponent implements OnInit, OnChanges {
       if (this.Command_Control == null) { } else {
         if (this.Command_Control[0] === 1 ) {
             this.patient_current_data = null;
+            this.patientfile = null;
         }
         if (this.Command_Control[0] === 2 ) {
-            this.assignData(this.Command_Control[1]);
+            this.patientfile = this.Command_Control[1];
+            this.assignData();
+        }
+        if (this.Command_Control[0] === 3 ) {
+          const currentTimePar = this.patient_current_data;
+          const timeIndex = currentTimePar['debug']['time']['index'];
+          currentTimePar['debug']['time']['index'] = this.Command_Control[1] * 10 - timeIndex;
+          this.patient_current_data = currentTimePar;
+          this.Jump();
+          console.log('jump backward');
+        }
+        if (this.Command_Control[0] === 4 ) {
+          this.patient_current_data['debug']['time']['index'] = this.Command_Control[1] * 10 + this.patient_current_data['debug']['time']['index'];
+          this.Jump();
+          console.log('-AH-ngOnChanges-jump forward', this.patient_current_data);
         }
         this.Command_Control = null;
     }
@@ -70,14 +85,26 @@ export class AppPrincipalContentComponent implements OnInit, OnChanges {
       this.visESI = false;
       this.visPlane = false;    }
   }
-  assignData(filename) {
-    this.d3service.getPatientInfo(filename, this.patient_current_data).subscribe(
+  assignData() {
+    this.d3service.getPatientInfo(this.patientfile, this.patient_current_data).subscribe(
         (response: Response) => {
-            this.patient_current_data = JSON.stringify(response);
+            this.patient_current_data = JSON.parse(JSON.stringify(response));
             console.log(response);
         },
     (err) => {
         console.log(err);
     });
-}
+  }
+
+  Jump() {
+    this.d3service.getJump(this.patient_current_data).subscribe(
+        (response: Response) => {
+            console.log(JSON.parse(JSON.stringify(response)));
+            this.patient_current_data['channels'] = JSON.parse(JSON.stringify(response));
+            console.log(response);
+        },
+    (err) => {
+        console.log(err);
+    });
+  }
 }

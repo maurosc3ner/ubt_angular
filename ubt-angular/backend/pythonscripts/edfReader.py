@@ -5,8 +5,10 @@ import numpy as np
 import pyedflib
 import sys
 import json
+import datetime
 
 from pathlib import Path
+
 
 if __name__ == '__main__':
     fileName = 'sujeto_base'
