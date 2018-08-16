@@ -52,10 +52,10 @@ export class D3Service {
     }
 
     getFilter(current_data: any): any {
-        current_data['debug']['command'] = 'jump_edf';
+        current_data['debug']['command'] = 'notch_filter';
         const payload = current_data;
-        this.socket.emit('jump_edf', payload);
-        const response = this.socket.fromEvent('jump_edf');
+        this.socket.emit('notch_filter', payload);
+        const response = this.socket.fromEvent('notch_filter');
         return response;
     }
 }

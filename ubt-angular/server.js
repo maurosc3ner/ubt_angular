@@ -6,9 +6,9 @@ var path = require('path');
 var fs = require('fs');
 var PythonShell = require('python-shell');
 
+
 var actSockets = 0;
 var interval;
-var shell;
 
 function openEDFScript(pathFileName,currentData) {
     //Aqui va llamado a rutina de python
@@ -58,33 +58,41 @@ function jumpEDFScript(filename,currentData) {
         return true;
 	});
 };
+  
+function notchScript(currentData) {
+    var options = {
+	  mode: 'binary',
+	  args: [] 
+    };  
+    //console.log('-EC-notch_filter-',JSON.stringify(currentData.channels[0]));
+    var notchShell = new PythonShell('/backend/pythonscripts/notch.py');
 
-/// recursive for filesearch in directories
-// function fromDir(startPath, filter) {
-//     console.log("startPath: ",startPath);
-//     var results = [];
-//     if (!fs.existsSync(__dirname + startPath)) {
-//         console.log("no dir ", startPath);
-//         //return;
-//     } else {
-//         console.log("exist ", startPath);
-//     }
+    // esto funciona
+    // notchShell.send(JSON.stringify(currentData.channels[0]));
+    // ahora enviemos los 20 canales
+    notchShell.send(JSON.stringify(currentData.channels));
 
-//     var files = fs.readdirSync(__dirname+startPath);
-//     console.log(files);
-//     for (var i = 0; i < files.length; i++) {
-//         var filename = path.join(__dirname+startPath, files[i]);
-//         var stat = fs.lstatSync(filename);
-//         if (stat.isDirectory()) {
-//             console.log("is a dir ...recursing");
-//             fromDir(startPath+'/'+files[i], filter); //recurse
-//         } else if (filter.test(filename)) {
-//             //fileFound(filename);
-//             console.log("File found "+filename);
-//             break;
-//         } else console.log("File not found");
-//     };
-// };
+    notchShell.on('message', function (message) {
+        // received a message sent from the Python script (a simple "print" statement)
+        // console.log(message);
+        results={}
+        results['channels'] = JSON.parse(message)['channels']
+        results['debug'] = currentData.debug;
+        results['annotations']=currentData.annotations;
+        results['patientInfo']=currentData.patientInfo;
+        io.emit("notch_filter", results);  
+      }); 
+       
+    // end the input stream and allow the process to exit
+    notchShell.end(function (err,code,signal) {
+        if (err) throw err;
+        console.log('-EC-notch_filter-The exit code was: ' + code);
+        console.log('-EC-notch_filter-The exit signal was: ' + signal);
+        console.log('-EC-notch_filter-finished');
+    });
+};
+ 
+///no agregue el campo time al data porfavor
 
 function edfFromFile(startPath, msg) {
    
@@ -108,7 +116,6 @@ io.on('connection', function(socket) {
     console.log('a user connected');
 
     socket.on('load_edf', function(msg) {
-
         console.log(msg.debug);
         //since it is an async call, io.emit should go into the python-shell callback
         if (!edfFromFile('/backend/server_data',msg))
@@ -117,11 +124,15 @@ io.on('connection', function(socket) {
     });
 
     socket.on('jump_edf', function(msg) {
-
-        console.log(msg.debug);
-        
+        //este funciona
         if (!edfFromFile('/backend/server_data', msg))
             console.log('-EC-lf- ooops something happen');
+        
+    });
+
+    socket.on('notch_filter', function(msg) {
+        console.log("-EC-notch_filter- ");
+        notchScript(msg);
         
     });
 
@@ -165,7 +176,8 @@ io.on('connection', function(socket) {
         }, 1000);
     });
 
-});
+});  
+    
 
 var express = require('express');
 
@@ -188,3 +200,6 @@ app.get('*', function(req, res, next) {
 http.listen(port, function() {
     console.log('listening on *:' + port);
 });
+
+
+  

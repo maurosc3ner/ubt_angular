@@ -1,5 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 
+
+
 @Component({
   selector: 'app-td-content',
   templateUrl: './td-content.component.html',

@@ -225,6 +225,7 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
                 }
                 current_channel.on('click', function(d) {
                     this.current_cursor = d3.mouse(this)[0];
+                    console.log(this.current_cursor);
                     let cursor;
                     if (current_channel.select('#cursor').empty()) {
                         cursor = current_channel.append('line');
