@@ -13,10 +13,10 @@
       <p>Filter</p>
     </div>
     <div class="col-2 col-md-2 speed">
-      <p>ESI</p>
+      <p>Topoplot</p>
     </div>
     <div class="col-2 col-md-2 speed">
-      <p>Load MRI</p>
+      <p>ESI</p>
     </div>
   </div>
   <div class="row main-container">
@@ -35,10 +35,15 @@
       <button mat-stroked-button (click)="Clear()" class="material-cust-small-button">
         <mat-icon class="material-cust-small-button-icon">remove</mat-icon>
       </button>
-    </div>
+    </div>    
     <div class="col-2 col-md-2">
       <button mat-stroked-button (click)="Filter()" class="material-cust-small-button">
         <mat-icon class="material-cust-small-button-icon">filter</mat-icon>
+      </button>
+    </div>
+    <div class="col-2 col-md-2">
+      <button mat-stroked-button (click)="Topoplot()" class="material-cust-small-button">
+        <mat-icon class="material-cust-small-button-icon">radio_button_checked</mat-icon>
       </button>
     </div>
     <div class="col-2 col-md-2">
@@ -46,11 +51,18 @@
         <mat-icon class="material-cust-small-button-icon">image_search</mat-icon>
       </button>
     </div>
+  </div>
+  <div class="row">
+    <div class="col-2 col-md-2 speed">
+      <p>Load MRI</p>
+    </div>
+  </div>
+  <div class="row main-container">
     <div class="col-2 col-md-2">
       <button mat-stroked-button (click)="PlaneLoad()" class="material-cust-small-button">
         <mat-icon class="material-cust-small-button-icon">image</mat-icon>
       </button>
-    </div>  
+    </div>
   </div>
 </div>
   
