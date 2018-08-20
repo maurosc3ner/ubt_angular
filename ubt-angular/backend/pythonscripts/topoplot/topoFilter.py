@@ -14,7 +14,6 @@ def read_in():
 
 ob = edf_topoplot()
 
-# da lectura al edf
 # signal,nch,labels = ob.read_edf(archi)
 stdin=read_in()
 

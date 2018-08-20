@@ -39,7 +39,6 @@ export class AppPrincipalContentComponent implements OnInit, OnChanges {
     console.log(this.Status);
       if (this.Command_Control == null) { } else {
         if (this.Command_Control[0] === 0 ) {
-          this.patient_current_data['debug']['time']['index'] = this.patient_current_data['debug']['time']['index'] + 10 * this.patient_current_data['channels'][0]['samplefrequency'];
           this.notchFilter();
         }
         if (this.Command_Control[0] === 1 ) {
@@ -57,7 +56,9 @@ export class AppPrincipalContentComponent implements OnInit, OnChanges {
         if (this.Command_Control[0] === 4 ) {
           this.patient_current_data['debug']['time']['index'] = this.patient_current_data['debug']['time']['index'] + this.Command_Control[1] * 10 * this.patient_current_data['channels'][0]['samplefrequency'];
           this.Jump();
-
+        }
+        if (this.Command_Control[0] === 5 ) {
+          this.ocularFilter();
         }
         this.Command_Control = null;
     }
@@ -125,5 +126,14 @@ export class AppPrincipalContentComponent implements OnInit, OnChanges {
     (err) => {
         console.log(err);
     });
+  }
+  ocularFilter() {
+    this.d3service.getOcularFilter(this.patient_current_data).subscribe(
+      (response: Response) => {
+          this.patient_current_data = JSON.parse(JSON.stringify(response));
+      },
+  (err) => {
+      console.log(err);
+  });
   }
 }

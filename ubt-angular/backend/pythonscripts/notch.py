@@ -128,6 +128,7 @@ if __name__ == '__main__':
 
     response={}
     response['channels']=[]
+    currentCh=0
     for channel in inSignals:
         
         channelObj={}
@@ -140,11 +141,15 @@ if __name__ == '__main__':
         channelObj['digitalMinimum']=channel['digitalMinimum']
         channelObj['samplefrequency']= channel['samplefrequency']
         channelObj['data']=[]
+        currentD=0
         for subitem in channel['data']:
             d={}
-            d['value']=float(subitem['value'])
+            # d['value']=float(subitem['value'])
+            d['value']=float(filtered_signal[currentCh,currentD])
             channelObj['data'].append(d)
+            currentD=currentD+1
         response['channels'].append(channelObj)
+        currentCh=currentCh+1
         # print(channelObj['id'])
     print (json.dumps(response))
 

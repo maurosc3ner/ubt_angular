@@ -58,4 +58,11 @@ export class D3Service {
         const response = this.socket.fromEvent('notch_filter');
         return response;
     }
+    getOcularFilter(current_data: any): any {
+        current_data['debug']['command'] = 'ocular_filter';
+        const payload = current_data;
+        this.socket.emit('ocular_filter', payload);
+        const response = this.socket.fromEvent('ocular_filter');
+        return response;
+    }
 }

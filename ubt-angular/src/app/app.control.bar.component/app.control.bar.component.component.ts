@@ -72,4 +72,7 @@ export class AppControlBarComponent {
   onGoForwd(event) {
     this.CoomandEvent.emit([4, event]);
   }
+  onOcularFilter(event) {
+    this.CoomandEvent.emit([5, 0]);
+  }
 }

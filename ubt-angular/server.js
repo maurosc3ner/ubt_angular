@@ -94,6 +94,33 @@ function notchScript(currentData) {
     });
 };
 
+function ocularScript(currentData) {
+    var options = {
+	  mode: 'binary',
+	  args: [] 
+    };  
+    var ocularShell = new PythonShell('/backend/pythonscripts/ocularArtifact/ocularFilter.py');
+    ocularShell.send(JSON.stringify(currentData.channels));
+
+    ocularShell.on('message', function (message) {
+        // received a message sent from the Python script (a simple "print" statement)
+        //console.log(message);
+        results={}
+        results['channels'] = JSON.parse(message)['channels']
+        results['debug'] = currentData.debug;
+        results['annotations']=currentData.annotations;
+        results['patientInfo']=currentData.patientInfo;
+        io.emit("ocular_filter", results);   
+      }); 
+       
+    // end the input stream and allow the process to exit
+    ocularShell.end(function (err,code,signal) {
+        if (err) throw err;
+        console.log('-EC-ocular_filter-The exit code was: ' + code);
+        console.log('-EC-ocular_filter-The exit signal was: ' + signal);
+        console.log('-EC-ocular_filter-finished');
+    });
+};
 
 // este debe ser el topoplot
 // function notchScript(currentData) {
@@ -168,6 +195,12 @@ io.on('connection', function(socket) {
     socket.on('notch_filter', function(msg) {
         console.log("-EC-notch_filter- ");
         notchScript(msg);
+        
+    });
+
+    socket.on('ocular_filter', function(msg) {
+        console.log("-EC-ocular_filter- ");
+        ocularScript(msg);
         
     });
 

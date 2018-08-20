@@ -11,9 +11,11 @@ export class EdfMenuBarComponent {
   @Output() annoclick = new EventEmitter();
   @Output() clearclick = new EventEmitter();
   @Output() notchfilterclick = new EventEmitter();
+  @Output() ocularfilterclick = new EventEmitter();
   @Output() topoclick = new EventEmitter();
   @Output() openclick = new EventEmitter();
   @ViewChild('fileinput') fileinput;
+
 
   ESILoad(event) {
     this.esiclick.emit(event);
@@ -29,6 +31,9 @@ export class EdfMenuBarComponent {
   }
   notchFilter(event) {
     this.notchfilterclick.emit(event);
+  }
+  ocularFilter(event) {
+    this.ocularfilterclick.emit(event);
   }
   TopoPlot(event) {
     this.topoclick.emit(event);

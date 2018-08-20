@@ -1,68 +1,78 @@
 <div class="container">
   <div class="row">
-    <div class="col-2 col-md-2 speed">
-      <p>View Anno</p>
-    </div>
-    <div class="col-2 col-md-2 speed">
+    
+    <div class="col-3 col-md-3 speed">
       <p class="speed">Open EDF</p>
     </div>
-    <div class="col-2 col-md-2 speed">
+    <div class="col-3 col-md-3 speed">
       <p>Clear</p>
     </div>
-    <div class="col-2 col-md-2 speed"> 
+    <div class="col-3 col-md-3 speed"> 
       <p>Notch Filter</p>
     </div>
-    <div class="col-2 col-md-2 speed">
-      <p>Topoplot</p>
-    </div>
-    <div class="col-2 col-md-2 speed">
-      <p>ESI</p>
+    <div class="col-3 col-md-3 speed"> 
+      <p>Ocular Filter</p>
     </div>
   </div>
   <div class="row main-container">
-    <div class="col-2 col-md-2">
-      <button mat-stroked-button (click)="AnnoLoad()" class="material-cust-small-button">
-        <mat-icon class="material-cust-small-button-icon">edit</mat-icon>
-      </button>
-    </div>
-    <div class="col-2 col-md-2">
+    
+    <div class="col-3 col-md-3">
       <input id="fileInput" name="file" type="file" (change)="OpenEDF($event)" [hidden]="true" #fileinput>
       <button mat-stroked-button (click)="SelectFiles(fileinput)" class="material-cust-small-button">
           <mat-icon class="material-cust-small-button-icon">folder_open</mat-icon>
         </button>
     </div>
-    <div class="col-2 col-md-2">
+    <div class="col-3 col-md-3">
       <button mat-stroked-button (click)="Clear()" class="material-cust-small-button">
         <mat-icon class="material-cust-small-button-icon">remove</mat-icon>
       </button>
     </div>    
-    <div class="col-2 col-md-2">
+    <div class="col-3 col-md-3">
       <button mat-stroked-button (click)="notchFilter()" class="material-cust-small-button">
         <mat-icon class="material-cust-small-button-icon">filter</mat-icon>
       </button>
     </div>
-    <div class="col-2 col-md-2">
-      <button mat-stroked-button (click)="TopoPlot()" class="material-cust-small-button">
-        <mat-icon class="material-cust-small-button-icon">radio_button_checked</mat-icon>
+    <div class="col-3 col-md-3">
+      <button mat-stroked-button (click)="ocularFilter()" class="material-cust-small-button">
+        <mat-icon class="material-cust-small-button-icon">filter</mat-icon>
       </button>
     </div>
-    <div class="col-2 col-md-2">
-      <button mat-stroked-button (click)="ESILoad()" class="material-cust-small-button">
-        <mat-icon class="material-cust-small-button-icon">image_search</mat-icon>
-      </button>
     </div>
   </div>
   <div class="row">
-    <div class="col-2 col-md-2 speed">
+    <div class="col-3 col-md-3 speed">
+        <p>View Anno</p>
+    </div>
+    <div class="col-3 col-md-3 speed">
+      <p>Topoplot</p>
+    </div>
+    <div class="col-3 col-md-3 speed">
+      <p>ESI</p>
+    </div>
+    <div class="col-3 col-md-3 speed">
       <p>Load MRI</p>
     </div>
   </div>
   <div class="row main-container">
-    <div class="col-2 col-md-2">
+    <div class="col-3 col-md-3">
+      <button mat-stroked-button (click)="AnnoLoad()" class="material-cust-small-button">
+        <mat-icon class="material-cust-small-button-icon">edit</mat-icon>
+      </button>
+    </div>
+    <div class="col-3 col-md-3">
+      <button mat-stroked-button (click)="TopoPlot()" class="material-cust-small-button">
+        <mat-icon class="material-cust-small-button-icon">radio_button_checked</mat-icon>
+      </button>
+    </div>
+    <div class="col-3 col-md-3">
+      <button mat-stroked-button (click)="ESILoad()" class="material-cust-small-button">
+        <mat-icon class="material-cust-small-button-icon">image_search</mat-icon>
+      </button>
+    </div>
+    <div class="col-3 col-md-3">
       <button mat-stroked-button (click)="PlaneLoad()" class="material-cust-small-button">
         <mat-icon class="material-cust-small-button-icon">image</mat-icon>
       </button>
-    </div>
   </div>
 </div>
   

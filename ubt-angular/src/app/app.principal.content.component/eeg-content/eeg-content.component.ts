@@ -250,16 +250,16 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
             return [1100, 530];
         }
         if (this.EEG_Status_eeg === 1) {
-            return [430, 480];
+            return [430, 530];
         }
         if (this.EEG_Status_eeg === 2) {
             return [1100, 530];
         }
         if (this.EEG_Status_eeg === 3) {
-            return [430, 480];
+            return [430, 530];
         }
         if (this.EEG_Status_eeg === 4) {
-            return [430, 480];
+            return [430, 530];
         }
     }
 }
