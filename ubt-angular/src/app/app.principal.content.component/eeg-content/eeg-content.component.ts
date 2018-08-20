@@ -1,7 +1,11 @@
 import { Component, Input, AfterContentInit, OnChanges } from '@angular/core';
 import { D3Service } from '../../app.services/d3/d3.service';
+
 import { Response } from '@angular/http';
+
 import * as d3 from 'd3';
+declare let cubism: any;
+
 @Component({
   selector: 'app-eeg-content',
   templateUrl: './eeg-content.component.html',
@@ -41,7 +45,6 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
     constructor(private d3service: D3Service) {
     }
     ngAfterContentInit() {
-
     }
     ngOnChanges() {
         console.log('AMHOnchangeseegcomponent', this.current_data, this.Command_eeg);
@@ -52,8 +55,39 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
                 this.delete_channel(true);
                 this.channel_num = this.init_channels();
                 this.create_channels(this.CheckStatus()[0], this.CheckStatus()[1], this.channel_num, false);
+                this.cubismDraw();
             }
         }
+    }
+    cubismDraw() {
+        d3.select('#graph').selectAll('path').remove();
+        d3.select('#graph').selectAll('g').remove();
+        const data = this.current_data;
+        const starttime = data['debug']['time'];
+        const data_0 = data['channels'][0]['data'];
+        const context = cubism.context().size(960);
+        const horizon = context.horizon().extent([0, 2]);
+        function random_ma(name) {
+            return context.metric(function(start, stop, step, callback) {
+                const values = [];
+                while (+start < +stop) {
+                    start = + start + step;
+                    values.push(Math.random());
+                }
+                callback(null, values);
+            }, name);
+        }
+        const metrics = ['foo', 'bar', 'baz'];
+        horizon.metric(random_ma);
+        console.log('AMHCubismDraw', metrics);
+        d3.select('#graph').selectAll('.horizon')
+              .data(metrics)
+              .enter()
+              .append('div')
+              .attr('class', 'horizon')
+              .call(horizon);
+        const axis = context.axis();
+        d3.select('#graph').append('div').attr('class', 'axis axis--x').append('g').call(axis);
     }
 
     click_multiplier(event, direction: boolean) {
