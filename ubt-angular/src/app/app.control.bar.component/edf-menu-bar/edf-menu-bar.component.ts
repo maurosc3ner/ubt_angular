@@ -11,6 +11,7 @@ export class EdfMenuBarComponent {
   @Output() annoclick = new EventEmitter();
   @Output() clearclick = new EventEmitter();
   @Output() notchfilterclick = new EventEmitter();
+  @Output() topoclick = new EventEmitter();
   @Output() openclick = new EventEmitter();
   @ViewChild('fileinput') fileinput;
 
@@ -28,6 +29,9 @@ export class EdfMenuBarComponent {
   }
   notchFilter(event) {
     this.notchfilterclick.emit(event);
+  }
+  TopoPlot(event) {
+    this.topoclick.emit(event);
   }
   OpenEDF(event) {
     console.log(event['target']['files'][0]['name']);

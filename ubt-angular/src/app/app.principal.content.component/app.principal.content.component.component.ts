@@ -36,6 +36,7 @@ export class AppPrincipalContentComponent implements OnInit, OnChanges {
 
   ngOnChanges() {
     console.log(this.Command_Control);
+    console.log(this.Status);
       if (this.Command_Control == null) { } else {
         if (this.Command_Control[0] === 0 ) {
           this.patient_current_data['debug']['time']['index'] = this.patient_current_data['debug']['time']['index'] + 10 * this.patient_current_data['channels'][0]['samplefrequency'];
@@ -54,8 +55,8 @@ export class AppPrincipalContentComponent implements OnInit, OnChanges {
           this.Jump();
         }
         if (this.Command_Control[0] === 4 ) {
-          this.patient_current_data['debug']['time']['index'] = this.patient_current_data['debug']['time']['index'] + this.Command_Control[1] * 10 * this.patient_current_data['channels'][0]['samplefrequency'];
-          this.Jump();
+
+
         }
         this.Command_Control = null;
     }
@@ -65,24 +66,36 @@ export class AppPrincipalContentComponent implements OnInit, OnChanges {
       this.visEEG = true;
       this.visESI = false;
       this.visPlane = false;
+      this.visTopoPLot = false;
     }
     if (this.Status === 1) {
       this.visAnno = false;
       this.visEEG = true;
       this.visESI = true;
       this.visPlane = false;
+      this.visTopoPLot = false;
     }
     if (this.Status === 2) {
       this.visAnno = false;
       this.visEEG = false;
       this.visESI = true;
       this.visPlane = true;
+      this.visTopoPLot = false;
     }
     if (this.Status === 3) {
       this.visAnno = true;
       this.visEEG = true;
       this.visESI = false;
-      this.visPlane = false;    }
+      this.visPlane = false;    
+      this.visTopoPLot = false;
+    }
+    if (this.Status === 4) {
+      this.visAnno = false;
+      this.visEEG = true;
+      this.visESI = false;
+      this.visPlane = false;    
+      this.visTopoPLot = true;
+    }
   }
   assignData() {
     this.d3service.getPatientInfo(this.patientfile, this.patient_current_data).subscribe(

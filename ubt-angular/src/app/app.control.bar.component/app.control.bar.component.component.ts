@@ -20,19 +20,17 @@ export class AppControlBarComponent {
   TopoPlotToggle: Boolean = false;
 
   checkStatus(ESIToggle, PlaneToggle, AnnotToggle, TopoPlotToggle) {
-    if (AnnotToggle === true) {
-      return 3;
-    } else {
-      if (PlaneToggle === true) {
-        return 2;
-      } else {
-        if (ESIToggle === true) {
-          return 1;
-        }
-        return 0;
-      }
-    }
+    if (TopoPlotToggle === true) {
+      return 4;
+    } else if (AnnotToggle === true) {
+        return 3;
+      } else if (PlaneToggle === true) {
+          return 2;
+        } else if (ESIToggle === true) {
+            return 1;
+          } else return 0;
   }
+
 
   onESILoad(event) {
     if (this.ESIToggle === true) { this.ESIToggle = false; } else { this.ESIToggle = true; }
@@ -46,6 +44,16 @@ export class AppControlBarComponent {
   }
   onAnnoLoad(event) {
     if (this.AnnotToggle === true) { this.AnnotToggle = false; } else { this.AnnotToggle = true; }
+    this.status = this.checkStatus(this.ESIToggle, this.PlaneToggle, this.AnnotToggle, this.TopoPlotToggle);
+    this.StatusEvent.emit(this.status);
+  }
+  onTopoFilter(event) {
+    if (this.TopoPlotToggle === true) { 
+      this.TopoPlotToggle = false; 
+    } else { 
+      this.TopoPlotToggle = true;
+      this.CoomandEvent.emit([5, 0]);
+    }
     this.status = this.checkStatus(this.ESIToggle, this.PlaneToggle, this.AnnotToggle, this.TopoPlotToggle);
     this.StatusEvent.emit(this.status);
   }
