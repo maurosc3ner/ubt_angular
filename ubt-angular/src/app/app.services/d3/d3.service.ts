@@ -51,7 +51,7 @@ export class D3Service {
         return response;
     }
 
-    getFilter(current_data: any): any {
+    getNotchFilter(current_data: any): any {
         current_data['debug']['command'] = 'notch_filter';
         const payload = current_data;
         this.socket.emit('notch_filter', payload);

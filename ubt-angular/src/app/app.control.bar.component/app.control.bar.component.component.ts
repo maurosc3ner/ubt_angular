@@ -49,7 +49,7 @@ export class AppControlBarComponent {
     this.status = this.checkStatus(this.ESIToggle, this.PlaneToggle, this.AnnotToggle, this.TopoPlotToggle);
     this.StatusEvent.emit(this.status);
   }
-  onFilter(event) {
+  onNotchFilter(event) {
     this.CoomandEvent.emit([0, 0]);
   }
   onClear(event) {

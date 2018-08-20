@@ -27,7 +27,7 @@ function openEDFScript(pathFileName,currentData) {
         results[0].debug.time.currentTime=results[0].debug.time.startTime;
         //console.log('-EC-openEDFScript- updating time object [index, currentTime]',results[0].debug);
         //console.log([results[0].channels[0].data[0],results[0].channels[0].data[20]]);
-        console.log(results[0].patientInfo);
+        //console.log(results[0].patientInfo);
         
         io.emit("load_edf", results[0]);
         console.log('-EC-openEDFScript- response to client...');
@@ -59,6 +59,8 @@ function jumpEDFScript(filename,currentData) {
 	});
 };
   
+
+//funciona 8-19-2018
 function notchScript(currentData) {
     var options = {
 	  mode: 'binary',
@@ -91,8 +93,41 @@ function notchScript(currentData) {
         console.log('-EC-notch_filter-finished');
     });
 };
- 
-///no agregue el campo time al data porfavor
+
+
+// este debe ser el topoplot
+// function notchScript(currentData) {
+//     var options = {
+// 	  mode: 'binary',
+// 	  args: [] 
+//     };  
+//     //console.log('-EC-notch_filter-',JSON.stringify(currentData.channels[0]));
+//     var notchShell = new PythonShell('/backend/pythonscripts/topoplot/topoFilter.py');
+
+//     // esto funciona
+//     // notchShell.send(JSON.stringify(currentData.channels[0]));
+//     // ahora enviemos los 20 canales
+//     notchShell.send(JSON.stringify(currentData.channels));
+
+//     notchShell.on('message', function (message) {
+//         // received a message sent from the Python script (a simple "print" statement)
+//          console.log(message);
+//         // results={}   
+//         // results['channels'] = JSON.parse(message)['channels']
+//         // results['debug'] = currentData.debug;
+//         // results['annotations']=currentData.annotations;
+//         // results['patientInfo']=currentData.patientInfo;
+//         // io.emit("notch_filter", results);  
+//       }); 
+
+//     // end the input stream and allow the process to exit
+//     notchShell.end(function (err,code,signal) {
+//         if (err) throw err;
+//         console.log('-EC-topoplot-The exit code was: ' + code);
+//         console.log('-EC-topoplot-The exit signal was: ' + signal);
+//         console.log('-EC-topoplot-finished'); 
+//     });
+// };
 
 function edfFromFile(startPath, msg) {
    

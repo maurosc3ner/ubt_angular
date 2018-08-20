@@ -16,7 +16,7 @@ export class AnnotationContentComponent implements OnChanges {
     if (this.current_data == null) {
       return 0;
     } else {
-    this.annotations = JSON.parse(this.current_data)['annotations']['items'];
+      this.annotations = this.current_data['annotations']['items'];
     }
   }
 }
