@@ -78,7 +78,7 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
             }, name);
         }
         const metrics = ['foo', 'bar', 'baz'];
-        horizon.metric(random_ma);
+        horizon.metric();
         console.log('AMHCubismDraw', metrics);
         d3.select('#graph').selectAll('.horizon')
               .data(metrics)
