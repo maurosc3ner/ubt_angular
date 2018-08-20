@@ -55,7 +55,8 @@ export class AppPrincipalContentComponent implements OnInit, OnChanges {
           this.Jump();
         }
         if (this.Command_Control[0] === 4 ) {
-
+          this.patient_current_data['debug']['time']['index'] = this.patient_current_data['debug']['time']['index'] + this.Command_Control[1] * 10 * this.patient_current_data['channels'][0]['samplefrequency'];
+          this.Jump();
 
         }
         this.Command_Control = null;
