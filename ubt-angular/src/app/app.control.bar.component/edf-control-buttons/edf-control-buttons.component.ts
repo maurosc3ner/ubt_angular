@@ -8,7 +8,7 @@ import { Component, Output, EventEmitter } from '@angular/core';
 export class EdfControlButtonsComponent {
   @Output() goBackward = new EventEmitter();
   @Output() goForward = new EventEmitter();
-  step = [1, 3, 6];
+  step = [1, 3, 6, 30];
   stepPos = 0;
   Backward(event, step = this.step[this.stepPos]) {
     this.goBackward.emit(step);

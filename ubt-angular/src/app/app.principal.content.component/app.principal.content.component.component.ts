@@ -80,7 +80,7 @@ export class AppPrincipalContentComponent implements OnInit, OnChanges {
     }
     if (this.Status === 3) {
       this.visAnno = true;
-      this.visEEG = false;
+      this.visEEG = true;
       this.visESI = false;
       this.visPlane = false;    }
   }

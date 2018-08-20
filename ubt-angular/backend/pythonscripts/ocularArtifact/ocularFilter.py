@@ -1,5 +1,5 @@
 # How to 
-# python ocularArtifactFilter.py -i "../../server_data/sujeto_base.edf" -e "t.edf"
+# python ocularFilter.py -i "../../server_data/sujeto_base.edf" -e "t.edf"
 # 
 import numpy as np 
 import pyedflib

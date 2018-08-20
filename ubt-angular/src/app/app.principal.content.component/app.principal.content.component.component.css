@@ -17,6 +17,13 @@
   border-color: blue;
 }
 
+.anno-content-container {
+  background-color: rgb(0, 0, 0);
+  border-style: solid;
+  border-width: 1px;
+  border-color: yellowgreen;
+}
+
 .plane-view-container {
   background-color: rgb(0, 0, 0);
   border-style: solid;
