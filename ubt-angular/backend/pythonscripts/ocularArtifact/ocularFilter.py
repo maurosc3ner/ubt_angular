@@ -6,6 +6,10 @@ import pyedflib
 from sklearn.decomposition import FastICA
 import argparse
 from jade import jadeR
+import matplotlib.pyplot as plt
+import sys
+import json
+import pandas as pd
 
 class ocular_artifact_filter():
     l=0
@@ -115,10 +119,79 @@ class ocular_artifact_filter():
         edf.close()
         del edf
 
+def read_in():
+    lines = sys.stdin.readlines()
+    #Since our input would only be having one line, parse our JSON data from that
+    return json.loads(lines[0])
+
 if __name__ == '__main__':
     
     adap1 = ocular_artifact_filter()
-    arc,output = adap1.argparse()
-    dataEEG ,fs,headers,channels_labels =  adap1.read_edf(arc)
-    Xpp = adap1.filt(dataEEG,channels_labels)
-    adap1.write_edf(Xpp,headers,output)
+    # arc,output = adap1.argparse()
+    stdin=read_in()
+    nch=len(stdin)
+    nSamples = len(stdin[0]['data'])
+    fs=stdin[0]['samplefrequency']
+
+    # dataEEG ,fs,headers,channels_labels =  adap1.read_edf(arc)
+    labels=[]
+    in_signal = np.zeros((nch,nSamples))
+    currentCh=0
+    for item in stdin:
+        labels.append(item['label'])
+        for subitem in item['data']:
+            subitem.pop('time', None)
+        df = pd.DataFrame(item['data'])
+        in_signal[currentCh,:]=np.array(df.values).transpose()
+        
+        currentCh = currentCh +1
+    # call filter
+    filtered_signal = adap1.filt(in_signal,labels)
+    # convert to message json
+    response={}
+    response['channels']=[]
+    currentCh=0
+    for channel in stdin:
+        channelObj={}
+        channelObj['id']=channel['id']
+        channelObj['label']=channel['label']
+        channelObj['samples']=channel['samples']
+        channelObj['physicalMaximum']=channel['physicalMaximum']
+        channelObj['physicalMinimum']=channel['physicalMinimum']
+        channelObj['digitalMaximum']=channel['digitalMaximum']
+        channelObj['digitalMinimum']=channel['digitalMinimum']
+        channelObj['samplefrequency']= channel['samplefrequency']
+        channelObj['data']=[]
+        currentD=0
+        for subitem in channel['data']:
+            d={}
+            # d['value']=float(subitem['value'])
+            d['value']=float(filtered_signal[currentCh,currentD])
+            channelObj['data'].append(d)
+            currentD=currentD+1
+        response['channels'].append(channelObj)
+        currentCh=currentCh+1
+        # print(channelObj['id'])
+    print (json.dumps(response))
+
+    # n = 2500 # 10 segundos.
+    # t = np.linspace(0,(n-1)/fs,n)
+    # ti = 1000 # Segundo inical.
+    # tf = 1010 # Segundo final.
+    # ni = ti*fs # Muestra inicial.
+    # nf = tf*fs # Muestra final.
+
+    # # Generación de gráficas CANAL 10.
+
+    # fig,subplt=plt.subplots(2,1,figsize=(8,5))
+    # subplt[0].plot(t,roiSignal[9][:])
+    # subplt[0].title.set_text('Señal original')
+    # subplt[0].grid()
+
+    # subplt[1].plot(t,Xpp[9][:])
+    # subplt[1].title.set_text('Señal filtrada')
+    # subplt[1].grid()
+    # print('Ok')
+    # plt.show()
+    # Xpp = adap1.filt(dataEEG,channels_labels)
+    # adap1.write_edf(Xpp,headers,output)
