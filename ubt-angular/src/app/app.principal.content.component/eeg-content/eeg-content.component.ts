@@ -55,39 +55,9 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
                 this.delete_channel(true);
                 this.channel_num = this.init_channels();
                 this.create_channels(this.CheckStatus()[0], this.CheckStatus()[1], this.channel_num, false);
-                this.cubismDraw();
+                this.cubismDraw(this.current_data);
             }
         }
-    }
-    cubismDraw() {
-        d3.select('#graph').selectAll('path').remove();
-        d3.select('#graph').selectAll('g').remove();
-        const data = this.current_data;
-        const starttime = data['debug']['time'];
-        const data_0 = data['channels'][0]['data'];
-        const context = cubism.context().size(960);
-        const horizon = context.horizon().extent([0, 2]);
-        function random_ma(name) {
-            return context.metric(function(start, stop, step, callback) {
-                const values = [];
-                while (+start < +stop) {
-                    start = + start + step;
-                    values.push(Math.random());
-                }
-                callback(null, values);
-            }, name);
-        }
-        const metrics = ['foo', 'bar', 'baz'];
-        horizon.metric(random_ma);
-        console.log('AMHCubismDraw', metrics);
-        d3.select('#graph').selectAll('.horizon')
-              .data(metrics)
-              .enter()
-              .append('div')
-              .attr('class', 'horizon')
-              .call(horizon);
-        const axis = context.axis();
-        d3.select('#graph').append('div').attr('class', 'axis axis--x').append('g').call(axis);
     }
 
     click_multiplier(event, direction: boolean) {
@@ -110,6 +80,7 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
             }
         }
         this.create_channels( this.CheckStatus()[0], this.CheckStatus()[1], this.channel_num, true);
+        this.cubismDraw(this.current_data);
     }
     delete_channel(command = false) {
             for (let n = 1 ; n < 2; n++) {
@@ -172,7 +143,7 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
         updating = false
     ) {
             if (data_eeg.length !== 0) {
-                const channel_data: Array<JSON> = data_eeg.data;
+                const channel_data: Array<JSON> = JSON.parse(JSON.stringify(data_eeg.data));
                 let i = 0;
                 const time_parse      =   d3.timeParse( '%S' );
                 const time_format     =   d3.timeFormat( '%S' );
@@ -278,6 +249,108 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
                     .attr('stroke-width' , 2);
                 });
             }
+    }
+    cubismDraw(data) {
+        d3.select('#graph').selectAll('div').remove();
+        const multip = this.scale_multiplier[this.multiplier_pos];
+        const startTime = data['debug']['time'];
+        const frequency = Math.max.apply(null, data['channels'].map(function(d) { return String(d['samplefrequency']); }));
+        const time_sample = 1 / frequency;
+        const max_samples = Math.max.apply(null, data['channels'].map(
+            d => d['data'].length
+            )
+        );
+        const time_values = [];
+        for (let i = 0; i < max_samples; i++) {
+            time_values.push(startTime['currentTime'] + i * time_sample);
+        }
+        const date_values = time_values.map(
+            d => {
+                const date = new Date( d * 1000 );
+                const year = date.getFullYear();
+                const month = date.getMonth();
+                const day = date.getDay();
+                const hours = date.getHours();
+                const minutes = '0' + date.getMinutes();
+                const seconds = '0' + date.getSeconds();
+                const miliseconds = '0' + date.getMilliseconds();
+                const formattedTime = year + '-' + month + '-' + day + '-' + hours + ':' + minutes.substr(-2) + ':'
+                + seconds.substr(-2) + ':' + miliseconds.substr(-2);
+                return formattedTime;
+            }
+        );
+        console.log('AMH_date_values', date_values);
+        const size_cubic = 2500;
+        const step_cubic = size_cubic / 1100;
+        const eeg_values = data['channels'].map(function(d) {
+            return d['data'].map(
+                function(f) {
+                    return f['value'];
+                });
+            });
+        const extent = [ -5 * multip, 5 * multip ];
+        console.log('AMH_SCALE');
+        const spectral = [
+        '#66c2a5',
+        '#abdda4',
+        '#fee08b',
+        '#f46d43',
+        '#d53e4f',
+        '#66c2a5',
+        '#abdda4',
+        '#fee08b',
+        '#f46d43',
+        '#d53e4f'
+        ];
+        const context = cubism
+        .context()
+        .step(step_cubic)
+        .size(1100)
+        .stop();
+        const horizon = context
+        .horizon()
+        .height([70])
+        .mode(['mirror'])
+        .extent(extent)
+        .colors(spectral);
+        const revalues = function temp(name) {
+            return context.metric(
+                function(start, stop, step, callback) {
+                const min_eeg = Math.min.apply(null, eeg_values[name]);
+                const values = eeg_values[name].map(
+                    // d => d + Math.abs(min_eeg)
+                    d => d
+                );
+                // console.log('AMH_data_eeg_min', name, min_eeg);
+                callback(null, values);
+                }, name);
+        };
+        const renames = data['channels'].map(function(d) { return String(d['id']); });
+        horizon.metric(revalues);
+        d3.select('#graph').selectAll('.horizon')
+            .data(renames)
+            .enter()
+            .append('div')
+            .attr('class', 'horizon')
+            .call(horizon);
+
+        d3.select('#graph')
+        .selectAll('.axis')
+        .data(['top'])
+        .enter()
+        .append('div')
+        .attr('class', 'axis axis--x')
+        .each(
+        function(d) {
+            d3.select(this)
+            .call(
+                context
+                .axis()
+                .ticks(10)
+                .orient(d)
+            );
+        });
+        // d3.select('#graph').append('div').attr('class', 'axis axis--x').append('g').call(axis);
     }
     CheckStatus() {
         if (this.EEG_Status_eeg === 0) {
