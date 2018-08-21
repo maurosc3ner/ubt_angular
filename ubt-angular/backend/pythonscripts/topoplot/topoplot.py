@@ -96,7 +96,7 @@ class edf_topoplot(object):
 		return pos,pot_signal,channels_labels
 	
 	#elabora el topoplot
-	def plot_topomap(self,output,pot_signal,pos):
+	def plot_topomap(self,output,samplesStr,pot_signal,pos):
 		from mne.viz import plot_topomap
 		import matplotlib
 		matplotlib.use('Agg')
@@ -104,7 +104,7 @@ class edf_topoplot(object):
 
 		minn = min(pot_signal)
 		maxx = max(pot_signal)
-		plt.title('topomap')
+		plt.title('topomap for '+samplesStr+' samples')
 		fig = plot_topomap(pot_signal, pos, cmap='jet', sensors='k.',contours=0, 
 			image_interp='spline36' ,show = False,vmin = minn, vmax = maxx)
 		plt.savefig(output)

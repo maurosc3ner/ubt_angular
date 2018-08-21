@@ -1,3 +1,4 @@
+
 from topoplot import edf_topoplot
 import sys
 import json
@@ -31,7 +32,7 @@ for item in stdin:
 	in_signal[currentCh,:]=np.array(df.values).transpose()
 	# print (in_signal[currentCh,:],currentCh)
 	currentCh = currentCh +1
-print(nch,nSamples,labels,in_signal.shape)
+# print(nch,nSamples,labels,in_signal.shape)
     # print(len(inSignals))
     # print(len(inSignals[0]['data']))
 
@@ -44,4 +45,4 @@ elec,labels_ref,center,radius = ob.prepare('config')
 ts = int(datetime.datetime.now().timestamp())
 # # calculo de las posiciones de los electrodos de la medida
 pos,power,labels= ob.positions(nch,labels,elec,labels_ref,power)
-fig = ob.plot_topomap('{0!s}'.format(ts),power,pos)
+fig = ob.plot_topomap('{0!s}'.format(ts),str(nSamples),power,pos)

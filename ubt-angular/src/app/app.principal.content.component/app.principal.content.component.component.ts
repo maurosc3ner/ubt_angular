@@ -60,6 +60,9 @@ export class AppPrincipalContentComponent implements OnInit, OnChanges {
         if (this.Command_Control[0] === 5 ) {
           this.ocularFilter();
         }
+        if (this.Command_Control[0] === 6 ) {
+          this.topoPlot();
+        }
         this.Command_Control = null;
     }
 
@@ -91,7 +94,7 @@ export class AppPrincipalContentComponent implements OnInit, OnChanges {
       this.visPlane = false;    
       this.visTopoPLot = false;
     }
-    if (this.Status === 4) {
+    if (this.Status === 4) { // EEG+topoplot
       this.visAnno = false;
       this.visEEG = true;
       this.visESI = false;
@@ -131,9 +134,18 @@ export class AppPrincipalContentComponent implements OnInit, OnChanges {
     this.d3service.getOcularFilter(this.patient_current_data).subscribe(
       (response: Response) => {
           this.patient_current_data = JSON.parse(JSON.stringify(response));
-      },
-  (err) => {
-      console.log(err);
-  });
+      },(err) => {
+        console.log(err);
+      });
+  }
+
+  topoPlot() {
+    this.d3service.getTopoPlot(this.patient_current_data).subscribe(
+      (response: Response) => {
+          this.patient_current_data = JSON.parse(JSON.stringify(response));
+
+      },(err) => {
+        console.log(err);
+      });
   }
 }

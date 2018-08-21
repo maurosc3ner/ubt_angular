@@ -52,7 +52,7 @@ export class AppControlBarComponent {
       this.TopoPlotToggle = false; 
     } else { 
       this.TopoPlotToggle = true;
-      this.CoomandEvent.emit([5, 0]);
+      this.CoomandEvent.emit([6, 0]);
     }
     this.status = this.checkStatus(this.ESIToggle, this.PlaneToggle, this.AnnotToggle, this.TopoPlotToggle);
     this.StatusEvent.emit(this.status);

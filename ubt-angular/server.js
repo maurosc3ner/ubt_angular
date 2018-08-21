@@ -123,38 +123,35 @@ function ocularScript(currentData) {
 };
 
 // este debe ser el topoplot
-// function notchScript(currentData) {
-//     var options = {
-// 	  mode: 'binary',
-// 	  args: [] 
-//     };  
-//     //console.log('-EC-notch_filter-',JSON.stringify(currentData.channels[0]));
-//     var notchShell = new PythonShell('/backend/pythonscripts/topoplot/topoFilter.py');
+function topoPlotScript(currentData) {
+    var options = {
+	  mode: 'binary',
+	  args: [] 
+    };  
+    //console.log('-EC-notch_filter-',JSON.stringify(currentData.channels[0]));
+    var topoPlotShell = new PythonShell('/backend/pythonscripts/topoplot/topoFilter.py');
 
-//     // esto funciona
-//     // notchShell.send(JSON.stringify(currentData.channels[0]));
-//     // ahora enviemos los 20 canales
-//     notchShell.send(JSON.stringify(currentData.channels));
+    topoPlotShell.send(JSON.stringify(currentData.channels));
 
-//     notchShell.on('message', function (message) {
-//         // received a message sent from the Python script (a simple "print" statement)
-//          console.log(message);
-//         // results={}   
-//         // results['channels'] = JSON.parse(message)['channels']
-//         // results['debug'] = currentData.debug;
-//         // results['annotations']=currentData.annotations;
-//         // results['patientInfo']=currentData.patientInfo;
-//         // io.emit("notch_filter", results);  
-//       }); 
+    topoPlotShell.on('message', function (message) {
+        // received a message sent from the Python script (a simple "print" statement)
+         console.log(message);
+        // results={}   
+        // results['channels'] = JSON.parse(message)['channels']
+        // results['debug'] = currentData.debug;
+        // results['annotations']=currentData.annotations;
+        // results['patientInfo']=currentData.patientInfo;
+        // io.emit("notch_filter", results);  
+      }); 
 
-//     // end the input stream and allow the process to exit
-//     notchShell.end(function (err,code,signal) {
-//         if (err) throw err;
-//         console.log('-EC-topoplot-The exit code was: ' + code);
-//         console.log('-EC-topoplot-The exit signal was: ' + signal);
-//         console.log('-EC-topoplot-finished'); 
-//     });
-// };
+    // end the input stream and allow the process to exit
+    topoPlotShell.end(function (err,code,signal) {
+        if (err) throw err;
+        console.log('-EC-topoplot-The exit code was: ' + code);
+        console.log('-EC-topoplot-The exit signal was: ' + signal);
+        console.log('-EC-topoplot-finished'); 
+    });
+};
 
 function edfFromFile(startPath, msg) {
    
@@ -201,6 +198,12 @@ io.on('connection', function(socket) {
     socket.on('ocular_filter', function(msg) {
         console.log("-EC-ocular_filter- ");
         ocularScript(msg);
+        
+    });
+
+    socket.on('topo_plot', function(msg) {
+        console.log("-EC-topo_plot- ");
+        topoPlotScript(msg);
         
     });
 

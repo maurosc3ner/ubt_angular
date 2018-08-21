@@ -65,4 +65,12 @@ export class D3Service {
         const response = this.socket.fromEvent('ocular_filter');
         return response;
     }
+
+    getTopoPlot(current_data: any): any {
+        current_data['debug']['command'] = 'topo_plot';
+        const payload = current_data;
+        this.socket.emit('topo_plot', payload);
+        const response = this.socket.fromEvent('topo_plot');
+        return response;
+    }
 }
