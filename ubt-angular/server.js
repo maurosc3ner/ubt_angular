@@ -142,11 +142,23 @@ function topoPlotScript(currentData) {
         // results['annotations']=currentData.annotations;
         // results['patientInfo']=currentData.patientInfo;
         // io.emit("notch_filter", results);  
+
+        
       }); 
 
     // end the input stream and allow the process to exit
     topoPlotShell.end(function (err,code,signal) {
         if (err) throw err;
+
+        fs.readFile(path.join(__dirname, '1534859325.png'), function(err, buf){
+            if (err) throw err;
+            // it's possible to embed binary data
+            // within arbitrarily-complex objects
+            io.emit('topo_plot', { image: true, buffer: buf });
+            console.log('image file before emmited');
+            //io.emit("topo_plot", "hello world");
+            
+        });
         console.log('-EC-topoplot-The exit code was: ' + code);
         console.log('-EC-topoplot-The exit signal was: ' + signal);
         console.log('-EC-topoplot-finished'); 

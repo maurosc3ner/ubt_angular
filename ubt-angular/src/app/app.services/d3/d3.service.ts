@@ -71,6 +71,7 @@ export class D3Service {
         const payload = current_data;
         this.socket.emit('topo_plot', payload);
         const response = this.socket.fromEvent('topo_plot');
+        console.log('EC-serviceTopoPlot ',response);
         return response;
     }
 }

@@ -20,6 +20,7 @@ export class AppPrincipalContentComponent implements OnInit, OnChanges {
   srcImageSagital: String = './assets/brain-dummy/MRISagital.png';
   srcImageAxial: String = './assets/brain-dummy/MRIAxial.png';
   srcImageCoronal: String = './assets/brain-dummy/MRICoronal_2.jpg';
+  srcTopoPlot: any;
 
   constructor(private d3service: D3Service) {
   }
@@ -105,7 +106,7 @@ export class AppPrincipalContentComponent implements OnInit, OnChanges {
   assignData() {
     this.d3service.getPatientInfo(this.patientfile, this.patient_current_data).subscribe(
         (response: Response) => {
-            this.patient_current_data = JSON.parse(JSON.stringify(response));
+          this.patient_current_data = JSON.parse(JSON.stringify(response));
         },
     (err) => {
         console.log(err);
@@ -140,9 +141,13 @@ export class AppPrincipalContentComponent implements OnInit, OnChanges {
   }
 
   topoPlot() {
+    console.log('EC-topoPlot before subscribe ');
     this.d3service.getTopoPlot(this.patient_current_data).subscribe(
       (response: Response) => {
-          this.patient_current_data = JSON.parse(JSON.stringify(response));
+          //this.patient_current_data = JSON.parse(JSON.stringify(response));
+        console.log('EC-topoPlot before response ',JSON.stringify(response));
+        this.srcTopoPlot =<any> 'data:image/png;base64,' + response['buffer'];
+        console.log('EC-topoPlot after response ',this.srcTopoPlot);
 
       },(err) => {
         console.log(err);
