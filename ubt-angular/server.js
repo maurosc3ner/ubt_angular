@@ -122,12 +122,12 @@ function ocularScript(currentData) {
     });
 };
 
-// este debe ser el topoplot
+// este debe ser el topoplot 
 function topoPlotScript(currentData) {
     var options = {
 	  mode: 'binary',
 	  args: [] 
-    };  
+    };   
     //console.log('-EC-notch_filter-',JSON.stringify(currentData.channels[0]));
     var topoPlotShell = new PythonShell('/backend/pythonscripts/topoplot/topoFilter.py');
 
@@ -135,28 +135,21 @@ function topoPlotScript(currentData) {
 
     topoPlotShell.on('message', function (message) {
         // received a message sent from the Python script (a simple "print" statement)
-         console.log(message);
-        // results={}   
-        // results['channels'] = JSON.parse(message)['channels']
-        // results['debug'] = currentData.debug;
-        // results['annotations']=currentData.annotations;
-        // results['patientInfo']=currentData.patientInfo;
-        // io.emit("notch_filter", results);  
-
-        
-      }); 
+        //  console.log(message.toString('base64'));
+        //  io.emit("topo_plot", { image: true, buffer: message});  
+      });  
 
     // end the input stream and allow the process to exit
     topoPlotShell.end(function (err,code,signal) {
         if (err) throw err;
-
-        fs.readFile(path.join(__dirname, '1534859325.png'), function(err, buf){
+ 
+        // lectura desde disco
+        fs.readFile(path.join(__dirname, 'temptopo.png'), function(err, buf){
             if (err) throw err;
             // it's possible to embed binary data
             // within arbitrarily-complex objects
-            io.emit('topo_plot', { image: true, buffer: buf });
-            console.log('image file before emmited');
-            //io.emit("topo_plot", "hello world");
+            io.emit('topo_plot', { image: true, buffer: buf.toString('base64') });
+            //console.log('image file before emmited',buf.toString('base64'));
             
         });
         console.log('-EC-topoplot-The exit code was: ' + code);
@@ -198,7 +191,7 @@ io.on('connection', function(socket) {
         //este funciona
         if (!edfFromFile('/backend/server_data', msg))
             console.log('-EC-lf- ooops something happen');
-        
+    
     });
 
     socket.on('notch_filter', function(msg) {

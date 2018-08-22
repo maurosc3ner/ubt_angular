@@ -29,8 +29,16 @@ export class TopoPlotComponent implements OnInit {
     canvas['width']  = 640;
     canvas['height'] = 480;
     const ctx = canvas.getContext('2d');
-    ctx.drawImage(this.topoplotImg, 0, 0);
+    const img = new Image();
+
+    img.onload = function() {
+     ctx.drawImage(img, 0, 0);
+    };
+    img.src = this.topoplotImg;
+    
+
   }
+
   ngAfterContentInit() {
     
   }

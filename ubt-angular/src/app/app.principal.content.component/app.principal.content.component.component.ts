@@ -41,6 +41,9 @@ export class AppPrincipalContentComponent implements OnInit, OnChanges {
       if (this.Command_Control == null) { } else {
         if (this.Command_Control[0] === 0 ) {
           this.notchFilter();
+          if (this.Status === 4) { // EEG+topoplot
+            this.topoPlot();
+          }
         }
         if (this.Command_Control[0] === 1 ) {
             this.patient_current_data = null;
@@ -53,10 +56,17 @@ export class AppPrincipalContentComponent implements OnInit, OnChanges {
         if (this.Command_Control[0] === 3 ) {
           this.patient_current_data['debug']['time']['index'] = this.patient_current_data['debug']['time']['index'] - this.Command_Control[1] * 10 * this.patient_current_data['channels'][0]['samplefrequency'];
           this.Jump();
+          if (this.Status === 4) { // EEG+topoplot
+            this.topoPlot();
+          }
         }
         if (this.Command_Control[0] === 4 ) {
           this.patient_current_data['debug']['time']['index'] = this.patient_current_data['debug']['time']['index'] + this.Command_Control[1] * 10 * this.patient_current_data['channels'][0]['samplefrequency'];
           this.Jump();
+          if (this.Status === 4) { // EEG+topoplot
+            this.topoPlot();
+          }
+
         }
         if (this.Command_Control[0] === 5 ) {
           this.ocularFilter();
@@ -126,6 +136,7 @@ export class AppPrincipalContentComponent implements OnInit, OnChanges {
     this.d3service.getNotchFilter(this.patient_current_data).subscribe(
         (response: Response) => {
             this.patient_current_data = JSON.parse(JSON.stringify(response));
+            this.topoPlot();
         },
     (err) => {
         console.log(err);
@@ -135,6 +146,7 @@ export class AppPrincipalContentComponent implements OnInit, OnChanges {
     this.d3service.getOcularFilter(this.patient_current_data).subscribe(
       (response: Response) => {
           this.patient_current_data = JSON.parse(JSON.stringify(response));
+          this.topoPlot();
       },(err) => {
         console.log(err);
       });
@@ -144,10 +156,11 @@ export class AppPrincipalContentComponent implements OnInit, OnChanges {
     console.log('EC-topoPlot before subscribe ');
     this.d3service.getTopoPlot(this.patient_current_data).subscribe(
       (response: Response) => {
-          //this.patient_current_data = JSON.parse(JSON.stringify(response));
-        console.log('EC-topoPlot before response ',JSON.stringify(response));
-        this.srcTopoPlot =<any> 'data:image/png;base64,' + response['buffer'];
-        console.log('EC-topoPlot after response ',this.srcTopoPlot);
+        //this.patient_current_data = JSON.parse(JSON.stringify(response));
+        //console.log('EC-topoPlot before response ',Object.getOwnPropertyNames(JSON.parse(JSON.stringify(response['buffer']))));
+        const tempImg=JSON.parse(JSON.stringify(response));
+        this.srcTopoPlot ='data:image/png;base64,' + tempImg['buffer'];
+        //console.log('EC-topoPlot after response ',this.srcTopoPlot.toString('base64'));
 
       },(err) => {
         console.log(err);

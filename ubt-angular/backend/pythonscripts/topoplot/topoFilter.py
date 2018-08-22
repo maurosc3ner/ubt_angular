@@ -45,4 +45,6 @@ elec,labels_ref,center,radius = ob.prepare('config')
 ts = int(datetime.datetime.now().timestamp())
 # # calculo de las posiciones de los electrodos de la medida
 pos,power,labels= ob.positions(nch,labels,elec,labels_ref,power)
-fig = ob.plot_topomap('{0!s}'.format(ts),str(nSamples),power,pos)
+fig = ob.plot_topomap('{0!s}'.format(ts),str(nSamples),power,pos,0)
+# sys.stdout.buffer.write(fig)
+# print(fig,flush=True)

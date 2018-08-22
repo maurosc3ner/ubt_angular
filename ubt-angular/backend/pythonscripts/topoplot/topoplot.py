@@ -96,29 +96,37 @@ class edf_topoplot(object):
 		return pos,pot_signal,channels_labels
 	
 	#elabora el topoplot
-	def plot_topomap(self,output,samplesStr,pot_signal,pos):
+	def plot_topomap(self,output,samplesStr,pot_signal,pos,saveMethod):
 		from mne.viz import plot_topomap
 		import matplotlib
 		matplotlib.use('Agg')
 		import matplotlib.pyplot as plt
+		from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
+		import urllib
+		from io import StringIO
 
 		minn = min(pot_signal)
 		maxx = max(pot_signal)
 		plt.title('topomap for '+samplesStr+' samples')
-		fig = plot_topomap(pot_signal, pos, cmap='jet', sensors='k.',contours=0, 
+		fig=plt.Figure()
+		canvas=FigureCanvas(fig)
+
+		fig = plot_topomap(pot_signal, pos, cmap='jet', sensors='k.', contours=0, 
 			image_interp='spline36' ,show = False,vmin = minn, vmax = maxx)
-		plt.savefig(output)
-		plt.show(fig)
-		plt.close('all')
-		
-
-# fig = plt.figure()
-# plt.plot([1,2,3])
-# plt.savefig('test0.png')
-# plt.close(fig)
-
-		return True
-		
+		if saveMethod == 0:# writing the file
+			plt.savefig('temptopo.png')
+			plt.show(fig)
+			plt.close('all')
+			return True
+		elif saveMethod == 1: # return as data-uri
+			
+			png_output = StringIO()
+			canvas.print_png(png_output)
+			data = png_output.getvalue().encode('base64')
+			data_url = 'data:image/png;base64,{}'.format(urllib.parse.quote(data.rstrip('\n')))
+			return data_url
+		else:
+			return False
 
 	def interpolation_object(self,pot_signal,pos,elec):
 		import matplotlib.pyplot as plt
