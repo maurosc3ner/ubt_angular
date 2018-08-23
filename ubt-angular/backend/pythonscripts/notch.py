@@ -93,10 +93,24 @@ def read_in():
     return json.loads(lines[0])
 
 if __name__ == '__main__':
-    # print ("start of notch")
+   
     notch1 = Notch()
+    # argparse input mode
+     # print ("start of notch")
+    # arc,output = notch1.argparse()
+    # signal , fs ,headers= notch1.read_edf(arc)
+    # filtered_signal,num,den = notch1.filt(signal[:,232250:234750],fs)
+    # print("size of output",filtered_signal.shape)
+    # print(vals)
+    # print("size of input",in_signal.shape)
+    # fig,subplt=plt.subplots(3,1,figsize=(8,5))
+    # subplt[0].plot(t,inp[9][ni:nf])
+    # subplt[0].title.set_text('Señal original')
+    # subplt[0].grid()
+    #notch1.write_edf(filtered_signal,headers,output)
+    
+    # python-shell input mode
     inSignals=read_in()
-
     nch=len(inSignals)
     nSamples = len(inSignals[0]['data'])
     fs=inSignals[0]['samplefrequency']
@@ -115,17 +129,12 @@ if __name__ == '__main__':
         currentCh = currentCh +1
 
 
-    # print(vals)
-    # print("size of input",in_signal.shape)
-    # fig,subplt=plt.subplots(3,1,figsize=(8,5))
-    # subplt[0].plot(t,inp[9][ni:nf])
-    # subplt[0].title.set_text('Señal original')
-    # subplt[0].grid()
-    # arc,output = notch1.argparse()
-    # signal , fs ,headers= notch1.read_edf(arc)
-    filtered_signal,num,den = notch1.filt(in_signal,fs)
-    # print("size of output",filtered_signal.shape)
+    
 
+    # python-shell execute mode
+    filtered_signal,num,den = notch1.filt(in_signal,fs)
+
+    # python-shell output mode
     response={}
     response['channels']=[]
     currentCh=0
@@ -153,4 +162,4 @@ if __name__ == '__main__':
         # print(channelObj['id'])
     print (json.dumps(response))
 
-    #notch1.write_edf(filtered_signal,headers,output)
+    

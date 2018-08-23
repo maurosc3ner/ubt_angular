@@ -36,14 +36,11 @@ export class AppPrincipalContentComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges() {
-    // console.log(this.Command_Control);
-    // console.log(this.Status);
+    console.log(this.Command_Control);
+    console.log(this.Status);
       if (this.Command_Control == null) { } else {
         if (this.Command_Control[0] === 0 ) {
           this.notchFilter();
-          if (this.Status === 4) { // EEG+topoplot
-            this.topoPlot();
-          }
         }
         if (this.Command_Control[0] === 1 ) {
             this.patient_current_data = JSON.parse('{}');
@@ -57,18 +54,11 @@ export class AppPrincipalContentComponent implements OnInit, OnChanges {
           this.patient_current_data['debug']['time']['index'] = this.patient_current_data['debug']['time']['index'] 
           - this.Command_Control[1] * 10 * this.patient_current_data['channels'][0]['samplefrequency'];
           this.Jump();
-          if (this.Status === 4) { // EEG+topoplot
-            this.topoPlot();
-          }
         }
         if (this.Command_Control[0] === 4 ) {
           this.patient_current_data['debug']['time']['index'] = this.patient_current_data['debug']['time']['index'] 
           + this.Command_Control[1] * 10 * this.patient_current_data['channels'][0]['samplefrequency'];
           this.Jump();
-          if (this.Status === 4) { // EEG+topoplot
-            this.topoPlot();
-          }
-
         }
         if (this.Command_Control[0] === 5 ) {
           this.ocularFilter();
@@ -129,6 +119,9 @@ export class AppPrincipalContentComponent implements OnInit, OnChanges {
     this.d3service.getJump(this.patient_current_data).subscribe(
         (response: Response) => {
             this.patient_current_data = JSON.parse(JSON.stringify(response));
+            if (this.Status === 4) { // EEG+topoplot
+              this.topoPlot();
+            }
         },
     (err) => {
         console.log(err);
@@ -138,7 +131,9 @@ export class AppPrincipalContentComponent implements OnInit, OnChanges {
     this.d3service.getNotchFilter(this.patient_current_data).subscribe(
         (response: Response) => {
             this.patient_current_data = JSON.parse(JSON.stringify(response));
-            this.topoPlot();
+            if (this.Status === 4) { // EEG+topoplot
+              this.topoPlot();
+            }
         },
     (err) => {
         console.log(err);
@@ -148,7 +143,9 @@ export class AppPrincipalContentComponent implements OnInit, OnChanges {
     this.d3service.getOcularFilter(this.patient_current_data).subscribe(
       (response: Response) => {
           this.patient_current_data = JSON.parse(JSON.stringify(response));
-          this.topoPlot();
+          if (this.Status === 4) { // EEG+topoplot
+            this.topoPlot();
+          }
       }, (err) => {
         console.log(err);
       });

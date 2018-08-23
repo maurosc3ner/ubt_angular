@@ -127,13 +127,19 @@ def read_in():
 if __name__ == '__main__':
     
     adap1 = ocular_artifact_filter()
+
+    # python argparse input mode
     # arc,output = adap1.argparse()
+    # dataEEG ,fs,headers,channels_labels =  adap1.read_edf(arc)
+    # print ("leido")
+
+    # python-shell input mode
     stdin=read_in()
     nch=len(stdin)
     nSamples = len(stdin[0]['data'])
     fs=stdin[0]['samplefrequency']
 
-    # dataEEG ,fs,headers,channels_labels =  adap1.read_edf(arc)
+    # python-shell exec mode
     labels=[]
     in_signal = np.zeros((nch,nSamples))
     currentCh=0
@@ -147,7 +153,8 @@ if __name__ == '__main__':
         currentCh = currentCh +1
     # call filter
     filtered_signal = adap1.filt(in_signal,labels)
-    # convert to message json
+    
+    # python-shell output mode (convert to message json)
     response={}
     response['channels']=[]
     currentCh=0
@@ -174,24 +181,22 @@ if __name__ == '__main__':
         # print(channelObj['id'])
     print (json.dumps(response))
 
+    # python output mode
     # n = 2500 # 10 segundos.
     # t = np.linspace(0,(n-1)/fs,n)
-    # ti = 1000 # Segundo inical.
-    # tf = 1010 # Segundo final.
-    # ni = ti*fs # Muestra inicial.
-    # nf = tf*fs # Muestra final.
-
-    # # Generación de gráficas CANAL 10.
-
+    # # ti = 1000 # Segundo inical.
+    # # tf = 1010 # Segundo final.
+    # # ni = ti*fs # Muestra inicial.
+    # # nf = tf*fs # Muestra final
+    # # # Generación de gráficas CANAL 10.
+    # Xpp = adap1.filt(dataEEG[:,232250:234750],channels_labels)
     # fig,subplt=plt.subplots(2,1,figsize=(8,5))
-    # subplt[0].plot(t,roiSignal[9][:])
+    # subplt[0].plot(t,dataEEG[9][232250:234750])
     # subplt[0].title.set_text('Señal original')
     # subplt[0].grid()
-
-    # subplt[1].plot(t,Xpp[9][:])
+    # subplt[1].plot(t,Xpp[9][0:2500])
     # subplt[1].title.set_text('Señal filtrada')
     # subplt[1].grid()
-    # print('Ok')
+    # print('Ok', Xpp.shape)
     # plt.show()
-    # Xpp = adap1.filt(dataEEG,channels_labels)
     # adap1.write_edf(Xpp,headers,output)

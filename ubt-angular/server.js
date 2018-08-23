@@ -35,6 +35,7 @@ function openEDFScript(pathFileName,currentData) {
 	});
 };
 
+
 function jumpEDFScript(filename,currentData) {
     //Aqui va llamado a rutina de python
     //TODO
@@ -56,9 +57,8 @@ function jumpEDFScript(filename,currentData) {
         io.emit("jump_edf", results[0]);
         console.log('-EC-jumpEDFScript- response to client...');
         return true;
-	});
-};
-  
+	}); 
+}; 
 
 //funciona 8-19-2018
 function notchScript(currentData) {
@@ -66,7 +66,7 @@ function notchScript(currentData) {
 	  mode: 'binary',
 	  args: [] 
     };  
-    //console.log('-EC-notch_filter-',JSON.stringify(currentData.channels[0]));
+    // console.log('-EC-notch_filter-',JSON.stringify(currentData.channels[0]));
     var notchShell = new PythonShell('/backend/pythonscripts/notch.py');
 
     // esto funciona
@@ -92,7 +92,7 @@ function notchScript(currentData) {
         console.log('-EC-notch_filter-The exit signal was: ' + signal);
         console.log('-EC-notch_filter-finished');
     });
-};
+};  
 
 function ocularScript(currentData) {
     var options = {
@@ -128,12 +128,13 @@ function topoPlotScript(currentData) {
 	  mode: 'binary',
 	  args: [] 
     };   
-    //console.log('-EC-notch_filter-',JSON.stringify(currentData.channels[0]));
+    // console.log('-EC-topoPlot-',JSON.stringify(currentData.channels[0]['id']));
     var topoPlotShell = new PythonShell('/backend/pythonscripts/topoplot/topoFilter.py');
 
     topoPlotShell.send(JSON.stringify(currentData.channels));
 
     topoPlotShell.on('message', function (message) {
+
         // received a message sent from the Python script (a simple "print" statement)
         //  console.log(message.toString('base64'));
         //  io.emit("topo_plot", { image: true, buffer: message});  
@@ -155,7 +156,7 @@ function topoPlotScript(currentData) {
         console.log('-EC-topoplot-The exit code was: ' + code);
         console.log('-EC-topoplot-The exit signal was: ' + signal);
         console.log('-EC-topoplot-finished'); 
-    });
+    }); 
 };
 
 function edfFromFile(startPath, msg) {
@@ -198,7 +199,7 @@ io.on('connection', function(socket) {
         console.log("-EC-notch_filter- ");
         notchScript(msg);
         
-    });
+    }); 
 
     socket.on('ocular_filter', function(msg) {
         console.log("-EC-ocular_filter- ");
