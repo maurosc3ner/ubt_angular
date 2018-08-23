@@ -1,4 +1,4 @@
-import { Component, Input, AfterContentInit, OnChanges } from '@angular/core';
+import { Component, Input, AfterContentInit, OnChanges, Output, EventEmitter } from '@angular/core';
 import { D3Service } from '../../app.services/d3/d3.service';
 
 import { Response } from '@angular/http';
@@ -15,6 +15,7 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
     @Input() EEG_Status_eeg: number;
     @Input() Command_eeg: Array<number>;
     @Input() current_data: any = null;
+    @Output() cursordata = new EventEmitter();
     visualization_type: String = 'Lines';
     control_vis: Boolean = false;
     handle_data: any;
@@ -133,6 +134,7 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
     delete_channel() {
         for (let n = 1 ; n < 2; n++) {
             d3.select('#channel' + n).selectAll('path').remove();
+            d3.select('#channel' + n).selectAll('rect').remove();
             d3.select('#channel' + n).selectAll('g').remove();
         }
         d3.select('#graph').selectAll('div').remove();
@@ -171,7 +173,8 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
                     this.color_scale,
                     width,
                     height,
-                    updating
+                    updating,
+                    this.cursordata
                 );
             }
         }
@@ -189,7 +192,8 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
         color_scale,
         width,
         height,
-        updating = false
+        updating = false,
+        cursordata
     ) {
             if (data_eeg.length !== 0) {
                 const channel_data: Array<JSON> = JSON.parse(JSON.stringify(data_eeg.data));
@@ -247,16 +251,13 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
                         })
                     ])
                 .range([chart_height - padding, padding]);
-
                 for (const sample of channel_data) {
                     sample['value'] = sample['value'] + multiplier * scale_multiplier;
                 }
                 const line = d3.line()
-
                 .x(function(d) {
                     return x_scale(d['time']);
                 })
-
                 .y(function(d) {
                     return y_scale(d['value']);
                 });
@@ -267,10 +268,8 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
                 const x_axis = d3.axisBottom(x_scale)
                 .ticks(5)
                 .tickFormat(time_format);
-
                 const y_axis = d3.axisLeft(y_scale)
                 .ticks(12);
-
                 if (x_axis_status) {
                     current_channel.selectAll('g').remove();
                     current_channel.append('g')
@@ -278,7 +277,6 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
                     .attr('transform', 'translate(0,' + (chart_height - padding) + ')')
                     .call(x_axis);
                 }
-
                 if (y_axis_status) {
                     current_channel.append('g')
                     .attr('class', 'axis axis--y')
@@ -307,14 +305,6 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
                 .attr('stroke', color_scale[color_pos - 1]);
                 }
                 current_channel.on('click', function(d) {
-                    const current_mouse = d3.mouse(this)[0];
-                    if (current_mouse < padding) {
-                        this.current_cursor = padding;
-                    } else if (current_mouse > chart_width) {
-                        this.current_cursor = chart_width;
-                    } else {
-                        this.current_cursor = current_mouse;
-                    }
                     const cursor_scale = d3.scaleLinear().domain([
                         padding,
                         chart_width + padding
@@ -329,6 +319,14 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
                         padding,
                         chart_width + padding
                     ]);
+                    const current_mouse = d3.mouse(this)[0];
+                    if (current_mouse < padding) {
+                        this.current_cursor = padding;
+                    } else if (current_mouse + cursor_scale_inverse(data_eeg.samplefrequency) > chart_width) {
+                        this.current_cursor = chart_width - cursor_scale_inverse(data_eeg.samplefrequency) + padding;
+                    } else {
+                        this.current_cursor = current_mouse;
+                    }
                     const start_time_index = channel_data[0]['time'].getTime();
                     const current_cursor_index = start_time_index
                     + (Math.round(cursor_scale(this.current_cursor)) * (1 / data_eeg.samplefrequency)) * 1000;
@@ -340,6 +338,8 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
                     // abs_current_cursor_time,
                     // cursor_scale_inverse(data_eeg.samplefrequency)
                     // );
+                    // console.log('AMH-eeg-component-cursor', current_data_cropped);
+                    cursordata.emit((Math.round(cursor_scale(this.current_cursor))));
                     // draw cursor
                     let cursor;
                     if (current_channel.select('#cursor').empty()) {
