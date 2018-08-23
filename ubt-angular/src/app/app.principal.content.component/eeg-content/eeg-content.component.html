@@ -1,10 +1,15 @@
-<mat-form-field >
-    <mat-select (selectionChange)="visualControl($event)" [(value)]="visualization_type">
-        <mat-option value="Lines">Lines</mat-option>
-        <mat-option value="Horizon">Horizon</mat-option>
-    </mat-select>
-</mat-form-field>
 <div class="container-fluid">
+        <div class="row">
+            <div class="col">
+                <mat-form-field >
+                    <label>Visualization Type:</label>
+                    <mat-select (selectionChange)="visualControl($event)" [(value)]="visualization_type">
+                        <mat-option value="Lines">Lines</mat-option>
+                        <mat-option value="Horizon">Horizon</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+        </div>
     <div class="row">
         <div class="col">
             <button mat-stroked-button (click)="click_multiplier($event, false)"  class="material-cust-small-button">

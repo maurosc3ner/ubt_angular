@@ -36,8 +36,8 @@ export class AppPrincipalContentComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges() {
-    console.log(this.Command_Control);
-    console.log(this.Status);
+    // console.log(this.Command_Control);
+    // console.log(this.Status);
       if (this.Command_Control == null) { } else {
         if (this.Command_Control[0] === 0 ) {
           this.notchFilter();

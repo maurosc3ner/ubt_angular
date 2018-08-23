@@ -22,6 +22,7 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
     scale_multiplier = [20, 50, 200];
     multiplier_pos = 0;
     current_cursor = 0;
+    current_scale: Array<any>;
     color_scale: Array<string> = [
          '#ffffff',
          '#ffffff',
@@ -91,19 +92,21 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
     ngAfterContentInit() {
     }
     ngOnChanges() {
-        console.log('AMHOnchangeseegcomponent', this.current_data, this.Command_eeg);
+        // console.log('AMHOnchangeseegcomponent', this.current_data, this.Command_eeg);
         if (this.Command_eeg == null) {
-            if (this.current_data == null) {
-                this.delete_channel(true);
+            if (this.current_data === undefined || JSON.stringify(this.current_data) === '{}') {
+                console.log('AMHOnundefined', this.current_data, this.Command_eeg);
+                this.delete_channel();
              } else {
-                this.delete_channel(true);
+                // console.log('AMHStartTime', this.current_data['debug']['time']);
+                this.delete_channel();
+                this.current_scale = this.computeTimeScale(this.current_data);
                 this.channel_num = this.init_channels();
                 this.create_channels(this.CheckStatus()[0], this.CheckStatus()[1], this.channel_num, false);
                 this.cubismDraw(this.current_data);
             }
         }
     }
-
     click_multiplier(event, direction: boolean) {
         if (this.current_data == null) {
             console.log('please load patient first');
@@ -126,13 +129,11 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
         this.create_channels( this.CheckStatus()[0], this.CheckStatus()[1], this.channel_num, true);
         this.cubismDraw(this.current_data);
     }
-    delete_channel(command = false) {
-        if (command ) {
-            for (let n = 1 ; n < 2; n++) {
-                d3.select('#channel' + n).selectAll('path').remove();
-            }
-            d3.select('#graph').selectAll('div').remove();
+    delete_channel() {
+        for (let n = 1 ; n < 2; n++) {
+            d3.select('#channel' + n).selectAll('path').remove();
         }
+        d3.select('#graph').selectAll('div').remove();
     }
     init_channels() {
         const channel_array: Array<any> = [];
@@ -200,6 +201,7 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
                 const chart_width     =   width;
                 const chart_height    =   height;
                 const padding         =   20;
+                console.log('creating axis', this.current_scale[0]);
                 for (const sample of channel_data) {
                     const sample_time: number = Math.round(1000 * i * (1 / data_eeg.samplefrequency))  / 1000;
                     sample['time'] = sample_time;
@@ -308,7 +310,6 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
                 });
             });
         const extent = [ -5 * multip, 5 * multip ];
-        console.log('AMH_SCALE');
         const spectral = [
         '#66c2a5',
         '#abdda4',
@@ -396,7 +397,6 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
         } else {
             this.control_vis = false;
         }
-        console.log('AMH-controlvis', this.control_vis);
     }
     computeTimeScale(data) {
         const startTime = data['debug']['time'];
@@ -406,9 +406,14 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
             d => d['data'].length
             )
         );
+        // console.log('AMHcomputeTimeScale', startTime, frequency, time_sample);
+        // console.log('AMHcomputeTimeDiference', startTime['currentTime'] - startTime['startTime']);
+        // console.log('AMHcomputeCurrentTimeDate', new Date((startTime['startTime'] + startTime['index'] * time_sample) * 1000 ));
+        // console.log('AMHcomputeStartTimeDate', new Date(startTime['startTime'] * 1000));
+        const startCurrentTime =  (startTime['startTime'] + startTime['index'] * time_sample); // Error mixing time with samples
         const time_values = [];
         for (let i = 0; i < max_samples; i++) {
-            time_values.push(startTime['currentTime'] + i * time_sample);
+            time_values.push( startCurrentTime + i * time_sample);
         }
         const date_values = time_values.map(
             d => {
@@ -422,9 +427,9 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
                 const miliseconds = '0' + date.getMilliseconds();
                 const formattedTime = year + '-' + month + '-' + day + '-' + hours + ':' + minutes.substr(-2) + ':'
                 + seconds.substr(-2) + ':' + miliseconds.substr(-2);
-                return formattedTime;
+                return date;
             }
         );
-        console.log('AMH_date_values', date_values);
+        return date_values;
     }
 }
