@@ -22,6 +22,7 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
     scale_multiplier = [20, 50, 200];
     multiplier_pos = 0;
     current_cursor = 0;
+    current_cursor_position = 0;
     current_scale: Array<any>;
     color_scale: Array<string> = [
          '#ffffff',
@@ -126,12 +127,13 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
                 this.multiplier_pos--;
             }
         }
-        this.create_channels( this.CheckStatus()[0], this.CheckStatus()[1], this.channel_num, true);
+        this.create_channels(this.CheckStatus()[0], this.CheckStatus()[1], this.channel_num, true);
         this.cubismDraw(this.current_data);
     }
     delete_channel() {
         for (let n = 1 ; n < 2; n++) {
             d3.select('#channel' + n).selectAll('path').remove();
+            d3.select('#channel' + n).selectAll('g').remove();
         }
         d3.select('#graph').selectAll('div').remove();
     }
@@ -144,7 +146,7 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
         }
     }
     create_channels(
-        width = 1100,
+        width = 980,
         height = 600,
         channel_array,
         updating = false
@@ -192,28 +194,48 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
             if (data_eeg.length !== 0) {
                 const channel_data: Array<JSON> = JSON.parse(JSON.stringify(data_eeg.data));
                 let i = 0;
-                const time_parse      =   d3.timeParse( '%S' );
-                const time_format     =   d3.timeFormat( '%S' );
+                const time_parse      =   d3.timeParse( '%Y-%m-%d-%H:%M:%S:%L' );
+                const time_format     =   d3.timeFormat( '%H:%M:%S' );
                 let color_pos = 0;
                 if (color_scale.length <= multiplier) {color_pos = color_scale.length; } else {color_pos = multiplier; }
-                //        const chart_width     =   +channel.attr('width');
-                //        const chart_height    =   +channel.attr('height');
                 const chart_width     =   width;
                 const chart_height    =   height;
                 const padding         =   20;
-                console.log('creating axis', this.current_scale[0]);
+                const scale_values = [];
+                this.current_scale.forEach(
+                    // tslint:disable-next-line:no-shadowed-variable
+                    function(date, i) {
+                        const year = date.getFullYear();
+                        const month = date.getMonth();
+                        const day = date.getDay();
+                        const hour = date.getHours();
+                        const minute = date.getMinutes();
+                        const second = date.getSeconds();
+                        const milisecond = date.getMilliseconds();
+                        const date_array = [year, month, day, hour, minute, second, milisecond];
+                        scale_values.push(time_parse(
+                            <string>year + '-' + <string>month + '-' + <string>day + '-' +
+                            <string>hour + ':' + <string>minute + ':' + <string>second + ':' +
+                        <string>milisecond));
+                });
+
                 for (const sample of channel_data) {
-                    const sample_time: number = Math.round(1000 * i * (1 / data_eeg.samplefrequency))  / 1000;
-                    sample['time'] = sample_time;
+                    // const sample_time: number = Math.round(1000 * i * (1 / data_eeg.samplefrequency))  / 1000;
+                    sample['time'] = scale_values[i];
                     i++;
                 }
-                const x_scale = d3.scaleLinear()
+
+                const x_scale = d3.scaleTime()
                 .domain([
-                    0,
+                    d3.min(channel_data, function(d) {
+                        return d['time'];
+                        })
+                    ,
                     d3.max(channel_data, function(d) {
                     return d['time'];
                     })
-                ]).range([padding, chart_width - padding]);
+                ]).range([padding, chart_width]);
+
                 const y_scale = d3.scaleLinear()
                 .domain(
                     [
@@ -225,13 +247,16 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
                         })
                     ])
                 .range([chart_height - padding, padding]);
+
                 for (const sample of channel_data) {
                     sample['value'] = sample['value'] + multiplier * scale_multiplier;
                 }
                 const line = d3.line()
+
                 .x(function(d) {
                     return x_scale(d['time']);
                 })
+
                 .y(function(d) {
                     return y_scale(d['value']);
                 });
@@ -240,15 +265,20 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
                 .attr('height', chart_height);
                 // Create Axes
                 const x_axis = d3.axisBottom(x_scale)
-                .ticks(10);
+                .ticks(5)
+                .tickFormat(time_format);
+
                 const y_axis = d3.axisLeft(y_scale)
                 .ticks(12);
+
                 if (x_axis_status) {
+                    current_channel.selectAll('g').remove();
                     current_channel.append('g')
                     .attr('class', 'axis axis--x')
                     .attr('transform', 'translate(0,' + (chart_height - padding) + ')')
                     .call(x_axis);
                 }
+
                 if (y_axis_status) {
                     current_channel.append('g')
                     .attr('class', 'axis axis--y')
@@ -277,11 +307,43 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
                 .attr('stroke', color_scale[color_pos - 1]);
                 }
                 current_channel.on('click', function(d) {
-                    this.current_cursor = d3.mouse(this)[0];
-                    console.log(this.current_cursor);
+                    const current_mouse = d3.mouse(this)[0];
+                    if (current_mouse < padding) {
+                        this.current_cursor = padding;
+                    } else if (current_mouse > chart_width) {
+                        this.current_cursor = chart_width;
+                    } else {
+                        this.current_cursor = current_mouse;
+                    }
+                    const cursor_scale = d3.scaleLinear().domain([
+                        padding,
+                        chart_width + padding
+                    ]).range([
+                        0,
+                        2500
+                    ]);
+                    const cursor_scale_inverse = d3.scaleLinear().domain([
+                        0,
+                        2500
+                    ]).range([
+                        padding,
+                        chart_width + padding
+                    ]);
+                    const start_time_index = channel_data[0]['time'].getTime();
+                    const current_cursor_index = start_time_index
+                    + (Math.round(cursor_scale(this.current_cursor)) * (1 / data_eeg.samplefrequency)) * 1000;
+                    const abs_current_cursor_time = new Date(current_cursor_index);
+                    // console.log('D3-dimensions-check-2',
+                    // channel_data[0]['time'],
+                    // start_time_index,
+                    // current_cursor_index,
+                    // abs_current_cursor_time,
+                    // cursor_scale_inverse(data_eeg.samplefrequency)
+                    // );
+                    // draw cursor
                     let cursor;
                     if (current_channel.select('#cursor').empty()) {
-                        cursor = current_channel.append('line');
+                        cursor = current_channel.append('rect');
                     } else {
                         cursor = current_channel.select('#cursor');
                     }
@@ -289,12 +351,13 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
                     .duration(1000)
                     .attr('id', 'cursor')
                     .attr('r', 5)
-                    .attr('x1' , d3.mouse(this)[0])
-                    .attr('x2' , d3.mouse(this)[0])
-                    .attr('y1' , 0)
-                    .attr('y2' , chart_height)
+                    .attr('x' , this.current_cursor)
+                    .attr('y' , 20)
+                    .attr('width' , cursor_scale_inverse(data_eeg.samplefrequency) - padding)
+                    .attr('height' , chart_height - 60)
                     .attr('stroke' , '#FF0000')
-                    .attr('stroke-width' , 2);
+                    .attr('stroke-width' , 2)
+                    .attr('opacity', 0.5);
                 });
             }
     }
@@ -353,7 +416,6 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
             .append('div')
             .attr('class', 'horizon')
             .call(horizon);
-
         d3.select('#graph')
         .selectAll('.axis')
         .data(['top'])
@@ -418,15 +480,6 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
         const date_values = time_values.map(
             d => {
                 const date = new Date( d * 1000 );
-                const year = date.getFullYear();
-                const month = date.getMonth();
-                const day = date.getDay();
-                const hours = date.getHours();
-                const minutes = '0' + date.getMinutes();
-                const seconds = '0' + date.getSeconds();
-                const miliseconds = '0' + date.getMilliseconds();
-                const formattedTime = year + '-' + month + '-' + day + '-' + hours + ':' + minutes.substr(-2) + ':'
-                + seconds.substr(-2) + ':' + miliseconds.substr(-2);
                 return date;
             }
         );
