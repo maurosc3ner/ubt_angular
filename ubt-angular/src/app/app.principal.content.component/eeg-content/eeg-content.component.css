@@ -9,4 +9,9 @@
     min-width: 1%;
     vertical-align: middle;
   }
- 
+
+  .controlclass {
+    visibility: hidden;
+    height: 10px;
+  }
+  

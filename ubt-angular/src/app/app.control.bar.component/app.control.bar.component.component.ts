@@ -28,7 +28,7 @@ export class AppControlBarComponent {
           return 2;
         } else if (ESIToggle === true) {
             return 1;
-          } else return 0;
+          } else { return 0; }
   }
 
 
@@ -48,9 +48,9 @@ export class AppControlBarComponent {
     this.StatusEvent.emit(this.status);
   }
   onTopoFilter(event) {
-    if (this.TopoPlotToggle === true) { 
-      this.TopoPlotToggle = false; 
-    } else { 
+    if (this.TopoPlotToggle === true) {
+      this.TopoPlotToggle = false;
+    } else {
       this.TopoPlotToggle = true;
       this.CoomandEvent.emit([6, 0]);
     }

@@ -203,4 +203,11 @@ h1, h2 {
   opacity: .2;
   z-index: 2;
 }
-  
+
+.mat-select-value {
+  color: rgba(255, 255, 255, 1);
+}
+
+.mat-select-arrow {
+  color: rgba(128,0,128,1);
+}

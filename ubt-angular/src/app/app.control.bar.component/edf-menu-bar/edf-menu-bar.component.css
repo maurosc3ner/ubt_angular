@@ -4,48 +4,35 @@
     width: 100%;
     height: 100%;
   }
-  
+
   /* Make the image responsive */
   .container img {
     width: 100%;
     height: 100%;
+    padding: 0 0 0 0;
   }
   
     /* Style the button and place it in the middle of the container/image */
-    .container .btn {
-      position: relative;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      -ms-transform: translate(-50%, -50%);
-      background-color: black;
-      color: white;
-      font-size: 6px;
-      padding: 1px 1px;
-      border: 1px solid white;
-      cursor: pointer;
-      border-radius: 0%;
-      width: 35px;
-      height: 35px;
-    }
 
-    .container .btn:hover {
-      border: 1px solid red;
+  .speed-top p{
+      min-width: 1%;  
+      font-size: 9px;
+      padding-bottom: 10%;
+      height: 5px;
+      text-align: center;
     }
-
-  .speed p{
-      font-size: 12px;
-      text-align: justify;
-      padding-left: 25%;
+  .speed-bottom p{
+      min-width: 1%;  
+      font-size: 9px;
+      padding-top: 10%;
       height: 15px;
+      text-align: center;
     }
-
     .material-cust-small-button {
-      width: auto;
       min-width: 1%;
       vertical-align: middle;
     }
-    
+
     .material-cust-small-button-icon {
       width: auto;
       min-width: 1%;
@@ -55,8 +42,9 @@
     .material-cust-small-input .inputfile + label {
       width: 80px;
       min-width: 1%;
-      vertical-align: middle;
+      /* vertical-align: middle; */
       opacity: 100%;
+      padding: 0%;
     }
 
     .inputfile + label {

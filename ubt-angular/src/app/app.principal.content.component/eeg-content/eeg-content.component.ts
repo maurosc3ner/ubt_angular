@@ -15,6 +15,8 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
     @Input() EEG_Status_eeg: number;
     @Input() Command_eeg: Array<number>;
     @Input() current_data: any = null;
+    visualization_type: String = 'Lines';
+    control_vis: Boolean = false;
     handle_data: any;
     channel_num: Array<any>;
     scale_multiplier = [20, 50, 200];
@@ -61,7 +63,7 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
          '#ffffff',
          '#ffffff',
          '#ffffff'
-    ]
+    ];
     // color_scale: Array<string> = [
     //     '#e6194b',
     //     '#3cb44b',
@@ -125,9 +127,11 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
         this.cubismDraw(this.current_data);
     }
     delete_channel(command = false) {
+        if (command ) {
             for (let n = 1 ; n < 2; n++) {
-                if (command ) { d3.select('#channel' + n).selectAll('path').remove(); }
-                d3.select('#channel' + n).selectAll('g').remove();
+                d3.select('#channel' + n).selectAll('path').remove();
+            }
+            d3.select('#graph').selectAll('div').remove();
         }
     }
     init_channels() {
@@ -295,33 +299,6 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
     cubismDraw(data) {
         d3.select('#graph').selectAll('div').remove();
         const multip = this.scale_multiplier[this.multiplier_pos];
-        const startTime = data['debug']['time'];
-        const frequency = Math.max.apply(null, data['channels'].map(function(d) { return String(d['samplefrequency']); }));
-        const time_sample = 1 / frequency;
-        const max_samples = Math.max.apply(null, data['channels'].map(
-            d => d['data'].length
-            )
-        );
-        const time_values = [];
-        for (let i = 0; i < max_samples; i++) {
-            time_values.push(startTime['currentTime'] + i * time_sample);
-        }
-        const date_values = time_values.map(
-            d => {
-                const date = new Date( d * 1000 );
-                const year = date.getFullYear();
-                const month = date.getMonth();
-                const day = date.getDay();
-                const hours = date.getHours();
-                const minutes = '0' + date.getMinutes();
-                const seconds = '0' + date.getSeconds();
-                const miliseconds = '0' + date.getMilliseconds();
-                const formattedTime = year + '-' + month + '-' + day + '-' + hours + ':' + minutes.substr(-2) + ':'
-                + seconds.substr(-2) + ':' + miliseconds.substr(-2);
-                return formattedTime;
-            }
-        );
-        console.log('AMH_date_values', date_values);
         const size_cubic = 2500;
         const step_cubic = size_cubic / 1100;
         const eeg_values = data['channels'].map(function(d) {
@@ -410,5 +387,44 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
         if (this.EEG_Status_eeg === 4) {
             return [430, 530];
         }
+    }
+    visualControl(event) {
+        if (this.visualization_type === 'Lines') {
+            this.control_vis = false;
+        } else if (this.visualization_type === 'Horizon') {
+            this.control_vis = true;
+        } else {
+            this.control_vis = false;
+        }
+        console.log('AMH-controlvis', this.control_vis);
+    }
+    computeTimeScale(data) {
+        const startTime = data['debug']['time'];
+        const frequency = Math.max.apply(null, data['channels'].map(function(d) { return String(d['samplefrequency']); }));
+        const time_sample = 1 / frequency;
+        const max_samples = Math.max.apply(null, data['channels'].map(
+            d => d['data'].length
+            )
+        );
+        const time_values = [];
+        for (let i = 0; i < max_samples; i++) {
+            time_values.push(startTime['currentTime'] + i * time_sample);
+        }
+        const date_values = time_values.map(
+            d => {
+                const date = new Date( d * 1000 );
+                const year = date.getFullYear();
+                const month = date.getMonth();
+                const day = date.getDay();
+                const hours = date.getHours();
+                const minutes = '0' + date.getMinutes();
+                const seconds = '0' + date.getSeconds();
+                const miliseconds = '0' + date.getMilliseconds();
+                const formattedTime = year + '-' + month + '-' + day + '-' + hours + ':' + minutes.substr(-2) + ':'
+                + seconds.substr(-2) + ':' + miliseconds.substr(-2);
+                return formattedTime;
+            }
+        );
+        console.log('AMH_date_values', date_values);
     }
 }

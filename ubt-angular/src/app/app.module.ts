@@ -31,6 +31,8 @@ import {
   MatToolbarModule,
   MatButtonModule,
   MatIconModule,
+  MatFormFieldModule,
+  MatSelectModule
 } from '@angular/material';
 
 
@@ -59,6 +61,8 @@ import {
     HttpClientModule,
     MatButtonModule,
     MatIconModule,
+    MatFormFieldModule,
+    MatSelectModule,
     HttpModule,
     NgIoModule.forRoot(config)
   ],

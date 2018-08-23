@@ -1,23 +1,29 @@
+<mat-form-field >
+    <mat-select (selectionChange)="visualControl($event)" [(value)]="visualization_type">
+        <mat-option value="Lines">Lines</mat-option>
+        <mat-option value="Horizon">Horizon</mat-option>
+    </mat-select>
+</mat-form-field>
 <div class="container-fluid">
     <div class="row">
         <div class="col">
             <button mat-stroked-button (click)="click_multiplier($event, false)"  class="material-cust-small-button">
                 <mat-icon class="material-cust-small-button-icon">remove</mat-icon>
-            </button>
-            &nbsp;
-            {{scale_multiplier[multiplier_pos]}}
+            </button> 
+            &nbsp; 
+            {{scale_multiplier[multiplier_pos]}} 
             &nbsp;
             <button mat-stroked-button (click)="click_multiplier($event, true)"  class="material-cust-small-button">
                 <mat-icon class="material-cust-small-button-icon">add</mat-icon>
             </button>
         </div>
     </div>
-    <div class="row">
+    <div class="row" [ngClass]="{'controlclass':control_vis===true}" >
         <div class="col">
-            <svg id="channel1" width="800" height="1500"></svg>
+            <svg id="channel1"></svg>
         </div>
     </div>
-    <div class="row">
+    <div class="row" [ngClass]="{'controlclass':control_vis===false}">
         <div class="col">
             <div id="body"> 
                 <div id="graph"></div>

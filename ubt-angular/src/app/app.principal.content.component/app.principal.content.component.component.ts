@@ -46,22 +46,24 @@ export class AppPrincipalContentComponent implements OnInit, OnChanges {
           }
         }
         if (this.Command_Control[0] === 1 ) {
-            this.patient_current_data = null;
-            this.patientfile = null;
+            this.patient_current_data = JSON.parse('{}');
+            this.patientfile = '';
         }
         if (this.Command_Control[0] === 2 ) {
             this.patientfile = this.Command_Control[1];
             this.assignData();
         }
         if (this.Command_Control[0] === 3 ) {
-          this.patient_current_data['debug']['time']['index'] = this.patient_current_data['debug']['time']['index'] - this.Command_Control[1] * 10 * this.patient_current_data['channels'][0]['samplefrequency'];
+          this.patient_current_data['debug']['time']['index'] = this.patient_current_data['debug']['time']['index'] 
+          - this.Command_Control[1] * 10 * this.patient_current_data['channels'][0]['samplefrequency'];
           this.Jump();
           if (this.Status === 4) { // EEG+topoplot
             this.topoPlot();
           }
         }
         if (this.Command_Control[0] === 4 ) {
-          this.patient_current_data['debug']['time']['index'] = this.patient_current_data['debug']['time']['index'] + this.Command_Control[1] * 10 * this.patient_current_data['channels'][0]['samplefrequency'];
+          this.patient_current_data['debug']['time']['index'] = this.patient_current_data['debug']['time']['index'] 
+          + this.Command_Control[1] * 10 * this.patient_current_data['channels'][0]['samplefrequency'];
           this.Jump();
           if (this.Status === 4) { // EEG+topoplot
             this.topoPlot();
@@ -102,14 +104,14 @@ export class AppPrincipalContentComponent implements OnInit, OnChanges {
       this.visAnno = true;
       this.visEEG = true;
       this.visESI = false;
-      this.visPlane = false;    
+      this.visPlane = false;
       this.visTopoPLot = false;
     }
     if (this.Status === 4) { // EEG+topoplot
       this.visAnno = false;
       this.visEEG = true;
       this.visESI = false;
-      this.visPlane = false;    
+      this.visPlane = false;
       this.visTopoPLot = true;
     }
   }
@@ -147,7 +149,7 @@ export class AppPrincipalContentComponent implements OnInit, OnChanges {
       (response: Response) => {
           this.patient_current_data = JSON.parse(JSON.stringify(response));
           this.topoPlot();
-      },(err) => {
+      }, (err) => {
         console.log(err);
       });
   }
@@ -156,13 +158,13 @@ export class AppPrincipalContentComponent implements OnInit, OnChanges {
     console.log('EC-topoPlot before subscribe ');
     this.d3service.getTopoPlot(this.patient_current_data).subscribe(
       (response: Response) => {
-        //this.patient_current_data = JSON.parse(JSON.stringify(response));
-        //console.log('EC-topoPlot before response ',Object.getOwnPropertyNames(JSON.parse(JSON.stringify(response['buffer']))));
-        const tempImg=JSON.parse(JSON.stringify(response));
-        this.srcTopoPlot ='data:image/png;base64,' + tempImg['buffer'];
-        //console.log('EC-topoPlot after response ',this.srcTopoPlot.toString('base64'));
+        // this.patient_current_data = JSON.parse(JSON.stringify(response));
+        // console.log('EC-topoPlot before response ',Object.getOwnPropertyNames(JSON.parse(JSON.stringify(response['buffer']))));
+        const tempImg = JSON.parse(JSON.stringify(response));
+        this.srcTopoPlot = 'data:image/png;base64,' + tempImg['buffer'];
+        // console.log('EC-topoPlot after response ',this.srcTopoPlot.toString('base64'));
 
-      },(err) => {
+      }, (err) => {
         console.log(err);
       });
   }
