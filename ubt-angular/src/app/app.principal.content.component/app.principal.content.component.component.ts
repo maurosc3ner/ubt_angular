@@ -41,29 +41,23 @@ export class AppPrincipalContentComponent implements OnInit, OnChanges {
       if (this.Command_Control == null) { } else {
         if (this.Command_Control[0] === 0 ) {
           this.notchFilter();
-        }
-        if (this.Command_Control[0] === 1 ) {
+        } else if (this.Command_Control[0] === 1 ) {
             this.patient_current_data = JSON.parse('{}');
             this.patientfile = '';
-        }
-        if (this.Command_Control[0] === 2 ) {
+        } else if (this.Command_Control[0] === 2 ) {
             this.patientfile = this.Command_Control[1];
             this.assignData();
-        }
-        if (this.Command_Control[0] === 3 ) {
+        } else if (this.Command_Control[0] === 3 ) {
           this.patient_current_data['debug']['time']['index'] = this.patient_current_data['debug']['time']['index'] 
           - this.Command_Control[1] * 10 * this.patient_current_data['channels'][0]['samplefrequency'];
           this.Jump();
-        }
-        if (this.Command_Control[0] === 4 ) {
+        } else if (this.Command_Control[0] === 4 ) {
           this.patient_current_data['debug']['time']['index'] = this.patient_current_data['debug']['time']['index'] 
           + this.Command_Control[1] * 10 * this.patient_current_data['channels'][0]['samplefrequency'];
           this.Jump();
-        }
-        if (this.Command_Control[0] === 5 ) {
+        } else if (this.Command_Control[0] === 5 ) {
           this.ocularFilter();
-        }
-        if (this.Command_Control[0] === 6 ) {
+        } else if (this.Command_Control[0] === 6 ) {
           this.topoPlot(this.patient_current_data);
         }
         this.Command_Control = null;
@@ -75,29 +69,25 @@ export class AppPrincipalContentComponent implements OnInit, OnChanges {
       this.visESI = false;
       this.visPlane = false;
       this.visTopoPLot = false;
-    }
-    if (this.Status === 1) {
+    } else if (this.Status === 1) {
       this.visAnno = false;
       this.visEEG = true;
       this.visESI = true;
       this.visPlane = false;
       this.visTopoPLot = false;
-    }
-    if (this.Status === 2) {
+    } else if (this.Status === 2) {
       this.visAnno = false;
       this.visEEG = false;
       this.visESI = true;
       this.visPlane = true;
       this.visTopoPLot = false;
-    }
-    if (this.Status === 3) {
+    } else if (this.Status === 3) {
       this.visAnno = true;
       this.visEEG = true;
       this.visESI = false;
       this.visPlane = false;
       this.visTopoPLot = false;
-    }
-    if (this.Status === 4) { // EEG+topoplot
+    } else if (this.Status === 4) { // EEG+topoplot
       this.visAnno = false;
       this.visEEG = true;
       this.visESI = false;

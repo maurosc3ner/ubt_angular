@@ -39,7 +39,7 @@ export class D3Service {
         };
         this.socket.emit('load_edf', payload);
         const response = this.socket.fromEvent('load_edf');
-        console.log(response);
+        // console.log(response);
         return response;
     }
 
@@ -71,7 +71,7 @@ export class D3Service {
         const payload = current_data;
         this.socket.emit('topo_plot', payload);
         const response = this.socket.fromEvent('topo_plot');
-        console.log('EC-serviceTopoPlot ',response);
+        // console.log('EC-serviceTopoPlot ',response);
         return response;
     }
 }

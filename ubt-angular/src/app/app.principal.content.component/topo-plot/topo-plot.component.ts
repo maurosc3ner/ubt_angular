@@ -8,23 +8,13 @@ import { Component, OnInit, Input } from '@angular/core';
 export class TopoPlotComponent implements OnInit {
 @Input() topoplotImg;
 
-
-// ctx: any
-
-
   constructor() { }
 
   ngOnInit() {
-  //   canvas = document.createElement 'canvas'
-	//   canvas.height = 400
-	//   canvas.width = 800  #size it up
-	// document.getElementsByTagName('your DOM')[0].appendChild(canvas) #append it into the DOM 
 
-	// App.ctx = App.canvas.getContext("2d") # Store the context 
   }
 
   ngOnChanges() {
-    
     const canvas = <HTMLCanvasElement> document.getElementById('myImage');
     canvas['width']  = 640;
     canvas['height'] = 480;
@@ -35,12 +25,9 @@ export class TopoPlotComponent implements OnInit {
      ctx.drawImage(img, 0, 0);
     };
     img.src = this.topoplotImg;
-    
-
   }
 
   ngAfterContentInit() {
-    
   }
 
 }
