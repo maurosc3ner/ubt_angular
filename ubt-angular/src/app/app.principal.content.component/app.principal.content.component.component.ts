@@ -64,7 +64,7 @@ export class AppPrincipalContentComponent implements OnInit, OnChanges {
           this.ocularFilter();
         }
         if (this.Command_Control[0] === 6 ) {
-          this.topoPlot();
+          this.topoPlot(this.patient_current_data);
         }
         this.Command_Control = null;
     }
@@ -120,7 +120,7 @@ export class AppPrincipalContentComponent implements OnInit, OnChanges {
         (response: Response) => {
             this.patient_current_data = JSON.parse(JSON.stringify(response));
             if (this.Status === 4) { // EEG+topoplot
-              this.topoPlot();
+              this.topoPlot(this.patient_current_data);
             }
         },
     (err) => {
@@ -132,7 +132,7 @@ export class AppPrincipalContentComponent implements OnInit, OnChanges {
         (response: Response) => {
             this.patient_current_data = JSON.parse(JSON.stringify(response));
             if (this.Status === 4) { // EEG+topoplot
-              this.topoPlot();
+              this.topoPlot(this.patient_current_data);
             }
         },
     (err) => {
@@ -144,16 +144,16 @@ export class AppPrincipalContentComponent implements OnInit, OnChanges {
       (response: Response) => {
           this.patient_current_data = JSON.parse(JSON.stringify(response));
           if (this.Status === 4) { // EEG+topoplot
-            this.topoPlot();
+            this.topoPlot(this.patient_current_data);
           }
       }, (err) => {
         console.log(err);
       });
   }
 
-  topoPlot() {
+  topoPlot(payload) {
     console.log('EC-topoPlot before subscribe ');
-    this.d3service.getTopoPlot(this.patient_current_data).subscribe(
+    this.d3service.getTopoPlot(payload).subscribe(
       (response: Response) => {
         // this.patient_current_data = JSON.parse(JSON.stringify(response));
         // console.log('EC-topoPlot before response ',Object.getOwnPropertyNames(JSON.parse(JSON.stringify(response['buffer']))));
@@ -163,7 +163,7 @@ export class AppPrincipalContentComponent implements OnInit, OnChanges {
 
       }, (err) => {
         console.log(err);
-      });
+    });
   }
   onCursorEvent(event) {
     const cursor_index = event;
@@ -173,7 +173,12 @@ export class AppPrincipalContentComponent implements OnInit, OnChanges {
         d['data'] = d['data'].slice(cursor_index, cursor_index + d['samplefrequency']);
       }
     );
-    console.log('AMH-principal-component-curso-before', this.patient_current_data);
-    console.log('AMH-principal-component-cursor-after', patient_data_copy);
+    // console.log('AMH-principal-component-curso-before', this.patient_current_data);
+    // console.log('AMH-principal-component-cursor-after', patient_data_copy);
+    if (this.Status === 4) { // EEG+topoplot
+    
+      this.topoPlot(patient_data_copy);
+    }
+    
   }
 }
