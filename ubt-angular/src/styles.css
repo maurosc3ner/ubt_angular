@@ -157,7 +157,7 @@ h1, h2 {
 }
 
 .axis line {
-  stroke: #000;
+  stroke: #ffffff;
   shape-rendering: crispEdges;
 }
 
@@ -211,3 +211,4 @@ h1, h2 {
 .mat-select-arrow {
   color: rgba(128,0,128,1);
 }
+

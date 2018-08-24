@@ -165,4 +165,15 @@ export class AppPrincipalContentComponent implements OnInit, OnChanges {
         console.log(err);
       });
   }
+  onCursorEvent(event) {
+    const cursor_index = event;
+    const patient_data_copy = JSON.parse(JSON.stringify(this.patient_current_data));
+    patient_data_copy['channels'].forEach(
+      function(d) {
+        d['data'] = d['data'].slice(cursor_index, cursor_index + d['samplefrequency']);
+      }
+    );
+    console.log('AMH-principal-component-curso-before', this.patient_current_data);
+    console.log('AMH-principal-component-cursor-after', patient_data_copy);
+  }
 }
