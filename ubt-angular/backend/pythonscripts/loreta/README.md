@@ -1,2 +1,0 @@
-# Loreta
-Brain mapping

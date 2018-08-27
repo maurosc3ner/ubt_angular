@@ -74,4 +74,13 @@ export class D3Service {
         // console.log('EC-serviceTopoPlot ',response);
         return response;
     }
+
+    getLoretaFilter(current_data: any): any {
+        current_data['debug']['command'] = 'loreta_filter';
+        const payload = current_data;
+        this.socket.emit('loreta_filter', payload);
+        const response = this.socket.fromEvent('loreta_filter');
+        // console.log('EC-serviceTopoPlot ',response);
+        return response;
+    }
 }

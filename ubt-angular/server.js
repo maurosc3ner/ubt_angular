@@ -38,7 +38,7 @@ function openEDFScript(pathFileName,currentData) {
 
 function jumpEDFScript(filename,currentData) {
     //Aqui va llamado a rutina de python
-    //TODO
+    //TODO 
     //console.log('-EC-jumpEDFScript- calling python edfNavigator.py');
     var options = {
 	  mode: 'json',
@@ -51,8 +51,8 @@ function jumpEDFScript(filename,currentData) {
         results[0].debug.time.currentTime=currentData.debug.time.startTime+currentData.debug.time.index;
         results[0]['annotations']=currentData.annotations;
         results[0]['patientInfo']=currentData.patientInfo;
-        console.log(currentData.patientInfo);
-        
+        // console.log(currentData.patientInfo);
+          
         //console.log([results[0].channels[0].data[0],results[0].channels[0].data[20]]);
         io.emit("jump_edf", results[0]);
         console.log('-EC-jumpEDFScript- response to client...');
@@ -134,29 +134,63 @@ function topoPlotScript(currentData) {
     topoPlotShell.send(JSON.stringify(currentData.channels));
 
     topoPlotShell.on('message', function (message) {
-
         // received a message sent from the Python script (a simple "print" statement)
         //  console.log(message.toString('base64'));
         //  io.emit("topo_plot", { image: true, buffer: message});  
       });  
-
     // end the input stream and allow the process to exit
     topoPlotShell.end(function (err,code,signal) {
         if (err) throw err;
- 
         // lectura desde disco
         fs.readFile(path.join(__dirname, 'temptopo.png'), function(err, buf){
             if (err) throw err;
             // it's possible to embed binary data
             // within arbitrarily-complex objects
             io.emit('topo_plot', { image: true, buffer: buf.toString('base64') });
-            //console.log('image file before emmited',buf.toString('base64'));
-            
         });
         console.log('-EC-topoplot-The exit code was: ' + code);
         console.log('-EC-topoplot-The exit signal was: ' + signal);
         console.log('-EC-topoplot-finished'); 
     }); 
+};
+
+/** 
+ * 
+ * @param {*} currentData 
+ */ 
+function loretaScript(currentData) { 
+    var options = { 
+      mode: 'text',      
+    //   pythonOptions: ['','','','',''], //own python env flags   
+    //   scriptPath : './backend/pythonscripts/loreta-new', 
+	  args: ['-l nyL.mat', '-v nyvert.mat', '-f nyface.mat', '-c nyCh.mat', '-d nyEEG_R.txt'] 
+    };    
+    // python loretaFilter.py -l nyL.mat -v nyvert.mat -f nyface.mat -c nyCh.mat -d nyEEG_R.txt -b ..\..\server_data\sujeto_base.edf
+    var loretaShell = new PythonShell('/backend/pythonscripts/loreta-new/loretaFilter.py',options);
+    // /backend/pythonscripts/loreta-new/loretaFilter.py
+    loretaShell.send(JSON.stringify(currentData.channels));  
+    var asyncMessage;
+    loretaShell.on('message', function (message) {
+        // received a message sent from the Python script (a simple "print" statement)
+        //console.log(message);
+        asyncMessage = message 
+        //results={}  
+        // results['channels'] = JSON.parse(message)['channels']
+        // results['debug'] = currentData.debug;
+        // results['annotations']=currentData.annotations;
+        // results['patientInfo']=currentData.patientInfo;
+        //io.emit("loreta_filter", JSON.parse(message));      
+      });    
+       
+    // end the input stream and allow the process to exit
+    loretaShell.end(function (err,code,signal) {
+        if (err) throw err; 
+        io.emit("loreta_filter", JSON.parse(asyncMessage)); 
+        //console.log(typeof JSON.parse(asyncMessage));
+        console.log('-EC-loretaFilter-The exit code was: ' + code);
+        console.log('-EC-loretaFilter-The exit signal was: ' + signal);
+        console.log('-EC-loretaFilter-finished');  
+    });
 };
 
 function edfFromFile(startPath, msg) {
@@ -196,20 +230,26 @@ io.on('connection', function(socket) {
     });
 
     socket.on('notch_filter', function(msg) {
-        console.log("-EC-notch_filter- ");
+        console.log("-EC-notch_filter-Start");
         notchScript(msg);
         
     }); 
 
     socket.on('ocular_filter', function(msg) {
-        console.log("-EC-ocular_filter- ");
+        console.log("-EC-ocular_filter-Start");
         ocularScript(msg);
         
     });
 
     socket.on('topo_plot', function(msg) {
-        console.log("-EC-topo_plot- ");
+        console.log("-EC-topo_plot-Start");
         topoPlotScript(msg);
+        
+    });
+
+    socket.on('loreta_filter', function(msg) {
+        console.log("-EC-loreta_filter-Start");
+        loretaScript(msg);
         
     });
 

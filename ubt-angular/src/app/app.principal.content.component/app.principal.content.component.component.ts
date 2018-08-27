@@ -21,6 +21,7 @@ export class AppPrincipalContentComponent implements OnInit, OnChanges {
   srcImageAxial: String = './assets/brain-dummy/MRIAxial.png';
   srcImageCoronal: String = './assets/brain-dummy/MRICoronal_2.jpg';
   srcTopoPlot: any;
+  brainColors:JSON;
 
   constructor(private d3service: D3Service) {
   }
@@ -56,9 +57,11 @@ export class AppPrincipalContentComponent implements OnInit, OnChanges {
           + this.Command_Control[1] * 10 * this.patient_current_data['channels'][0]['samplefrequency'];
           this.Jump();
         } else if (this.Command_Control[0] === 5 ) {
-          this.ocularFilter();
+            this.ocularFilter();
         } else if (this.Command_Control[0] === 6 ) {
-          this.topoPlot(this.patient_current_data);
+            this.topoPlot(this.patient_current_data);
+        } else if (this.Command_Control[0] === 7 ) {
+            this.loretaFilter(this.patient_current_data);
         }
         this.Command_Control = null;
     }
@@ -69,7 +72,7 @@ export class AppPrincipalContentComponent implements OnInit, OnChanges {
       this.visESI = false;
       this.visPlane = false;
       this.visTopoPLot = false;
-    } else if (this.Status === 1) {
+    } else if (this.Status === 1) { // EEG+bviewer
       this.visAnno = false;
       this.visEEG = true;
       this.visESI = true;
@@ -111,6 +114,9 @@ export class AppPrincipalContentComponent implements OnInit, OnChanges {
             this.patient_current_data = JSON.parse(JSON.stringify(response));
             if (this.Status === 4) { // EEG+topoplot
               this.topoPlot(this.patient_current_data);
+            }
+            if(this.Status === 1){
+              this.loretaFilter(this.patient_current_data);
             }
         },
     (err) => {
@@ -155,6 +161,20 @@ export class AppPrincipalContentComponent implements OnInit, OnChanges {
         console.log(err);
     });
   }
+  
+  loretaFilter(payload) {
+    console.log('EC-loretaFilter before subscribe ');
+    this.d3service.getLoretaFilter(payload).subscribe(
+      (response: Response) => {
+        this.brainColors = JSON.parse(JSON.stringify(response));
+        
+        console.log('EC-topoPlot after response ',this.brainColors);
+
+      }, (err) => {
+        console.log(err);
+    });
+  }
+
   onCursorEvent(event) {
     const cursor_index = event;
     const patient_data_copy = JSON.parse(JSON.stringify(this.patient_current_data));
@@ -166,8 +186,10 @@ export class AppPrincipalContentComponent implements OnInit, OnChanges {
     // console.log('AMH-principal-component-curso-before', this.patient_current_data);
     // console.log('AMH-principal-component-cursor-after', patient_data_copy);
     if (this.Status === 4) { // EEG+topoplot
-    
       this.topoPlot(patient_data_copy);
+    }
+    if (this.Status === 1) { // EEG+topoplot
+      this.loretaFilter(patient_data_copy);
     }
     
   }

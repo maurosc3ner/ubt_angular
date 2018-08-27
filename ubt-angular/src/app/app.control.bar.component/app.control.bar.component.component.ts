@@ -33,7 +33,12 @@ export class AppControlBarComponent {
 
 
   onESILoad(event) {
-    if (this.ESIToggle === true) { this.ESIToggle = false; } else { this.ESIToggle = true; }
+    if (this.ESIToggle === true) { 
+      this.ESIToggle = false; 
+    } else { 
+      this.CoomandEvent.emit([7, 0]);
+      this.ESIToggle = true; 
+    }
     this.status = this.checkStatus(this.ESIToggle, this.PlaneToggle, this.AnnotToggle, this.TopoPlotToggle);
     this.StatusEvent.emit(this.status);
   }

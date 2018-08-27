@@ -1,4 +1,8 @@
+// meterlo a assets
+// registro en angular.json
+// declare en el component
 import { Component, OnInit, Input } from '@angular/core';
+import { assertPreviousIsParent } from '../../../../node_modules/@angular/core/src/render3/instructions';
 
 @Component({
   selector: 'app-topo-plot',

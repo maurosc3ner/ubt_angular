@@ -1,0 +1,4 @@
+cd C:\Users\Solid\Desktop\Esteban\Mapeo
+
+python Main_BM.py -l Data\nyL.mat -v Data\nyvert.mat -f Data\nyface.mat -c Data\nyCh.mat -d Data\nyEEG_R.txt -b Data\sujeto_base.edf
+

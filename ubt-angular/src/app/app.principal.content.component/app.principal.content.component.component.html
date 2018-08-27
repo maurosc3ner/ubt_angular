@@ -10,7 +10,7 @@
       <app-topo-plot [topoplotImg]='srcTopoPlot' ></app-topo-plot>
     </div>
     <div class="col td-content-container" *ngIf="visESI">
-      <app-td-content></app-td-content>
+      <app-td-content [brainFrontColors]='brainColors'></app-td-content>
     </div>
     <div class="col anno-content-container" *ngIf="visAnno">
       <app-annotation-content [Command_eeg]='Command_Control' [EEG_Status_eeg]='Status' [current_data]='patient_current_data'></app-annotation-content>
