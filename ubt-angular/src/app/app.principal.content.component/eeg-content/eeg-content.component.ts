@@ -435,19 +435,21 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
         // d3.select('#graph').append('div').attr('class', 'axis axis--x').append('g').call(axis);
     }
     CheckStatus() {
+        // console.log('eegStatusVis:', this.EEG_Status_eeg);
         if (this.EEG_Status_eeg === 0) {
+            
             return [1100, 530];
         }
-        if (this.EEG_Status_eeg === 1) {
+        if (this.EEG_Status_eeg === 1) { //eeg+bviewer
             return [430, 530];
         }
         if (this.EEG_Status_eeg === 2) {
             return [1100, 530];
         }
-        if (this.EEG_Status_eeg === 3) {
+        if (this.EEG_Status_eeg === 3) { // eeg+anotation
             return [430, 530];
         }
-        if (this.EEG_Status_eeg === 4) {
+        if (this.EEG_Status_eeg === 4) {  // eeg+topo
             return [430, 530];
         }
     }

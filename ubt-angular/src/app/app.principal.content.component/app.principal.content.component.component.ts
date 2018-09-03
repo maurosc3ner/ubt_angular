@@ -37,8 +37,8 @@ export class AppPrincipalContentComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges() {
-    console.log(this.Command_Control);
-    console.log(this.Status);
+    // console.log(this.Command_Control);
+    // console.log(this.Status);
       if (this.Command_Control == null) { } else {
         if (this.Command_Control[0] === 0 ) {
           this.notchFilter();
@@ -148,7 +148,7 @@ export class AppPrincipalContentComponent implements OnInit, OnChanges {
   }
 
   topoPlot(payload) {
-    console.log('EC-topoPlot before subscribe ');
+    // console.log('EC-topoPlot before subscribe ');
     this.d3service.getTopoPlot(payload).subscribe(
       (response: Response) => {
         // this.patient_current_data = JSON.parse(JSON.stringify(response));
@@ -163,12 +163,12 @@ export class AppPrincipalContentComponent implements OnInit, OnChanges {
   }
   
   loretaFilter(payload) {
-    console.log('EC-loretaFilter before subscribe ');
+    // console.log('EC-loretaFilter before subscribe ');
     this.d3service.getLoretaFilter(payload).subscribe(
       (response: Response) => {
         this.brainColors = JSON.parse(JSON.stringify(response));
         
-        console.log('EC-topoPlot after response ',this.brainColors);
+        // console.log('EC-loretaFilter after response ',this.brainColors);
 
       }, (err) => {
         console.log(err);

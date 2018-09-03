@@ -1,6 +1,25 @@
+// demo topoplot 
+// 1. open edf
+// 2. siguiente una vez
+// 3. topoplot
+// 4. cursor al comienzo
+// 5. mover cursor al final
+// 6. aplicar ocular
+
+// demo brain, 
+// 1. open EDF
+// 2. deja ver el actual
+// 3. siguiente una vez
+// 4. cursor al comienzo
+// 5. mover cursor a la mitad
+// 6. Abrir MRI
+
+
+
 import { AfterViewInit, Component,OnInit, ElementRef, Input, ViewChild, OnChanges } from '@angular/core';
 // import * as THREE from 'three';
 import * as THREE from 'three-full';
+import { validateHorizontalPosition } from '../../../../node_modules/@angular/cdk/overlay';
 
 
 @Component({
@@ -23,27 +42,30 @@ export class TdContentComponent implements AfterViewInit, OnChanges {
   @ViewChild('canvas')
   private canvasRef: ElementRef;
 
-  private cube: THREE.Mesh;
+  private cubeMesh: THREE.Mesh;
   private brainMesh: THREE.Mesh;
 
   private renderer: THREE.WebGLRenderer;
 
   public scene: THREE.Scene;
   private regularGeometry : THREE.Geometry;
+  private cubeGeometry : THREE.Geometry;
 
-
+  private cubeTexture: THREE.material;
 
   /* CUBE PROPERTIES */
   @Input() brainFrontColors: JSON;
   // @Input() ESIstatus_td: Boolean;
   
-  public rotationSpeedX: number = 0.005;
+  public rotationSpeedX: number = 0.0005;
 
   
   public rotationSpeedY: number = 0.01;
 
   
   public size: number = 200;
+
+  public colorSel=0;
 
   
   public texture: string = '/assets/bviewer/crate.gif';
@@ -56,7 +78,7 @@ export class TdContentComponent implements AfterViewInit, OnChanges {
   // public cameraZ: number = 400;
   public cameraX: number = 0;
   public cameraY: number = 0;
-  public cameraZ: number = 300;
+  public cameraZ: number = 275;
 
   
   // public fieldOfView: number = 70;
@@ -81,25 +103,45 @@ export class TdContentComponent implements AfterViewInit, OnChanges {
   /* STAGING, ANIMATION, AND RENDERING */
 
   /**
-   * Animate the cube
-   */
-  private animateCube() {
-    this.cube.rotation.x += this.rotationSpeedX;
-    this.cube.rotation.y += this.rotationSpeedY;
-  }
-
-  /**
    * Create the cube
    */
   private createCube() {
     let texture = new THREE.TextureLoader().load(this.texture);
-    let material = new THREE.MeshBasicMaterial({ map: texture });
-    
-    let geometry = new THREE.BoxBufferGeometry(this.size, this.size, this.size);
-    this.cube = new THREE.Mesh(geometry, material);
+    // let material = new THREE.MeshBasicMaterial({ map: texture });
+    this.cubeTexture = new THREE.MeshLambertMaterial({
+      color: new THREE.Color( 1.0, 1.0, 1.0),
+      vertexColors: THREE.VertexColors,
+      emissive: new THREE.Color( 0, 0, 0 ),
+      transparent : true, 
+      //opacity: 1, 
+      precision: "highp" ,
+      wireframe : false,
+      flatShading: false
+    });
+  
+    this.cubeGeometry = new THREE.BoxGeometry(this.size, this.size, this.size);
+    this.cubeMesh = new THREE.Mesh(this.cubeGeometry, this.cubeTexture);
+
+    if (this.colorSel === 0){
+      for ( let i = 0; i < this.cubeGeometry.faces.length; i += 2 ) {
+        let faceColor1 = 0xff0000;
+        this.cubeGeometry.faces[i].color.setHex(faceColor1);
+        let faceColor2 = 0xff0000;
+        this.cubeGeometry.faces[i+1].color.setHex(faceColor2);
+      }
+      this.colorSel=1;
+    }else if (this.colorSel === 1){
+      for ( let i = 0; i < this.cubeGeometry.faces.length; i += 2 ) {
+        let faceColor1 = 0x00ff00;
+        this.cubeGeometry.faces[i].color.setHex(faceColor1);
+        let faceColor2 = 0x00ff00;
+        this.cubeGeometry.faces[i+1].color.setHex(faceColor2);
+      }
+      this.colorSel =0;
+    }
 
     // Add cube to scene
-    this.scene.add(this.cube);
+    this.scene.add(this.cubeMesh);
   }
 
 
@@ -107,18 +149,77 @@ export class TdContentComponent implements AfterViewInit, OnChanges {
   /**
    * Load NY model
    */
-  private loadBrain() {
+  private createBrain() {
+    let loader = new THREE.PLYLoader();  
+  
+    loader.load(this.objBrain, (Geometry) => {
+      let material = new THREE.MeshLambertMaterial({
+        color: new THREE.Color( 1.0, 1.0, 1.0),
+        vertexColors: THREE.VertexColors,
+        emissive: new THREE.Color( 0, 0, 0 ),
+        transparent : true, 
+        precision: "lowp" ,
+        wireframe : false,
+        flatShading: false
+      });
 
+      this.regularGeometry = new THREE.Geometry().fromBufferGeometry( Geometry );
+      this.brainMesh = new THREE.Mesh(this.regularGeometry, material);
 
-
+      // console.log(this.regularGeometry);
+      // // faces are in.dexed using characters
+      // var faceIndices = [ 'a', 'b', 'c', 'd' ];
+      // var color, f, p, vertexIndex;
+      // // 1. first, assign colors to vertices as desired
+      // for ( let i = 1; i < this.regularGeometry['vertices']['length']; i++ ) 
+      // {
+      //   let color = new THREE.Color( 0xffffff );
+      //   // color.setRGB(this.colorFromFile['items'][i].r,this.colorFromFile['items'][i].g,this.colorFromFile['items'][i].b);
+      //    color.setRGB(1.0,0.0,0.0);
+        
+      //   this.regularGeometry['colors'][i] = color; // use this array for convenience
+      // }
+      // // 2. copy the colors to corresponding positions 
+      // //     in each face's vertexColors array.
+      // // modo a
+      // for ( let i = 0; i < this.regularGeometry['faces']['length']; i++ ) 
+      // {
+      //   let face = this.regularGeometry['faces'][ i ];
+      //   let numberOfSides = ( face instanceof THREE.Face3 ) ? 3 : 4;
+      //   for( let j = 0; j < numberOfSides; j++ ) 
+      //   {
+      //     let vertexIndex = face[ faceIndices[ j ] ];
+      //     color = new THREE.Color( 0xff0000 );
+      //     // color.setRGB(this.colorFromFile['items'][vertexIndex].r,this.colorFromFile['items'][vertexIndex].g,this.colorFromFile['items'][vertexIndex].b);
+      //     face['vertexColors'][ j ] = color;
+      //   }
+      // }
+      // this.regularGeometry['colorsNeedUpdate']= true;
+      // to LPS space
+      let RASToLPS = new THREE.Matrix4();
+      RASToLPS.set(-1, 0, 0, 0, 0, -1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+      this.brainMesh.applyMatrix(RASToLPS);
+      this.brainMesh.castShadow = true;
+      this.brainMesh.receiveShadow = true;
+      this.scene.add(this.brainMesh);
+      // console.log(this.scene);
+    });
   }
 
   /**
-   * Animate the cube
+   * Animate the brain
    */
   private animateBrain() {
     this.brainMesh.rotation.x += this.rotationSpeedX;
-    this.brainMesh.rotation.y += this.rotationSpeedY;
+    // this.brainMesh.rotation.y += this.rotationSpeedY;
+  }
+
+   /**
+   * Animate the cube
+   */
+  private animateCube() {
+    this.cubeMesh.rotation.x += this.rotationSpeedX;
+    this.cubeMesh.rotation.y += this.rotationSpeedY;
   }
 
 
@@ -144,29 +245,70 @@ export class TdContentComponent implements AfterViewInit, OnChanges {
     
   }
 
-  private updateColors() {
-    /* Scene */
-    this.scene = new THREE.Scene();
 
-    /* Camera */
-    let aspectRatio = this.getAspectRatio();
-    this.camera = new THREE.PerspectiveCamera(
-      this.fieldOfView,
-      aspectRatio,
-      this.nearClippingPane,
-      this.farClippingPane
-    );
-    this.camera.position.x = this.cameraX;
-    this.camera.position.y = this.cameraY;
-    this.camera.position.z = this.cameraZ;
+  
+  private updateCubeColors() {
+    this.scene.remove(this.cubeMesh);
+
+// vuelvo y lo creo
+    // let material = new THREE.MeshLambertMaterial({
+    //   color: new THREE.Color( 1.0, 1.0, 1.0),
+    //   vertexColors: THREE.VertexColors,
+    //   emissive: new THREE.Color( 0, 0, 0 ),
+    //   transparent : true, 
+    //   //opacity: 1, 
+    //   precision: "highp" ,
+    //   wireframe : false,
+    //   flatShading: false
+    // });
+  
+    this.cubeGeometry = new THREE.BoxGeometry(this.size, this.size, this.size);
+    if (this.colorSel === 0){
+      for ( let i = 0; i < this.cubeGeometry.faces.length; i += 2 ) {
+        let faceColor1 = 0xff0000;
+        this.cubeGeometry.faces[i].color.setHex(faceColor1);
+        let faceColor2 = 0xff0000;
+        this.cubeGeometry.faces[i+1].color.setHex(faceColor2);
+      }
+      this.colorSel=1;
+    }else if (this.colorSel === 1){
+      for ( let i = 0; i < this.cubeGeometry.faces.length; i += 2 ) {
+        let faceColor1 = 0x00ff00;
+        this.cubeGeometry.faces[i].color.setHex(faceColor1);
+        let faceColor2 = 0x00ff00;
+        this.cubeGeometry.faces[i+1].color.setHex(faceColor2);
+      }
+      this.colorSel =2;
+    } else if (this.colorSel === 2){
+      for ( let i = 0; i < this.cubeGeometry.faces.length; i += 2 ) {
+        let faceColor1 = 0x00ff00;
+        this.cubeGeometry.faces[i].color.setHex(faceColor1);
+        let faceColor2 = 0x00ff00;
+        this.cubeGeometry.faces[i+1].color.setHex(faceColor2);
+      }
+      this.colorSel =0;
+    }
+    this.cubeMesh = new THREE.Mesh(this.cubeGeometry, this.cubeTexture);
+
+    // Add cube to scene
+    this.scene.add(this.cubeMesh);
+
+
+    // console.log("updateCubeColors", this.colorSel);
+  }
+
+
+  private updateBrainColors() {
+    
+    this.scene.remove(this.brainMesh);
 
     let loader = new THREE.PLYLoader();  
-    // loader.load(this.objBrain, function(Geometry) {
+  
     loader.load(this.objBrain, (Geometry) => {
       let material = new THREE.MeshLambertMaterial({
         color: new THREE.Color( 1.0, 1.0, 1.0),
         vertexColors: THREE.VertexColors,
-        emissive: new THREE.Color( 0, 0, 0 ),
+        emissive: new THREE.Color( 0.0, 0.0, 0.0 ),
         transparent : true, 
         precision: "lowp" ,
         wireframe : false,
@@ -174,19 +316,20 @@ export class TdContentComponent implements AfterViewInit, OnChanges {
       });
 
       this.regularGeometry = new THREE.Geometry().fromBufferGeometry( Geometry );
-      let mesh = new THREE.Mesh(this.regularGeometry, material);
+      this.brainMesh = new THREE.Mesh(this.regularGeometry, material);
 
-      console.log(this.regularGeometry);
+      //lo coloreo
       // faces are in.dexed using characters
-      var faceIndices = [ 'a', 'b', 'c', 'd' ];
-      var color, f, p, vertexIndex;
+      let faceIndices = [ 'a', 'b', 'c', 'd' ];
+      let color = new THREE.Color;
+      let f, p, vertexIndex;
       // 1. first, assign colors to vertices as desired
       for ( let i = 1; i < this.regularGeometry['vertices']['length']; i++ ) 
       {
         let color = new THREE.Color( 0xffffff );
-        color.setRGB(this.colorFromFile['items'][i].r,this.colorFromFile['items'][i].g,this.colorFromFile['items'][i].b);
+        color.setRGB(this.brainFrontColors['items'][i].r,this.brainFrontColors['items'][i].g,this.brainFrontColors['items'][i].b);
         //  color.setRGB(1.0,0.0,0.0);
-        
+        // console.log(i,this.brainFrontColors['items'][i]);
         this.regularGeometry['colors'][i] = color; // use this array for convenience
       }
       // 2. copy the colors to corresponding positions 
@@ -200,28 +343,22 @@ export class TdContentComponent implements AfterViewInit, OnChanges {
         {
           let vertexIndex = face[ faceIndices[ j ] ];
           color = new THREE.Color( 0xff0000 );
-          color.setRGB(this.colorFromFile['items'][vertexIndex].r,this.colorFromFile['items'][vertexIndex].g,this.colorFromFile['items'][vertexIndex].b);
+          color.setRGB(this.brainFrontColors['items'][vertexIndex].r,this.brainFrontColors['items'][vertexIndex].g,this.brainFrontColors['items'][vertexIndex].b);
           face['vertexColors'][ j ] = color;
         }
       }
+
       this.regularGeometry['colorsNeedUpdate']= true;
-
-
-
       // to LPS space
       let RASToLPS = new THREE.Matrix4();
       RASToLPS.set(-1, 0, 0, 0, 0, -1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
-      mesh.applyMatrix(RASToLPS);
-      mesh.castShadow = true;
-      mesh.receiveShadow = true;
-      this.brainMesh = mesh;
-      this.scene.add(mesh);
-      console.log(this.scene);
+      this.brainMesh.applyMatrix(RASToLPS);
+      this.brainMesh.castShadow = true;
+      this.brainMesh.receiveShadow = true;
+      this.scene.add(this.brainMesh);
+      // console.log("updatebrainColors");
     });
-
-    this.scene.add( new THREE.HemisphereLight( 0x443333, 0x111122 ) );
-    this.addShadowedLight( 0.5, 1, -1,new THREE.Color( 0.85, 0.85, 0.85), 1.35 );
-
+    
   }
 
   /**
@@ -242,69 +379,8 @@ export class TdContentComponent implements AfterViewInit, OnChanges {
     this.camera.position.x = this.cameraX;
     this.camera.position.y = this.cameraY;
     this.camera.position.z = this.cameraZ;
-
-    let loader = new THREE.PLYLoader();  
-    // loader.load(this.objBrain, function(Geometry) {
-    loader.load(this.objBrain, (Geometry) => {
-      let material = new THREE.MeshLambertMaterial({
-        color: new THREE.Color( 1.0, 1.0, 1.0),
-        vertexColors: THREE.VertexColors,
-        emissive: new THREE.Color( 0, 0, 0 ),
-        transparent : true, 
-        precision: "lowp" ,
-        wireframe : false,
-        flatShading: false
-      });
-
-      this.regularGeometry = new THREE.Geometry().fromBufferGeometry( Geometry );
-      let mesh = new THREE.Mesh(this.regularGeometry, material);
-
-      console.log(this.regularGeometry);
-      // faces are in.dexed using characters
-      var faceIndices = [ 'a', 'b', 'c', 'd' ];
-      var color, f, p, vertexIndex;
-      // 1. first, assign colors to vertices as desired
-      for ( let i = 1; i < this.regularGeometry['vertices']['length']; i++ ) 
-      {
-        let color = new THREE.Color( 0xffffff );
-        // color.setRGB(this.colorFromFile['items'][i].r,this.colorFromFile['items'][i].g,this.colorFromFile['items'][i].b);
-         color.setRGB(1.0,0.0,0.0);
-        
-        this.regularGeometry['colors'][i] = color; // use this array for convenience
-      }
-      // 2. copy the colors to corresponding positions 
-      //     in each face's vertexColors array.
-      // modo a
-      for ( let i = 0; i < this.regularGeometry['faces']['length']; i++ ) 
-      {
-        let face = this.regularGeometry['faces'][ i ];
-        let numberOfSides = ( face instanceof THREE.Face3 ) ? 3 : 4;
-        for( let j = 0; j < numberOfSides; j++ ) 
-        {
-          let vertexIndex = face[ faceIndices[ j ] ];
-          color = new THREE.Color( 0xff0000 );
-          // color.setRGB(this.colorFromFile['items'][vertexIndex].r,this.colorFromFile['items'][vertexIndex].g,this.colorFromFile['items'][vertexIndex].b);
-          face['vertexColors'][ j ] = color;
-        }
-      }
-      this.regularGeometry['colorsNeedUpdate']= true;
-
-
-
-      // to LPS space
-      let RASToLPS = new THREE.Matrix4();
-      RASToLPS.set(-1, 0, 0, 0, 0, -1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
-      mesh.applyMatrix(RASToLPS);
-      mesh.castShadow = true;
-      mesh.receiveShadow = true;
-      this.brainMesh = mesh;
-      this.scene.add(mesh);
-      console.log(this.scene);
-    });
-
-    this.scene.add( new THREE.HemisphereLight( 0x443333, 0x111122 ) );
-    this.addShadowedLight( 0.5, 1, -1,new THREE.Color( 0.85, 0.85, 0.85), 1.35 );
-
+    this.scene.add( new THREE.HemisphereLight( 0x887777, 0x111122 ) );
+    this.addShadowedLight( 0.5, 1, -1,new THREE.Color(1, 1, 1), 1);
   }
 
 
@@ -330,8 +406,9 @@ export class TdContentComponent implements AfterViewInit, OnChanges {
     let component: TdContentComponent = this;
     (function render() {
       requestAnimationFrame(render);
-      //component.animateCube();
-      // component.animateBrain();
+      
+      component.animateBrain();
+      // component.animateCube()
       component.renderer.render(component.scene, component.camera);
     }());
   }
@@ -360,18 +437,18 @@ export class TdContentComponent implements AfterViewInit, OnChanges {
    * but we would be unable to add it to the scene until now.
    */
   public ngAfterViewInit() {
-    // this.createScene();
-    // // this.createCube();
-    // this.startRenderingLoop();
-    // this.ESIstatus_td = true;
+    this.createScene();
+    this.createBrain()
+    //this.createCube();
+    this.startRenderingLoop();
+    
   }
   
-  public ngOnChanges() {
-    console.log('entre al onchange',this.brainFrontColors);
-    this.colorFromFile = this.brainFrontColors;
-    this.updateColors();
-    
-    this.startRenderingLoop();
-    //this.ESIstatus_td = true;
+  public ngOnChanges(changes) {
+    // console.log('entre al onchange',changes.colorSel);
+    // this.colorFromFile = this.brainFrontColors;
+    // this.updateCubeColors();
+    this.updateBrainColors();
+    //this.startRenderingLoop();
   }
 }

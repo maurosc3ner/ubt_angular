@@ -10,21 +10,30 @@
   background-color: rgb(0, 0, 0);
   border-style: solid;
   border-width: 1px;
-  border-color: yellow;
+  border-color: black;
+  padding-left: 20px;
+  padding-top: 150px;
 }
 
 .td-content-container {
   background-color: rgb(0, 0, 0);
   border-style: solid;
   border-width: 1px;
-  border-color: blue;
+  border-color: black;
+  padding-left: 20px;
+  padding-top: 120px;
+  height: 630px;
 }
 
 .anno-content-container {
   background-color: rgb(0, 0, 0);
   border-style: solid;
-  border-width: 1px;
-  border-color: yellowgreen;
+  border-width: 10px;
+  border-color: black;
+  padding-left: 20px;
+  padding-top: 150px;
+  width: 400px;
+  height: 630px;
 }
 
 .plane-view-container {
@@ -32,6 +41,7 @@
   border-style: solid;
   border-width: 1px;
   border-color: red;
+  height: 630px;
 }
 
 .layout0 {

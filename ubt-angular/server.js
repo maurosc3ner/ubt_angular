@@ -6,7 +6,6 @@ var path = require('path');
 var fs = require('fs');
 var PythonShell = require('python-shell');
 
-
 var actSockets = 0;
 var interval;
 
@@ -30,7 +29,6 @@ function openEDFScript(pathFileName,currentData) {
         //console.log(results[0].patientInfo);
         
         io.emit("load_edf", results[0]);
-        console.log('-EC-openEDFScript- response to client...');
         return true;
 	});
 };
@@ -51,11 +49,7 @@ function jumpEDFScript(filename,currentData) {
         results[0].debug.time.currentTime=currentData.debug.time.startTime+currentData.debug.time.index;
         results[0]['annotations']=currentData.annotations;
         results[0]['patientInfo']=currentData.patientInfo;
-        // console.log(currentData.patientInfo);
-          
-        //console.log([results[0].channels[0].data[0],results[0].channels[0].data[20]]);
         io.emit("jump_edf", results[0]);
-        console.log('-EC-jumpEDFScript- response to client...');
         return true;
 	}); 
 }; 
@@ -147,10 +141,11 @@ function topoPlotScript(currentData) {
             // it's possible to embed binary data
             // within arbitrarily-complex objects
             io.emit('topo_plot', { image: true, buffer: buf.toString('base64') });
+            console.log('-EC-topoplot-The exit code was: ' + code);
+            console.log('-EC-topoplot-The exit signal was: ' + signal);
+            console.log('-EC-topoplot-finished'); 
         });
-        console.log('-EC-topoplot-The exit code was: ' + code);
-        console.log('-EC-topoplot-The exit signal was: ' + signal);
-        console.log('-EC-topoplot-finished'); 
+        
     }); 
 };
 
@@ -173,13 +168,7 @@ function loretaScript(currentData) {
     loretaShell.on('message', function (message) {
         // received a message sent from the Python script (a simple "print" statement)
         //console.log(message);
-        asyncMessage = message 
-        //results={}  
-        // results['channels'] = JSON.parse(message)['channels']
-        // results['debug'] = currentData.debug;
-        // results['annotations']=currentData.annotations;
-        // results['patientInfo']=currentData.patientInfo;
-        //io.emit("loreta_filter", JSON.parse(message));      
+        asyncMessage = message      
       });    
        
     // end the input stream and allow the process to exit
@@ -269,7 +258,7 @@ io.on('connection', function(socket) {
     socket.on('request_subrecords', function(msg) {
         console.log(msg);
         interval = setInterval(function() {
-            response = {
+            response = { 
                 "type": "DISP",
                 "origin": "PYCOLLECT",
                 "command": "request_subrecords",
