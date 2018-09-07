@@ -100,20 +100,20 @@ function ocularScript(currentData) {
         // received a message sent from the Python script (a simple "print" statement)
         //console.log(message);
         results={}
-        results['channels'] = JSON.parse(message)['channels']
+        results['channels'] = JSON.parse(message)['channels']  
         results['debug'] = currentData.debug;
         results['annotations']=currentData.annotations;
         results['patientInfo']=currentData.patientInfo;
         io.emit("ocular_filter", results);   
-      }); 
+      });  
        
     // end the input stream and allow the process to exit
     ocularShell.end(function (err,code,signal) {
         if (err) throw err;
         console.log('-EC-ocular_filter-The exit code was: ' + code);
         console.log('-EC-ocular_filter-The exit signal was: ' + signal);
-        console.log('-EC-ocular_filter-finished');
-    });
+        console.log('-EC-ocular_filter-finished'); 
+    }); 
 };
 
 // este debe ser el topoplot 
@@ -148,7 +148,7 @@ function topoPlotScript(currentData) {
         
     }); 
 };
-
+  
 /** 
  * 
  * @param {*} currentData 
@@ -208,7 +208,7 @@ io.on('connection', function(socket) {
         //since it is an async call, io.emit should go into the python-shell callback
         if (!edfFromFile('/backend/server_data',msg))
             console.log('-EC-lf- ooops something happen');
-        
+         
     });
 
     socket.on('jump_edf', function(msg) {

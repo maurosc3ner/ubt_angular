@@ -16,44 +16,44 @@
   <div class="row">
     <div class="col-3 col-md-3">
       <input id="fileInput" name="file" type="file" (change)="OpenEDF($event)" [hidden]="true" #fileinput>
-      <button mat-stroked-button (click)="SelectFiles(fileinput)" class="material-cust-small-button">
+      <button mat-stroked-button (click)="SelectFiles(fileinput)" class="material-cust-small-button" data-toggle="tooltip" data-placement="top" title="Abrir archivo EDF">
         <mat-icon class="material-cust-small-button-icon">folder_open</mat-icon>
       </button>
     </div>
     <div class="col-3 col-md-3">
-      <button mat-stroked-button (click)="Clear()" class="material-cust-small-button">
+      <button mat-stroked-button (click)="Clear()" class="material-cust-small-button" data-toggle="tooltip" data-placement="top" title="Cerrar archivo actual">
         <mat-icon class="material-cust-small-button-icon">remove</mat-icon>
       </button>
     </div>    
     <div class="col-3 col-md-3">
-      <button mat-stroked-button (click)="notchFilter()" class="material-cust-small-button">
+      <button mat-stroked-button (click)="notchFilter()" class="material-cust-small-button" data-toggle="tooltip" data-placement="top" title="Aplicar filtro Notch">
         <mat-icon class="material-cust-small-button-icon">filter</mat-icon>
       </button>
     </div>
     <div class="col-3 col-md-3">
-      <button mat-stroked-button (click)="ocularFilter()" class="material-cust-small-button">
+      <button mat-stroked-button (click)="ocularFilter()" class="material-cust-small-button" data-toggle="tooltip" data-placement="top" title="Aplicar filtro ocular">
         <mat-icon class="material-cust-small-button-icon">filter</mat-icon>
       </button>
     </div>
   </div>
   <div class="row">
     <div class="col-3 col-md-3">
-      <button mat-stroked-button (click)="AnnoLoad()" class="material-cust-small-button">
+      <button mat-stroked-button (click)="AnnoLoad()" class="material-cust-small-button" data-toggle="tooltip" data-placement="top" title="Anotaciones">
         <mat-icon class="material-cust-small-button-icon">edit</mat-icon>
       </button>
     </div>
     <div class="col-3 col-md-3">
-      <button mat-stroked-button (click)="TopoPlot()" class="material-cust-small-button">
+      <button mat-stroked-button (click)="TopoPlot()" class="material-cust-small-button" data-toggle="tooltip" data-placement="top" title="Estimar topoplot">
         <mat-icon class="material-cust-small-button-icon">radio_button_checked</mat-icon>
       </button>
     </div>
     <div class="col-3 col-md-3">
-      <button mat-stroked-button (click)="ESILoad()" class="material-cust-small-button">
+      <button mat-stroked-button (click)="ESILoad()" class="material-cust-small-button" data-toggle="tooltip" data-placement="top" title="Estimar Loreta">
         <mat-icon class="material-cust-small-button-icon">image_search</mat-icon>
       </button>
     </div>
     <div class="col-3 col-md-3">
-      <button mat-stroked-button (click)="PlaneLoad()" class="material-cust-small-button">
+      <button mat-stroked-button (click)="PlaneLoad()" class="material-cust-small-button" data-toggle="tooltip" data-placement="top" title="Abrir archivo MRI">
         <mat-icon class="material-cust-small-button-icon">image</mat-icon>
       </button>
     </div>

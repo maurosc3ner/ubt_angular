@@ -1,22 +1,22 @@
 <div class="container">
   <div class="row main-container">
     <div class="col-3 col-md-3">
-      <button mat-stroked-button (click)="Backward($event)" class="material-cust-small-button">
+      <button mat-stroked-button (click)="Backward($event)" class="material-cust-small-button" data-toggle="tooltip" data-placement="top" title="Página anterior">
         <mat-icon class="material-cust-small-button-icon">keyboard_arrow_left</mat-icon>
       </button>
     </div>
     <div class="col-3 col-md-3">
-      <button mat-stroked-button (click)="Forward($event)" class="material-cust-small-button">
+      <button mat-stroked-button (click)="Forward($event)" class="material-cust-small-button" data-toggle="tooltip" data-placement="top" title="Página siguiente">
         <mat-icon class="material-cust-small-button-icon">keyboard_arrow_right</mat-icon>
       </button>
     </div>
     <div class="col-3 col-md-3">
-        <button mat-stroked-button (click)="changeStep($event, false)" class="material-cust-small-button">
+        <button mat-stroked-button (click)="changeStep($event, false)" class="material-cust-small-button" data-toggle="tooltip" data-placement="top" title="Reducir salto">
             <mat-icon class="material-cust-small-button-icon">keyboard_arrow_down</mat-icon>
           </button>
     </div>
     <div class="col-3 col-md-3">
-        <button mat-stroked-button (click)="changeStep($event, true)" class="material-cust-small-button">
+        <button mat-stroked-button (click)="changeStep($event, true)" class="material-cust-small-button" data-toggle="tooltip" data-placement="top" title="Incrementar salto">
             <mat-icon class="material-cust-small-button-icon">keyboard_arrow_up</mat-icon>
           </button>
       </div>
@@ -24,8 +24,8 @@
   <div class="row main-container">
     <div class="col-6 col-md-6 text-center"><p class="speed"></p></div>
     <div class="col-6 col-md-6 text-center">
-      <p class="speed">
-        {{this.step[this.stepPos]}}x</p>
+      <p class="speed" data-toggle="tooltip" data-placement="top" title="Tamaño actual del salto">
+        {{this.step[this.stepPos]}}0 segundos</p>
     </div>
   </div>
 </div>

@@ -101,21 +101,35 @@ class edf_topoplot(object):
 		import matplotlib
 		matplotlib.use('Agg')
 		import matplotlib.pyplot as plt
+		plt.rcParams["figure.facecolor"] = "black"
 		from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 		import urllib
 		from io import StringIO
 
 		minn = min(pot_signal)
 		maxx = max(pot_signal)
-		plt.title('topomap for '+samplesStr+' samples')
+		title_obj = plt.title('topomap for '+samplesStr+' samples') #get the title property handler
+		
 		fig=plt.Figure()
 		canvas=FigureCanvas(fig)
 
-		fig = plot_topomap(pot_signal, pos, cmap='jet', sensors='k.', contours=0, 
+
+		fig,cn = plot_topomap(pot_signal, pos, cmap='jet', sensors='k.', contours=0, 
 			image_interp='spline36' ,show = False,vmin = minn, vmax = maxx)
+		
 		if saveMethod == 0:# writing the file
-			plt.savefig('temptopo.png')
+			
+			
+			plt.getp(title_obj)                    #print out the properties of title
+			plt.getp(title_obj, 'text')            #print out the 'text' property for title
+			plt.setp(title_obj, color='w')         #set the color of title to red
+
+			plt.savefig('temp2.png', facecolor="black", edgecolor="none")
+
+			plt.savefig('temptopo.png',facecolor="black")
 			plt.show(fig)
+			
+			# ax.set_facecolor()
 			plt.close('all')
 			return True
 		elif saveMethod == 1: # return as data-uri
