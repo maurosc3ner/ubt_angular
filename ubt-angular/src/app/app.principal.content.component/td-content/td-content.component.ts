@@ -31,13 +31,12 @@ import { validateHorizontalPosition } from '../../../../node_modules/@angular/cd
 export class TdContentComponent implements AfterViewInit, OnChanges {
   /* HELPER PROPERTIES (PRIVATE PROPERTIES) */
   private camera: THREE.PerspectiveCamera;
+  private controls: THREE.OrbitControls;
   colorFromFile = {};
 
   private get canvas() : HTMLCanvasElement {
     return this.canvasRef.nativeElement;
   }
-
-
   
   @ViewChild('canvas')
   private canvasRef: ElementRef;
@@ -48,7 +47,9 @@ export class TdContentComponent implements AfterViewInit, OnChanges {
   private renderer: THREE.WebGLRenderer;
 
   public scene: THREE.Scene;
-  private regularGeometry : THREE.Geometry;
+  //cmb2
+  //private regularGeometry : THREE.Geometry;
+  private regularGeometry : THREE.BufferGeometry;
   private cubeGeometry : THREE.Geometry;
 
   private cubeTexture: THREE.material;
@@ -57,10 +58,10 @@ export class TdContentComponent implements AfterViewInit, OnChanges {
   @Input() brainFrontColors: JSON;
   // @Input() ESIstatus_td: Boolean;
   
-  public rotationSpeedX: number = 0.0005;
+  public rotationSpeedX: number = 0.001;
 
   
-  public rotationSpeedY: number = 0.01;
+  public rotationSpeedY: number = 0.001;
 
   
   public size: number = 200;
@@ -71,6 +72,8 @@ export class TdContentComponent implements AfterViewInit, OnChanges {
   public texture: string = '/assets/bviewer/crate.gif';
 
   public objBrain: string= '/assets/bviewer/model/NYmeshWithNormalsASC.ply';
+  
+  public drawCounter : number = 0;
 
 
   /* STAGE PROPERTIES */
@@ -162,8 +165,9 @@ export class TdContentComponent implements AfterViewInit, OnChanges {
         wireframe : false,
         flatShading: false
       });
-
-      this.regularGeometry = new THREE.Geometry().fromBufferGeometry( Geometry );
+      //cmb1
+      //this.regularGeometry = new THREE.Geometry().fromBufferGeometry( Geometry );
+      this.regularGeometry = Geometry;
       this.brainMesh = new THREE.Mesh(this.regularGeometry, material);
 
       // console.log(this.regularGeometry);
@@ -202,7 +206,8 @@ export class TdContentComponent implements AfterViewInit, OnChanges {
       this.brainMesh.castShadow = true;
       this.brainMesh.receiveShadow = true;
       this.scene.add(this.brainMesh);
-      // console.log(this.scene);
+      this.drawCounter++;
+      console.log('draw='+this.drawCounter);
     });
   }
 
@@ -211,7 +216,7 @@ export class TdContentComponent implements AfterViewInit, OnChanges {
    */
   private animateBrain() {
     this.brainMesh.rotation.x += this.rotationSpeedX;
-    // this.brainMesh.rotation.y += this.rotationSpeedY;
+    this.brainMesh.rotation.y += this.rotationSpeedY;
   }
 
    /**
@@ -297,7 +302,9 @@ export class TdContentComponent implements AfterViewInit, OnChanges {
     // console.log("updateCubeColors", this.colorSel);
   }
 
-
+/*
+ este funciona creando el cerebro desde cero pero es costoso 09-09-2018
+ 
   private updateBrainColors() {
     
     this.scene.remove(this.brainMesh);
@@ -356,9 +363,32 @@ export class TdContentComponent implements AfterViewInit, OnChanges {
       this.brainMesh.castShadow = true;
       this.brainMesh.receiveShadow = true;
       this.scene.add(this.brainMesh);
-      // console.log("updatebrainColors");
+      this.drawCounter++;
+      console.log('draw='+this.drawCounter);// console.log("updatebrainColors");
     });
     
+  }
+
+*/
+
+  private updateBrainColors() {
+    //    this.scene.remove(this.brainMesh); no brain removal!!
+    if(this.regularGeometry){
+      if (this.drawCounter>0){
+        let colors2 = new Float32Array(this.regularGeometry.attributes.position.count*3);
+        for ( let i = 0; i < this.regularGeometry.attributes.position.count; i ++ ) {
+            colors2[ i * 3 ] = this.brainFrontColors['items'][i]['r'];
+            colors2[ i * 3 + 1 ] = this.brainFrontColors['items'][i]['g'];
+            colors2[ i * 3 + 2 ] = this.brainFrontColors['items'][i]['b'];
+        }
+        this.regularGeometry.addAttribute( "color", new THREE.BufferAttribute( colors2, 3 ) );
+        this.regularGeometry.colorsNeedUpdate= true;
+      }else{
+          console.log("no existo");
+      }
+      this.drawCounter++;
+      console.log('draw='+this.drawCounter);// console.log("updatebrainColors");
+    }
   }
 
   /**
@@ -379,6 +409,8 @@ export class TdContentComponent implements AfterViewInit, OnChanges {
     this.camera.position.x = this.cameraX;
     this.camera.position.y = this.cameraY;
     this.camera.position.z = this.cameraZ;
+    this.controls = new THREE.OrbitControls( this.camera );
+
     this.scene.add( new THREE.HemisphereLight( 0x887777, 0x111122 ) );
     this.addShadowedLight( 0.5, 1, -1,new THREE.Color(1, 1, 1), 1);
   }
@@ -406,7 +438,7 @@ export class TdContentComponent implements AfterViewInit, OnChanges {
     let component: TdContentComponent = this;
     (function render() {
       requestAnimationFrame(render);
-      
+      component.controls.update();
       component.animateBrain();
       // component.animateCube()
       component.renderer.render(component.scene, component.camera);

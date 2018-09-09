@@ -108,24 +108,39 @@ class edf_topoplot(object):
 
 		minn = min(pot_signal)
 		maxx = max(pot_signal)
-		title_obj = plt.title('topomap for '+samplesStr+' samples') #get the title property handler
+		title_obj = plt.title('Topomap for '+samplesStr+' samples') #get the title property handler
 		
 		fig=plt.Figure()
 		canvas=FigureCanvas(fig)
 
-
+		
 		fig,cn = plot_topomap(pot_signal, pos, cmap='jet', sensors='k.', contours=0, 
-			image_interp='spline36' ,show = False,vmin = minn, vmax = maxx)
+			 image_interp='spline36' ,show = False,vmin = minn, vmax = maxx)
+		
+		
+		
+		from mpl_toolkits.axes_grid1 import make_axes_locatable  # noqa: F401
 		
 		if saveMethod == 0:# writing the file
-			
+			ax = plt.gca()
+			divider = make_axes_locatable(ax)
+			cax = divider.append_axes('right', size="5%", pad=.05)
+			cbar = plt.colorbar(fig, cax=cax, cmap='jet', format='%3.2f')
+			cbar.set_ticks((minn, maxx))
+			# set colorbar label plus label color
+			cbar.set_label('Values', color='white')
+			# set colorbar tick color
+			cbar.ax.yaxis.set_tick_params(color='white')
+			# set colorbar edge color
+			cbar.outline.set_edgecolor('white')
+			# set colorbar ticklabels
+			plt.setp(plt.getp(cbar.ax.axes, 'yticklabels'), color='white')
 			
 			plt.getp(title_obj)                    #print out the properties of title
 			plt.getp(title_obj, 'text')            #print out the 'text' property for title
 			plt.setp(title_obj, color='w')         #set the color of title to red
 
-			plt.savefig('temp2.png', facecolor="black", edgecolor="none")
-
+			
 			plt.savefig('temptopo.png',facecolor="black")
 			plt.show(fig)
 			

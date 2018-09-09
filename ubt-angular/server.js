@@ -86,7 +86,7 @@ function notchScript(currentData) {
         console.log('-EC-notch_filter-The exit signal was: ' + signal);
         console.log('-EC-notch_filter-finished');
     });
-};  
+};     
 
 function ocularScript(currentData) {
     var options = {
@@ -105,7 +105,7 @@ function ocularScript(currentData) {
         results['annotations']=currentData.annotations;
         results['patientInfo']=currentData.patientInfo;
         io.emit("ocular_filter", results);   
-      });  
+      });    
        
     // end the input stream and allow the process to exit
     ocularShell.end(function (err,code,signal) {
