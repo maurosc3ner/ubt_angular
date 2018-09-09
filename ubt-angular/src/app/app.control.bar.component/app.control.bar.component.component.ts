@@ -11,7 +11,6 @@ export class AppControlBarComponent {
   @Output() CoomandEvent = new EventEmitter();
   status: Number = 0;
   constructor(private d3Service: D3Service) {
-    this.status = -1;
   }
 
   ESIToggle: Boolean = false;
@@ -20,24 +19,52 @@ export class AppControlBarComponent {
   TopoPlotToggle: Boolean = false;
 
   checkStatus(ESIToggle, PlaneToggle, AnnotToggle, TopoPlotToggle) {
-    if (TopoPlotToggle === true) {
-      return 4;
-    } else if (AnnotToggle === true) {
-        return 3;
-      } else if (PlaneToggle === true) {
+    console.log('AMH-Checkstatus', this.status, ESIToggle, PlaneToggle, AnnotToggle, TopoPlotToggle);
+    if ((ESIToggle || PlaneToggle || AnnotToggle || TopoPlotToggle) === false) {
+      return 0;
+    } else {
+      if (this.status === 0) {
+        if (TopoPlotToggle === true) {
+          return 4;
+        }
+        if (AnnotToggle === true) {
+          return 3;
+        }
+        if (PlaneToggle === true) {
           return 2;
-        } else if (ESIToggle === true) {
-            return 1;
-          } else { return 0; }
+        }
+        if (ESIToggle === true) {
+          return 1;
+        }
+      } else {
+        // State machine logic
+        if (this.status === 1) {
+          ESIToggle = false;
+          this.status = 0;
+        }
+        if (this.status === 2) {
+          PlaneToggle = false;
+          this.status = 0;
+        }
+        if (this.status === 3) {
+          AnnotToggle = false;
+          this.status = 0;
+        }
+        if (this.status === 4) {
+          TopoPlotToggle = false;
+          this.status = 0;
+        }
+        return this.checkStatus(ESIToggle, PlaneToggle, AnnotToggle, TopoPlotToggle);
+      }
+    }
   }
 
-
   onESILoad(event) {
-    if (this.ESIToggle === true) { 
-      this.ESIToggle = false; 
-    } else { 
+    if (this.ESIToggle === true) {
+      this.ESIToggle = false;
+    } else {
       this.CoomandEvent.emit([7, 0]);
-      this.ESIToggle = true; 
+      this.ESIToggle = true;
     }
     this.status = this.checkStatus(this.ESIToggle, this.PlaneToggle, this.AnnotToggle, this.TopoPlotToggle);
     this.StatusEvent.emit(this.status);
