@@ -12,7 +12,7 @@ var interval;
 function openEDFScript(pathFileName,currentData) {
     //Aqui va llamado a rutina de python
     //TODO
-    //console.log('-EC-openEDFScript- calling python edfReader.py');
+    //console.log('-EC-openEDFScript- calling python edfReader.py',pathFileName);
     var options = {
 	  mode: 'json',
 	  args: [pathFileName,232000] 
