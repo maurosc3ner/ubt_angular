@@ -159,7 +159,7 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
         let y_axis  = false;
         for (const sample of channel_array) {
             for (let j = 0 ; j < data['channels'].length; j++) {
-                if (j === 0) {x_axis = true; y_axis = true; } else { x_axis = false; y_axis = false; }
+                if (j === 0) {x_axis = true; y_axis = true; } else { x_axis = false; y_axis = true; }
                 this.DrawChannel(
                     sample,
                     'line_eeg_1',
