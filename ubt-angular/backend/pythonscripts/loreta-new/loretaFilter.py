@@ -32,7 +32,7 @@ class Main_L(object):
         parser.add_argument('-c','--ch',help='nombre del archivo .m correspodiente a los canales',type = str)
         
         parser.add_argument('-d','--archivo',help='nombre del archivo .txt que desea utilizar',type = str)
-        # parser.add_argument('-b','--archivo2',help='nombre del archivo .edf correspondiente a las etiquetas')
+        parser.add_argument('-b','--archivo2',help='nombre del archivo .edf correspondiente a las etiquetas')
 
         parsedargs = parser.parse_args()
         lead = parsedargs.L
@@ -40,10 +40,10 @@ class Main_L(object):
         faces=parsedargs.Fa
         channels=parsedargs.ch 
         data=parsedargs.archivo
-        # base=parsedargs.archivo2
+        base=parsedargs.archivo2
         
-        # return lead,verts,faces,channels,data,base 
-        return lead,verts,faces,channels,data 
+        return lead,verts,faces,channels,data,base 
+        # return lead,verts,faces,channels,data 
     
     def read_edf(self,name):
         f = pyedflib.EdfReader(name)
@@ -110,6 +110,7 @@ class Main_L(object):
     def load_BM_data(self,Lead_field,verts,faces,channels):
     	#Cargar Lead Field
         data_folder = Path("backend/pythonscripts/loreta-new/")
+        # data_folder = Path(".") #for argparse mode
         L = sio.loadmat(data_folder/Lead_field)
     	# L = sio.loadmat(Lead_field)
         L_8ch=L['L_8ch']
@@ -227,9 +228,64 @@ path = './'
 # argparse input mode
 # lead,verts,faces,channels,data,base =l.argparse()
 # print ("comienzo del parsing ", Path().absolute())
-lead,verts,faces,channels,data=l.argparse()
-
 # print (lead,verts,faces,channels,data)
+# Lead_field=lead # Ubicacion de la Lead Field
+# verts=verts #Ubicacion de los verts
+# faces=faces # Ubicacion de las faces
+# channels=channels #Ubicacion de los cannels
+# DataEEG=data # datos del EEG
+# BaseEEG=base # etiquetas del EEG
+# [L,verts,faces,channels]=l.load_BM_data(Lead_field,verts,faces,channels)#Loading Forward Model solution (LeadField)
+# Y = np.loadtxt('nyEEG_R.txt')#cargar datos del EEG
+# Hdr,record= l.read_edf(BaseEEG)# Cargar parametros del EEG
+# print(Hdr["labels"])# Mostrar Etiquetas
+# Y=Y.T
+# # Source reconstruction
+# # TicToc = l.TicTocGenerator()# Comenzar contador
+# # l.tic() #Inicio del contador
+# alfa=0.05
+# print(np.shape(Y))#Mostrar dimensiones de los datos del EEG
+# print(np.shape(L))#Mostrar dimensiones de los datos de la Lead_Field 
+# J = l.source_reconstruction(Y,L,alfa,'sLOR')#Focalizar actividad ya sea con 'LOR':Loreta o 'sLOR': sLoreta
+# J_energy=l.source_energy(J)# Energia de las fuentes
+# J_energy=l.normalize_vector(J_energy) # normalizar los valores de energia 
+# #Umbralizar los valores de la energia 
+# for i in range(0,np.shape(J_energy)[0]):
+# 		if J_energy[i]<0.2:
+# 			J_energy[i] = 0.0
+
+# print(np.shape(J_energy))#Mostrar dimensiones de las fuentes
+# # l.toc()# Final del contador
+# colors = l.IntensitytoJet(J_energy)
+# colorExporter=colors[:,[0,1,2]]/255
+
+# color={}
+# color['items']=[]
+# for i in range(0,np.shape(colors)[0]):
+#     rgbObj={}
+#     rgbObj['r']=colorExporter[i,0]
+#     rgbObj['g']=colorExporter[i,1]
+#     rgbObj['b']=colorExporter[i,2]
+#     color['items'].append(rgbObj)
+
+# l.write2JSONFile(path,'colors',color)
+
+# np.savetxt('J_energy.txt', J_energy, fmt='%.2e')
+# app = QtGui.QApplication([]) 
+# w = gl.GLViewWidget()
+# w.show()
+# w.setCameraPosition(distance=500)
+# m1 = gl.GLMeshItem(vertexes=verts, faces=faces.astype(int), vertexColors=colors, smooth=True, shader='shaded')
+# w.addItem(m1)
+
+# # Start Qt event loop unless running in interactive mode.
+# if __name__ == '__main__':
+#     import sys
+#     if (sys.flags.interactive != 1) or not hasattr(QtCore, 'PYQT_VERSION'):
+#         QtGui.QApplication.instance().exec_()
+
+## pythonShell mode 
+lead,verts,faces,channels,data,base=l.argparse()
 stdin=read_in()
 # print (stdin)
 Lead_field='nyL.mat' # Ubicacion de la Lead Field
@@ -237,17 +293,6 @@ verts='nyvert.mat' #Ubicacion de los verts
 faces='nyface.mat' # Ubicacion de las faces
 channels='nyCh.mat' #Ubicacion de los cannels
 [L,verts,faces,channels]=l.load_BM_data(Lead_field,verts,faces,channels)#Loading Forward Model solution (LeadField)
-# Lead_field=lead # Ubicacion de la Lead Field
-# verts=verts #Ubicacion de los verts
-# faces=faces # Ubicacion de las faces
-# channels=channels #Ubicacion de los cannels
-# DataEEG=data # datos del EEG
-# BaseEEG=base # etiquetas del EEG
-#[L,verts,faces,channels]=l.load_BM_data(Lead_field,verts,faces,channels)#Loading Forward Model solution (LeadField)
-
-# data_folder = Path("backend/pythonscripts/loreta-new/")
-# Y = np.loadtxt(data_folder/'nyEEG_R.txt')#cargar datos del EEG
-
 nch=len(stdin)
 nSamples = len(stdin[0]['data'])
 fs=stdin[0]['samplefrequency']
@@ -263,9 +308,6 @@ for item in stdin:
 	# print (in_signal[currentCh,:],currentCh)
 	currentCh = currentCh +1
 # print(nch,nSamples,labels,in_signal.shape)
-
-# Hdr,record= l.read_edf(BaseEEG)# Cargar parametros del EEG
-# Y=Y.T
 Y= in_signal
 alfa=0.05
 # print('dataEEG',np.shape(Y))#Mostrar dimensiones de los datos del EEG
@@ -290,54 +332,11 @@ for i in range(0,np.shape(colors)[0]):
     rgbObj['g']=colorExporter[i,1]
     rgbObj['b']=colorExporter[i,2]
     color['items'].append(rgbObj)
-
+# print ("end")
 # l.write2JSONFile(path,'colors',color)
 print (json.dumps(color))
 
 
 
-# print(Hdr["labels"])# Mostrar Etiquetas
-# Y=Y.T
-# # Source reconstruction
-# TicToc = l.TicTocGenerator()# Comenzar contador
-# l.tic() #Inicio del contador
-# alfa=0.05
-# print(np.shape(Y))#Mostrar dimensiones de los datos del EEG
-# print(np.shape(L))#Mostrar dimensiones de los datos de la Lead_Field 
-# J = l.source_reconstruction(Y,L,alfa,'sLOR')#Focalizar actividad ya sea con 'LOR':Loreta o 'sLOR': sLoreta
-# J_energy=l.source_energy(J)# Energia de las fuentes
-# J_energy=l.normalize_vector(J_energy) # normalizar los valores de energia 
-# #Umbralizar los valores de la energia 
-# for i in range(0,np.shape(J_energy)[0]):
-# 		if J_energy[i]<0.2:
-# 			J_energy[i] = 0.0
 
-# print(np.shape(J_energy))#Mostrar dimensiones de las fuentes
-# l.toc()# Final del contador
-# colors = l.IntensitytoJet(J_energy)
-# colorExporter=colors[:,[0,1,2]]/255
 
-# color={}
-# color['items']=[]
-# for i in range(0,np.shape(colors)[0]):
-#     rgbObj={}
-#     rgbObj['r']=colorExporter[i,0]
-#     rgbObj['g']=colorExporter[i,1]
-#     rgbObj['b']=colorExporter[i,2]
-#     color['items'].append(rgbObj)
-
-# l.write2JSONFile(path,'colors',color)
-
-# np.savetxt('J_energy.txt', J_energy, fmt='%.2e')
-# app = QtGui.QApplication([]) 
-# w = gl.GLViewWidget()
-# w.show()
-# w.setCameraPosition(distance=500)
-# m1 = gl.GLMeshItem(vertexes=verts, faces=faces.astype(int), vertexColors=colors, smooth=True, shader='shaded')
-# w.addItem(m1)
-
-## Start Qt event loop unless running in interactive mode.
-# if __name__ == '__main__':
-#     import sys
-    # if (sys.flags.interactive != 1) or not hasattr(QtCore, 'PYQT_VERSION'):
-    #     QtGui.QApplication.instance().exec_()

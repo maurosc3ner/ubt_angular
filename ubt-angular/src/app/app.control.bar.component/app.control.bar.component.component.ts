@@ -27,6 +27,7 @@ export class AppControlBarComponent {
         if (TopoPlotToggle === true) {
           return 4;
         }
+        
         if (AnnotToggle === true) {
           return 3;
         }

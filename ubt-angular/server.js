@@ -149,9 +149,9 @@ function topoPlotScript(currentData) {
     }); 
 };
   
-/** 
+/**  
  * 
- * @param {*} currentData 
+ * @param {*} currentData  
  */ 
 function loretaScript(currentData) { 
     var options = { 
@@ -164,23 +164,24 @@ function loretaScript(currentData) {
     var loretaShell = new PythonShell('/backend/pythonscripts/loreta-new/loretaFilter.py',options);
     // /backend/pythonscripts/loreta-new/loretaFilter.py
     loretaShell.send(JSON.stringify(currentData.channels));  
+    //console.log(currentData.channels);
     var asyncMessage;
     loretaShell.on('message', function (message) {
         // received a message sent from the Python script (a simple "print" statement)
-        //console.log(message);
+        // console.log(message);    
         asyncMessage = message      
       });    
-       
+        
     // end the input stream and allow the process to exit
     loretaShell.end(function (err,code,signal) {
-        if (err) throw err; 
+        if (err) throw err;  
         io.emit("loreta_filter", JSON.parse(asyncMessage)); 
         //console.log(typeof JSON.parse(asyncMessage));
         console.log('-EC-loretaFilter-The exit code was: ' + code);
         console.log('-EC-loretaFilter-The exit signal was: ' + signal);
         console.log('-EC-loretaFilter-finished');  
     });
-};
+}; 
 
 function edfFromFile(startPath, msg) {
    
