@@ -9,29 +9,62 @@ var PythonShell = require('python-shell');
 var actSockets = 0;
 var interval;
 
-function openEDFScript(pathFileName,currentData) {
-    //Aqui va llamado a rutina de python
-    //TODO
-    //console.log('-EC-openEDFScript- calling python edfReader.py',pathFileName);
-    var options = {
-	  mode: 'json',
-	  args: [pathFileName,232000] 
-	};
-    PythonShell.run('/backend/pythonscripts/edfReader.py', options, function (err, results) {
-		if (err) console.log(err);
-        console.log('-EC-openEDFScript- end of exec edfReader',currentData.debug,results[0]['debug']);
-        results[0]['debug'].command = currentData.debug.command;
-        results[0]['debug'].fileName = currentData.debug.fileName;
-        results[0].debug.time.index=232000;
-        results[0].debug.time.currentTime=results[0].debug.time.startTime;
-        //console.log('-EC-openEDFScript- updating time object [index, currentTime]',results[0].debug);
-        //console.log([results[0].channels[0].data[0],results[0].channels[0].data[20]]);
-        //console.log(results[0].patientInfo);
+// function openEDFScript(pathFileName,currentData) {
+//     //Aqui va llamado a rutina de python
+//     //TODO
+//     //console.log('-EC-openEDFScript- calling python edfReader.py',pathFileName);
+//     var options = {
+// 	  mode: 'json',
+// 	  args: [pathFileName,232000] 
+// 	};
+//     PythonShell.run('/backend/pythonscripts/edfReader.py', options, function (err, results) {
+// 		if (err) console.log(err);
+//         console.log('-EC-openEDFScript- end of exec edfReader',currentData.debug,results[0]['debug']);
+//         results[0]['debug'].command = currentData.debug.command;
+//         results[0]['debug'].fileName = currentData.debug.fileName;
+//         results[0].debug.time.index=232000;
+//         results[0].debug.time.currentTime=results[0].debug.time.startTime;
+//         //console.log('-EC-openEDFScript- updating time object [index, currentTime]',results[0].debug);
+//         //console.log([results[0].channels[0].data[0],results[0].channels[0].data[20]]);
+//         //console.log(results[0].patientInfo);
         
-        io.emit("load_edf", results[0]);
-        return true;
-	});
-};
+//         io.emit("load_edf", results[0]);
+//         return true;
+// 	});
+// };
+
+/**  
+ * 
+ * @param {*} currentData  
+ */ 
+function openEDFScript(pathFileName,currentData) { 
+    var options = { 
+      mode: 'json',      
+    //   pythonOptions: ['','','','',''], //own python env flags   
+    //   scriptPath : './backend/pythonscripts/loreta-new', 
+        args: [pathFileName,232000] 
+    };    
+    var readerShell = new PythonShell('/backend/pythonscripts/edfReader.py',options);
+    var asyncMessage;
+    readerShell.on('message', function (message) {
+        console.log(message);    
+        asyncMessage = message      
+      });    
+        
+    // end the input stream and allow the process to exit
+    readerShell.end(function (err,code,signal) {
+        if (err) throw err;  
+        console.log(asyncMessage);
+        asyncMessage['debug'].command = currentData.debug.command;
+        asyncMessage['debug'].fileName = currentData.debug.fileName;
+        asyncMessage.debug.time.index=232000;
+        asyncMessage.debug.time.currentTime=asyncMessage.debug.time.startTime;
+        io.emit("load_edf", asyncMessage);
+        console.log('-EC-edfReader-The exit code was: ' + code);
+        console.log('-EC-edfReader-The exit signal was: ' + signal);
+        console.log('-EC-edfReader-finished');  
+    });
+}; 
 
 
 function jumpEDFScript(filename,currentData) {
