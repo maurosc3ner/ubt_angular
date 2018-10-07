@@ -1,0 +1,38 @@
+<div class="container-fluid">
+        <div class="row">
+            <div class="col">
+                <mat-form-field >
+                    <label>Información del paciente:</label>
+                    <mat-select (selectionChange)="visualControl($event)" [(value)]="visualization_type">
+                        <mat-option value="Lines">Lines</mat-option>
+                        <mat-option value="Horizon" disabled>Horizon</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+        </div>
+    <div class="row">
+        <div class="col">
+            <button mat-stroked-button (click)="click_multiplier($event, false)"  class="material-cust-small-button" data-toggle="tooltip" data-placement="top" title="Reducir amplitud">
+                <mat-icon class="material-cust-small-button-icon">remove</mat-icon>
+            </button> 
+            &nbsp; 
+            {{scale_multiplier[multiplier_pos]}}mV 
+            &nbsp;
+            <button mat-stroked-button (click)="click_multiplier($event, true)"  class="material-cust-small-button" data-toggle="tooltip" data-placement="top" title="Incrementar amplitud">
+                <mat-icon class="material-cust-small-button-icon">add</mat-icon>
+            </button>
+        </div>
+    </div>
+    <div class="row" [ngClass]="{'controlclass':control_vis===true}" >
+        <div class="col">
+            <svg id="channel1"></svg>
+        </div>
+    </div>
+    <div class="row" [ngClass]="{'controlclass':control_vis===false}">
+        <div class="col">
+            <div id="body"> 
+                <div id="graph"></div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,17 @@
+.material-cust-small-button {
+    width: auto;
+    min-width: 1%;
+    vertical-align: middle;
+  }
+  
+  .material-cust-small-button-icon {
+    width: auto;
+    min-width: 1%;
+    vertical-align: middle;
+  }
+
+  .controlclass {
+    visibility: hidden;
+    height: 10px;
+  }
+  
