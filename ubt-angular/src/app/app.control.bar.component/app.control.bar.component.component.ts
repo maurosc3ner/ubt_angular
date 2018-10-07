@@ -27,7 +27,6 @@ export class AppControlBarComponent {
         if (TopoPlotToggle === true) {
           return 4;
         }
-        
         if (AnnotToggle === true) {
           return 3;
         }
@@ -55,6 +54,7 @@ export class AppControlBarComponent {
           TopoPlotToggle = false;
           this.status = 0;
         }
+        console.log('checkstatus');
         return this.checkStatus(ESIToggle, PlaneToggle, AnnotToggle, TopoPlotToggle);
       }
     }

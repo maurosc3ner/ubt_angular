@@ -100,10 +100,10 @@ function notchScript(currentData) {
     // notchShell.send(JSON.stringify(currentData.channels[0]));
     // ahora enviemos los 20 canales
     notchShell.send(JSON.stringify(currentData.channels));
-
+ 
     notchShell.on('message', function (message) {
         // received a message sent from the Python script (a simple "print" statement)
-        // console.log(message);
+        console.log(message);
         results={}
         results['channels'] = JSON.parse(message)['channels']
         results['debug'] = currentData.debug;
@@ -114,7 +114,7 @@ function notchScript(currentData) {
        
     // end the input stream and allow the process to exit
     notchShell.end(function (err,code,signal) {
-        if (err) throw err;
+        //if (err) throw err;
         console.log('-EC-notch_filter-The exit code was: ' + code);
         console.log('-EC-notch_filter-The exit signal was: ' + signal);
         console.log('-EC-notch_filter-finished');

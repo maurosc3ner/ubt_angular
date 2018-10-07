@@ -1,4 +1,4 @@
-import pyedflib
+# import pyedflib
 import numpy as np
 from scipy import signal as sg
 import argparse
@@ -33,25 +33,25 @@ class Notch():
                 self.Q = parsedargs.Q
         return arc,output
 
-    def read_edf(self,nameEdf):
-        '''
-        Descripción: Se encarga de leer el archivo .edf
-        Entradas: - nameEdf: nombre del archivo .edf
-        Salidas: - in_signal: Matriz de Canales X Tiempo
-                 - fs: Frecuencia de muestro
-                 - headers: Etiquetas del archivo .edf 
-        '''   
-        edf = pyedflib.EdfReader(nameEdf) 
-        headers = edf.getSignalHeaders() 
-        nch  = edf.signals_in_file
-        nsig = edf.getNSamples()[0]
-        fs = edf.getSampleFrequency(0)
-        in_signal = np.zeros((nch,nsig))
-        for x in range(nch):
-            in_signal[x,:] = edf.readSignal(x)
-        edf._close()
-        del edf
-        return  in_signal,fs,headers
+    # def read_edf(self,nameEdf):
+    #     '''
+    #     Descripción: Se encarga de leer el archivo .edf
+    #     Entradas: - nameEdf: nombre del archivo .edf
+    #     Salidas: - in_signal: Matriz de Canales X Tiempo
+    #              - fs: Frecuencia de muestro
+    #              - headers: Etiquetas del archivo .edf 
+    #     '''   
+    #     edf = pyedflib.EdfReader(nameEdf) 
+    #     headers = edf.getSignalHeaders() 
+    #     nch  = edf.signals_in_file
+    #     nsig = edf.getNSamples()[0]
+    #     fs = edf.getSampleFrequency(0)
+    #     in_signal = np.zeros((nch,nsig))
+    #     for x in range(nch):
+    #         in_signal[x,:] = edf.readSignal(x)
+    #     edf._close()
+    #     del edf
+    #     return  in_signal,fs,headers
 
     def filt(self,in_signal,fs):
         '''
@@ -67,24 +67,24 @@ class Notch():
             out_signal[i]=sg.filtfilt(num,den,in_signal[i])
         return out_signal,num,den
 
-    def write_edf(self,in_signal,headers,nameEdf):
-        '''
-        Descripción: Se encarga de escribir los datos del nuevo EEG
-        Entradas: - headers: etiquetas del .edf 
-                  - in_signal: Matriz de Canales X Tiempo
-                  - nameEdf : Nombre con el que se desea guardar el nuevo .edf
-        ''' 
-        edf = pyedflib.EdfWriter(nameEdf,len(in_signal),file_type=pyedflib.FILETYPE_EDFPLUS)
-        edf_info = []
-        edf_signal = []
-        for i in range (len(in_signal)):
-            channel_info={'label':headers[i]['label'],'dimension':headers[i]['dimension'],'sample_rate':headers[i]['sample_rate'],'physical_max':headers[i]['physical_max'] , 'physical_min': headers[i]['physical_min'], 'digital_max': headers[i]['digital_max'], 'digital_min': headers[i]['digital_min'], 'transducer':headers[i]['transducer'] , 'prefilter':headers[i]['prefilter']+',notch '+str(self.f0)+'Hz'}
-            edf_info.append(channel_info)
-            edf_signal.append(in_signal[i])
-        edf.setSignalHeaders(edf_info)
-        edf.writeSamples(edf_signal)
-        edf.close()
-        del edf
+    # def write_edf(self,in_signal,headers,nameEdf):
+    #     '''
+    #     Descripción: Se encarga de escribir los datos del nuevo EEG
+    #     Entradas: - headers: etiquetas del .edf 
+    #               - in_signal: Matriz de Canales X Tiempo
+    #               - nameEdf : Nombre con el que se desea guardar el nuevo .edf
+    #     ''' 
+    #     edf = pyedflib.EdfWriter(nameEdf,len(in_signal),file_type=pyedflib.FILETYPE_EDFPLUS)
+    #     edf_info = []
+    #     edf_signal = []
+    #     for i in range (len(in_signal)):
+    #         channel_info={'label':headers[i]['label'],'dimension':headers[i]['dimension'],'sample_rate':headers[i]['sample_rate'],'physical_max':headers[i]['physical_max'] , 'physical_min': headers[i]['physical_min'], 'digital_max': headers[i]['digital_max'], 'digital_min': headers[i]['digital_min'], 'transducer':headers[i]['transducer'] , 'prefilter':headers[i]['prefilter']+',notch '+str(self.f0)+'Hz'}
+    #         edf_info.append(channel_info)
+    #         edf_signal.append(in_signal[i])
+    #     edf.setSignalHeaders(edf_info)
+    #     edf.writeSamples(edf_signal)
+    #     edf.close()
+    #     del edf
 
 #Read data from stdin
 def read_in():

@@ -1,5 +1,7 @@
-import { Component, Input, OnInit, OnChanges } from '@angular/core';
+import { Component, Input, OnInit, OnChanges, OnDestroy } from '@angular/core';
 import { D3Service } from '../app.services/d3/d3.service';
+import {last, tap, take, finalize} from 'rxjs/operators';
+import {throwError} from 'rxjs';
 
 @Component({
   selector: 'app-principal-content-component',
@@ -9,7 +11,6 @@ import { D3Service } from '../app.services/d3/d3.service';
 export class AppPrincipalContentComponent implements OnInit, OnChanges {
   @Input() Status: number;
   @Input() Command_Control;
-
   visAnno: boolean;
   visEEG: boolean;
   visESI: boolean;
@@ -22,20 +23,17 @@ export class AppPrincipalContentComponent implements OnInit, OnChanges {
   srcImageCoronal: String = './assets/brain-dummy/MRICoronal_2.jpg';
   srcTopoPlot: any;
   brainColors:JSON;
-
-  constructor(private d3service: D3Service) {
-  }
-
-  ngOnInit() {
-    this.Command_Control = null;
-    this.Status = 0;
-    this.visAnno = false;
-    this.visEEG = true;
-    this.visESI = false;
-    this.visTopoPLot = false;
-    this.visPlane = false;
-  }
-
+constructor(private d3service: D3Service) {
+}
+ngOnInit() {
+  this.Command_Control = null;
+  this.Status = 0;
+  this.visAnno = false;
+  this.visEEG = true;
+  this.visESI = false;
+  this.visTopoPLot = false;
+  this.visPlane = false;
+}
   ngOnChanges() {
     console.log(this.Command_Control);
     console.log(this.Status);
@@ -49,12 +47,14 @@ export class AppPrincipalContentComponent implements OnInit, OnChanges {
             this.patientfile = this.Command_Control[1];
             this.assignData();
         } else if (this.Command_Control[0] === 3 ) {
-          this.patient_current_data['debug']['time']['index'] = this.patient_current_data['debug']['time']['index'] 
-          - this.Command_Control[1] * 10 * this.patient_current_data['channels'][0]['samplefrequency'];
+          this.patient_current_data['debug']['time']['index'] =
+          this.patient_current_data['debug']['time']['index'] -
+          this.Command_Control[1] * 10 * this.patient_current_data['channels'][0]['samplefrequency'];
           this.Jump();
         } else if (this.Command_Control[0] === 4 ) {
-          this.patient_current_data['debug']['time']['index'] = this.patient_current_data['debug']['time']['index'] 
-          + this.Command_Control[1] * 10 * this.patient_current_data['channels'][0]['samplefrequency'];
+          this.patient_current_data['debug']['time']['index'] =
+          this.patient_current_data['debug']['time']['index'] +
+          this.Command_Control[1] * 10 * this.patient_current_data['channels'][0]['samplefrequency'];
           this.Jump();
         } else if (this.Command_Control[0] === 5 ) {
             this.ocularFilter();
@@ -65,7 +65,6 @@ export class AppPrincipalContentComponent implements OnInit, OnChanges {
         }
         this.Command_Control = null;
     }
-
     if (this.Status === 0) {
       this.visAnno = false;
       this.visEEG = true;
@@ -107,71 +106,79 @@ export class AppPrincipalContentComponent implements OnInit, OnChanges {
         console.log(err);
     });
   }
-
   Jump() {
-    this.d3service.getJump(this.patient_current_data).subscribe(
-        (response: Response) => {
-            this.patient_current_data = JSON.parse(JSON.stringify(response));
-            if (this.Status === 4) { // EEG+topoplot
-              this.topoPlot(this.patient_current_data);
-            }
-            if(this.Status === 1){
-              this.loretaFilter(this.patient_current_data);
-            }
-        },
-    (err) => {
-        console.log(err);
-    });
+    const jump = this.d3service.getJump(this.patient_current_data);
+    jump.pipe(
+      tap((response) => this.patient_current_data = JSON.parse(JSON.stringify(response))),
+      take(1),
+      finalize(() => {
+        console.log('finalized');
+        if (this.Status === 4) { // EEG+topoplot
+          this.topoPlot(this.patient_current_data);
+        }
+        if (this.Status === 1) {
+          this.loretaFilter(this.patient_current_data);
+        }
+      }))
+      .subscribe((response: Response) => response);
   }
+
   notchFilter() {
-    this.d3service.getNotchFilter(this.patient_current_data).subscribe(
-        (response: Response) => {
-            this.patient_current_data = JSON.parse(JSON.stringify(response));
-            if (this.Status === 4) { // EEG+topoplot
-              this.topoPlot(this.patient_current_data);
-            }
-        },
-    (err) => {
-        console.log(err);
-    });
+    const notch = this.d3service.getNotchFilter(this.patient_current_data);
+    notch.pipe(
+      tap((response) => this.patient_current_data = JSON.parse(JSON.stringify(response))),
+      take(1),
+      finalize(() => {
+        console.log('finalized');
+        if (this.Status === 4) { // EEG+topoplot
+          this.topoPlot(this.patient_current_data);
+        }
+        if (this.Status === 1) {
+          this.loretaFilter(this.patient_current_data);
+        }
+      }))
+    .subscribe((response: Response) => response);
   }
   ocularFilter() {
-    this.d3service.getOcularFilter(this.patient_current_data).subscribe(
-      (response: Response) => {
-          this.patient_current_data = JSON.parse(JSON.stringify(response));
-          if (this.Status === 4) { // EEG+topoplot
-            this.topoPlot(this.patient_current_data);
-          }
-      }, (err) => {
-        console.log(err);
-      });
+    const ocular = this.d3service.getOcularFilter(this.patient_current_data)
+    ocular.pipe(
+      tap((response) => this.patient_current_data = JSON.parse(JSON.stringify(response))),
+      take(1),
+      finalize(() => {
+        console.log('finalized');
+        if (this.Status === 4) { // EEG+topoplot
+          this.topoPlot(this.patient_current_data);
+        }
+        if (this.Status === 1) {
+          this.loretaFilter(this.patient_current_data);
+        }
+      }))
+    .subscribe((response: Response) => response);
   }
-
   topoPlot(payload) {
     // console.log('EC-topoPlot before subscribe ');
-    this.d3service.getTopoPlot(payload).subscribe(
-      (response: Response) => {
-        // this.patient_current_data = JSON.parse(JSON.stringify(response));
-        // console.log('EC-topoPlot before response ',Object.getOwnPropertyNames(JSON.parse(JSON.stringify(response['buffer']))));
+    const topoplot = this.d3service.getTopoPlot(payload);
+    topoplot.pipe(
+      tap((response) => {
         const tempImg = JSON.parse(JSON.stringify(response));
         this.srcTopoPlot = 'data:image/png;base64,' + tempImg['buffer'];
-        // console.log('EC-topoPlot after response ',this.srcTopoPlot.toString('base64'));
-      }, (err) => {
-        console.log(err);
-    });
+      }),
+      take(1),
+      finalize(() => {
+      }))
+    .subscribe((response: Response) => response);
   }
 
   loretaFilter(payload) {
     // console.log('EC-loretaFilter before subscribe ');
-    this.d3service.getLoretaFilter(payload).subscribe(
-      (response: Response) => {
-        this.brainColors = JSON.parse(JSON.stringify(response));
-        // console.log('EC-loretaFilter after response ',this.brainColors);
-      }, (err) => {
-        console.log(err);
-    });
+    const brain = this.d3service.getLoretaFilter(payload);
+    brain.pipe(
+      tap((response) => this.brainColors = JSON.parse(JSON.stringify(response))),
+      take(1),
+      finalize(() => {
+      }))
+    .subscribe((response: Response) => response);
   }
-
   onCursorEvent(event) {
     const cursor_index = event;
     const patient_data_copy = JSON.parse(JSON.stringify(this.patient_current_data));
