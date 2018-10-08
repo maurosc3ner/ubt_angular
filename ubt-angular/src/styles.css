@@ -11,10 +11,7 @@ body {
 /* D3 Styles are called from the main style header*/
 .axis--x path, .axis--y path, .axis--x text, .axis--x line {
   stroke: rgb(255, 255, 255);
-}
 
-.axis--y text, .axis--y line {
-  display: none;
 }
 
 .line_eeg_1 {
@@ -81,7 +78,7 @@ textarea {
 
 
 svg {
-  font: 10px sans-serif;
+  font: 8px sans-serif;
 }
 
 .axis path, .axis line {
@@ -142,6 +139,10 @@ h1, h2 {
   position: absolute;
   top: 0;
   right: 0;
+}
+
+#y-axis {
+  font: 8px sans-serif;
 }
 
 .axis {
