@@ -1,27 +1,20 @@
 <div class="container content-panel">
-  <div class="row main-container" [ngClass]="{'layout-2-1':Status === 2}">
-    <div class="col plane-view-container" *ngIf="visPlane">
+  <div class="row main-container" [ngClass]="{'layout-2-1':localState_in == 0 || localState_in == 1 || localState_in == 2 ||  localState_in == 3}">
+    <!-- <div class="col plane-view-container" *ngIf="visPlane">
         <app-plane-view [srcImage]="srcImageAxial"></app-plane-view>
+    </div> -->
+    <div class="container-fluid eeg-content-container" *ngIf="visEEG" [ngClass]="{'layout1-0': localState_in == 3}">
+      <app-eeg-content [EEG_Status_eeg]='localState_in'  ></app-eeg-content>
     </div>
-    <div class="container-fluid eeg-content-container" *ngIf="visEEG" [ngClass]="{'layout1-0': Status == 1 || Status == 3 || Status == 4}">
-      <app-eeg-content  [Command_eeg]='Command_Control' [EEG_Status_eeg]='Status' [current_data]='patient_current_data' (cursordata)='onCursorEvent($event)' ></app-eeg-content>
-    </div>
-    <div class="col topo-plot-container" *ngIf="visTopoPLot">
-      <app-topo-plot [topoplotImg]='srcTopoPlot' ></app-topo-plot>
-    </div>
-    <div class="col td-content-container" *ngIf="visESI">
+    <!-- <div class="col topo-plot-container" *ngIf="visTopoPLot">
+      <app-topo-plot [topoplotImg]='srcTopoPlot' ></app-topo-plot>    [current_data]='patient_current_data'
+    </div> -->
+    <!-- <div class="col td-content-container" *ngIf="visESI">
       <app-td-content [brainFrontColors]='brainColors'></app-td-content>
-    </div>
+    </div> -->
     <div class="col anno-content-container" *ngIf="visAnno">
-      <app-annotation-content [Command_eeg]='Command_Control' [EEG_Status_eeg]='Status' [current_data]='patient_current_data'></app-annotation-content>
+      <app-annotation-content  [EEG_Status_eeg]='localState_in' [current_data]='current_data_in'></app-annotation-content>
     </div>
   </div>
-  <div class="row main-container" *ngIf="visPlane">
-    <div class="col plane-view-container">
-        <app-plane-view [srcImage]="srcImageSagital"></app-plane-view>
-    </div>
-    <div class="col plane-view-container">
-        <app-plane-view [srcImage]="srcImageCoronal"></app-plane-view>
-    </div>
-  </div>
+  
 </div>

@@ -3,7 +3,7 @@
 }
 
 .eeg-content-container {
-  background-color: rgb(0, 0, 0);
+  background-color: rgb(180, 34, 34);
 }
 
 .topo-plot-container {
@@ -26,14 +26,14 @@
 }
 
 .anno-content-container {
-  background-color: rgb(0, 0, 0);
+  background-color: rgb(172, 167, 167);
   border-style: solid;
   border-width: 10px;
-  border-color: aqua;
+  border-color: rgb(172, 167, 167);
   padding-left: 20px;
   padding-top: 150px;
   width: 400px;
-  height: 630px;
+  height: 300px;
 }
 
 .plane-view-container {
@@ -46,14 +46,15 @@
 
 .layout0 {
   width: 100%;
-  height: 530px;
+  height: 300px;
 }
 
 .layout1-0 {
   width: 40%;
-  height: 530px;
+  height: 300px;
 }
 
 .layout-2-1 {
-  height: 530px;
+  width: 100%;
+  height: 300px;
 }

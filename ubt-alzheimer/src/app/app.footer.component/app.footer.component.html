@@ -2,7 +2,7 @@
   <div class="row main-container">
       
       <div class="container-fluid controls-content-container" *ngIf="visControls">
-          <app-alz-control-buttons (startControlBar)='onCtrlToComponent($event)'></app-alz-control-buttons>
+          <app-alz-control-buttons (startControlBar)='onCtrlToComponent($event)'  (annoControlBar)='onCtrlToComponent($event)'></app-alz-control-buttons>
       </div>
       <div class="container-fluid connect-content-container" *ngIf="visConnect">
         <app-alz-connect-bar (portFromConnectBar)='onPortToFooterBar($event)'></app-alz-connect-bar>

@@ -9,6 +9,7 @@ import { AlzServices } from './app.services/alzservices';
 export class AppComponent{
   title = 'app';
   public CurrentState = 0;
+  public current_channels={};
   public CommandControl;
   myPort;
   mySocket;
@@ -30,6 +31,8 @@ export class AppComponent{
       this.connectDriver(event);
     }else if ( event['state'] == 2){
       this.startStream(event);
+    } else if ( event['state'] == 3){
+      this.CurrentState = 3;
     }
     
   }
@@ -61,8 +64,9 @@ export class AppComponent{
     this.mySocket.send(msg); 
 
     this.mySocket.onmessage = event=>{
-      var myObj=JSON.parse(event.data);
-      console.log(myObj);
+      this.current_channels=JSON.parse(event.data);
+
+      //console.log(myObj);
     };
   }
 

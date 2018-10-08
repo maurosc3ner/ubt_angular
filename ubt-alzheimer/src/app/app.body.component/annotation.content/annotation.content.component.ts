@@ -13,10 +13,11 @@ export class AnnotationContentComponent implements OnChanges {
   annotations;
 
   ngOnChanges() {
+    console.log('ACC-ngOnChanges',this.EEG_Status_eeg);
     if (this.current_data == null) {
       return 0;
     } else {
-      this.annotations = this.current_data['annotations']['items'];
+      this.annotations = this.current_data['channels'];
     }
   }
 }

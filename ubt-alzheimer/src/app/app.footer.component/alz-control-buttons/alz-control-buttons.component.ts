@@ -8,18 +8,24 @@ import { Component, OnInit, Output,EventEmitter } from '@angular/core';
 export class AlzControlButtonsComponent implements OnInit {
   
   @Output() startControlBar=new EventEmitter();
+  @Output() annoControlBar=new EventEmitter();
   constructor() { }
 
   ngOnInit() {
   }
 
   onStartClick(event){
-    // let msg=JSON.stringify({"command": "available_channels"});
-    //this.mySocket.send(msg);
+    
     let msg=  {'state':2};
-    console.log('acb-onStartClick',msg);
+    //console.log('acb-onStartClick',msg); probado y OK
     this.startControlBar.emit(msg);
   };
+
+  onAddAnnoClick(event){
+    let msg=  {'state':3};
+    //console.log('acb-onAddAnnoClick'); probado y OK
+    this.annoControlBar.emit(msg);
+  }
 
 
 }
