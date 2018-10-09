@@ -10,7 +10,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { HttpModule } from '@angular/http';
 import { AlzServices } from './app.services/alzservices';
 import { NgIoModule, NgIoConfig } from 'ng-io';
-const config: NgIoConfig = { url: 'http://localhost:3300', options: {} };
+// const config: NgIoConfig = { url: 'http://localhost:3300', options: {} };
 import {
   MatProgressBarModule,
   MatToolbarModule,
@@ -23,6 +23,7 @@ import { AlzControlButtonsComponent } from './app.footer.component/alz-control-b
 import { AlzConnectBarComponent } from './app.footer.component/alz-connect-bar/alz-connect-bar.component';
 import { EegContentComponent } from './app.body.component/eeg-content/eeg-content.component';
 import { AnnotationContentComponent } from './app.body.component/annotation.content/annotation.content.component';
+import { AlzEegC3Component } from './app.body.component/alz-eeg-c3/alz-eeg-c3.component';
 
 
 
@@ -35,7 +36,8 @@ import { AnnotationContentComponent } from './app.body.component/annotation.cont
     AlzControlButtonsComponent,
     AlzConnectBarComponent,
     EegContentComponent,
-    AnnotationContentComponent
+    AnnotationContentComponent,
+    AlzEegC3Component
   ],
   imports: [
     BrowserModule,
@@ -49,7 +51,7 @@ import { AnnotationContentComponent } from './app.body.component/annotation.cont
     MatFormFieldModule,
     MatSelectModule,
     HttpModule,
-    NgIoModule.forRoot(config)
+    // NgIoModule.forRoot(config)
   ],
   providers: [AlzServices],
   bootstrap: [AppComponent]

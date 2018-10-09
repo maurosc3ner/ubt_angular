@@ -22,7 +22,7 @@ export class AppBodyComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges() {
-    console.log('abc-ngOnChanges new channels',this.current_data_in,this.localState_in);
+    // console.log('abc-ngOnChanges new channels',this.current_data_in,this.localState_in);
 
     if (this.localState_in==3){
       if(this.visAnno == true){

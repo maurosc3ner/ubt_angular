@@ -3,8 +3,12 @@
     <!-- <div class="col plane-view-container" *ngIf="visPlane">
         <app-plane-view [srcImage]="srcImageAxial"></app-plane-view>
     </div> -->
-    <div class="container-fluid eeg-content-container" *ngIf="visEEG" [ngClass]="{'layout1-0': localState_in == 3}">
+    <!-- <div class="container-fluid eeg-content-container" *ngIf="visEEG" [ngClass]="{'layout1-0': localState_in == 3 }">
       <app-eeg-content [EEG_Status_eeg]='localState_in'  ></app-eeg-content>
+    </div> -->
+
+    <div class="container-fluid eeg-content-container">
+      <app-alz-eeg-c3 [EEG_Status_eeg]='localState_in' [current_data]='current_data_in'></app-alz-eeg-c3>
     </div>
     <!-- <div class="col topo-plot-container" *ngIf="visTopoPLot">
       <app-topo-plot [topoplotImg]='srcTopoPlot' ></app-topo-plot>    [current_data]='patient_current_data'

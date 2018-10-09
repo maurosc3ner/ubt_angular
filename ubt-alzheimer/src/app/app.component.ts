@@ -1,5 +1,5 @@
 import { Component, Input, Output } from '@angular/core';
-import { AlzServices } from './app.services/alzservices';
+// import { AlzServices } from './app.services/alzservices';
 
 @Component({
   selector: 'app-root',
@@ -15,8 +15,8 @@ export class AppComponent{
   mySocket;
   @Input() testInput;
   
-  constructor(private myServices: AlzServices) {
-  }
+  // constructor(private myServices: AlzServices) {
+  // }
 
   onChangeStatus(event) {
     this.CurrentState = event;
@@ -34,7 +34,6 @@ export class AppComponent{
     } else if ( event['state'] == 3){
       this.CurrentState = 3;
     }
-    
   }
 
   /*
@@ -55,17 +54,20 @@ export class AppComponent{
 
   startStream(event) {
     console.log("Starting streaming",event);
-    let msg=JSON.stringify({"command": "available_channels"});
+    let msg=JSON.stringify({
+      "command": "available_channels"
+    });
     this.mySocket.send(msg);
 
-    msg=JSON.stringify({"command": "request_channels", 
-            "labels": []
+    msg=JSON.stringify({
+      "command": "request_channels", 
+      "labels": []
     });
-    this.mySocket.send(msg); 
 
+    this.mySocket.send(msg); 
+    this.CurrentState=2;
     this.mySocket.onmessage = event=>{
       this.current_channels=JSON.parse(event.data);
-
       //console.log(myObj);
     };
   }
