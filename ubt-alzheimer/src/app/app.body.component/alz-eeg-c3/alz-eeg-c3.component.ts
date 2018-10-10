@@ -1,10 +1,28 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
 import * as c3 from 'c3';
+import { rgb } from '../../../../node_modules/@types/d3';
 
 @Component({
   selector: 'app-alz-eeg-c3',
-  templateUrl: './alz-eeg-c3.component.html',
-  styleUrls: ['./alz-eeg-c3.component.css']
+  encapsulation: ViewEncapsulation.None,
+  templateUrl: './alz-eeg-c3.component.html', 
+  //styleUrls: ['./alz-eeg-c3.component.css'],
+  styles: [`
+     .line {
+       fill: red;
+    }
+
+    .inverted .c3 c3-chart-arcs-background {
+      background-color: #4F5E63;
+    }
+    .inverted text.c3-text { 
+      fill: whitesmoke!important;
+      stroke: whitesmoke!important;
+      stroke-opacity: 0.5!important;
+    }
+
+  `]
+  
 })
 export class AlzEegC3Component implements OnInit {
   @Input() EEG_Status_eeg;
@@ -35,7 +53,7 @@ export class AlzEegC3Component implements OnInit {
       },
       
       color: {
-        pattern: ['#ffffff']
+        pattern: ['#1f77b4']
       },
       axis: {
         y: {
@@ -57,7 +75,7 @@ export class AlzEegC3Component implements OnInit {
       },
       
       color: {
-        pattern: ['#ffffff']
+        pattern: ['#0000ff']
       },
       axis: {
         y: {
@@ -77,11 +95,15 @@ export class AlzEegC3Component implements OnInit {
         ],
         type: 'spline'
       },
-      
+      point: {
+        show: false
+      }, 
       color: {
-        pattern: ['#ffffff']
+        pattern: ['#00ff00']
       },
       axis: {
+        
+        // stroke: rgb(255,255,255),
         y: {
             max: 100,
             min: -100
@@ -185,14 +207,37 @@ export class AlzEegC3Component implements OnInit {
     if (this.dataPLETH.length<=12 && this.fdPLETH==false){
       this.dataPLETH.push(this.getRndInteger(1,10));
       this.dataPLETH.push(this.getRndInteger(1,10));
+      this.dataENT100.push(this.getRndInteger(1,10));
+      this.dataENT100.push(this.getRndInteger(1,10));
+      this.dataENTROPYRE.push(this.getRndInteger(1,10));
+      this.dataENTROPYRE.push(this.getRndInteger(1,10));
     }else{
       this.dataPLETH=['PLETH' ,this.getRndInteger(1,10),this.getRndInteger(1,10)];
       this.fdPLETH=true;
+      this.dataENT100=['ENT100' ,this.getRndInteger(1,10),this.getRndInteger(1,10)];
+      this.fdENT100=true;
+      this.dataENTROPYRE=['ENTROPY_RE' ,this.getRndInteger(-100,100),this.getRndInteger(-100,100)];
+      this.fdENTROPYRE=true;
     }
       console.log('EC3-onAddClick',this.dataPLETH,this.dataPLETH.length);
       this.chartPLETH.flow({
         columns: [
           this.dataPLETH
+        ],
+        duration: 0,
+        length:2
+      });
+
+      this.chartENT100.flow({
+        columns: [
+          this.dataENT100
+        ],
+        duration: 0,
+        length:2
+      });
+      this.chartENTROPYRE.flow({
+        columns: [
+          this.dataENTROPYRE
         ],
         duration: 0,
         length:2
