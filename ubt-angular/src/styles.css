@@ -9,9 +9,8 @@ body {
 
   
 /* D3 Styles are called from the main style header*/
-.axis--x path, .axis--y path, .axis--x text, .axis--x line {
+.axis--x path, .axis--y path, .axis--x text, .axis--x line .axis--y line {
   stroke: rgb(255, 255, 255);
-
 }
 
 .line_eeg_1 {
@@ -142,7 +141,7 @@ h1, h2 {
 }
 
 #y-axis {
-  font: 8px sans-serif;
+  font: 6px sans-serif;
 }
 
 .axis {
