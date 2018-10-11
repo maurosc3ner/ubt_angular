@@ -7,11 +7,23 @@ body {
   margin: 0;
 }
 
-  
 /* D3 Styles are called from the main style header*/
-.axis--x path, .axis--y path, .axis--x text, .axis--x line .axis--y line {
+.axis > path, .tick, .tick > line {
   stroke: rgb(255, 255, 255);
 }
+
+.channel-0 > path{
+  display: none;
+}
+
+svg {
+  font: 10px sans-serif;
+}
+
+.y-axis {
+  font: 6px sans-serif;
+}
+
 
 .line_eeg_1 {
   fill: none;
@@ -75,17 +87,6 @@ textarea {
   color: #636363;
 }
 
-
-svg {
-  font: 8px sans-serif;
-}
-
-.axis path, .axis line {
-  fill: none;
-  stroke: #000;
-  shape-rendering: crispEdges;
-}
-
 sup, sub {
   line-height: 0;
 }
@@ -140,26 +141,6 @@ h1, h2 {
   right: 0;
 }
 
-#y-axis {
-  font: 6px sans-serif;
-}
-
-.axis {
-  font: 10px sans-serif;
-}
-
-.axis text {
-  -webkit-transition: fill-opacity 250ms linear;
-}
-
-.axis path {
-  display: none;
-}
-
-.axis line {
-  stroke: #ffffff;
-  shape-rendering: crispEdges;
-}
 
 .horizon {
   border-bottom: solid 1px #000;
@@ -211,4 +192,3 @@ h1, h2 {
 .mat-select-arrow {
   color: rgba(128,0,128,1);
 }
-
