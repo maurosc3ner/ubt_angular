@@ -168,7 +168,6 @@ ngOnInit() {
       }))
     .subscribe((response: Response) => response);
   }
-
   loretaFilter(payload) {
     // console.log('EC-loretaFilter before subscribe ');
     const brain = this.d3service.getLoretaFilter(payload);

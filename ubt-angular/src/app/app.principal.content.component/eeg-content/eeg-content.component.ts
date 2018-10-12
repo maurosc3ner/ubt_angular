@@ -20,52 +20,13 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
     control_vis: Boolean = false;
     handle_data: any;
     channel_num: Array<any>;
-    scale_multiplier = [20, 50, 200];
+    scale_multiplier = [20, 60, 200];
     multiplier_pos = 0;
     current_cursor = 0;
     current_cursor_position = 0;
     current_scale: Array<any>;
     color_scale: Array<string> = [
          '#ffffff',
-         '#ffffff',
-         '#ffffff',
-         '#ffffff',
-         '#ffffff',
-         '#ffffff',
-         '#ffffff',
-         '#ffffff',
-         '#ffffff',
-         '#ffffff',
-         '#ffffff',
-         '#ffffff',
-         '#ffffff',
-         '#ffffff',
-         '#ffffff',
-         '#ffffff',
-         '#ffffff',
-         '#ffffff',
-         '#ffffff',
-         '#ffffff',
-         '#ffffff',
-         '#ffffff',
-         '#ffffff',
-         '#ffffff',
-         '#ffffff',
-         '#ffffff',
-         '#ffffff',
-         '#ffffff',
-         '#ffffff',
-         '#ffffff',
-         '#ffffff',
-         '#ffffff',
-         '#ffffff',
-         '#ffffff',
-         '#ffffff',
-         '#ffffff',
-         '#ffffff',
-         '#ffffff',
-         '#ffffff',
-         '#ffffff'
     ];
     constructor(private d3service: D3Service) {
     }
@@ -117,13 +78,12 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
             d3.select('#channel' + n).selectAll('rect').remove();
             d3.select('#channel' + n).selectAll('g').remove();
         }
-        d3.select('#graph').selectAll('div').remove();
+//        d3.select('#graph').selectAll('div').remove();
     }
 
     init_channels() {
         const channel_array: Array<any> = [];
-        console.log('init', this.current_data['channels']);
-        for (let n = 1 ; n < this.current_data['channels'].length + 1; n++) {
+        for (let n = 0 ; n < this.current_data['channels'].length + 1; n++) {
             const current_channel = d3.select('#channel' + n);
             channel_array.push(current_channel);
         }
@@ -138,13 +98,21 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
     let j = 0;
     d3.selectAll('#y-axis').remove();
     for (const sample of channel_array) {
- //       for (let j = 0 ; j < data['channels'].length; j++) {
-        if (j === 0) {x_axis = true; y_axis = true; } else { x_axis = false; y_axis = true; }
         console.log('AMH_j', j);
-            this.DrawChannel(   sample, 'line_eeg_1', data['channels'][j], 0,
-                                duration, x_axis, y_axis, 1, this.scale_multiplier[this.multiplier_pos],
-                                this.color_scale, width, height, updating, this.cursordata );
-//        }
+        if (j === 0) {
+            x_axis = true;
+            y_axis = false;
+            this.DrawChannel(   sample, 'line_eeg_1', data['channels'][0], 0,
+            duration, x_axis, y_axis, 1, this.scale_multiplier[this.multiplier_pos],
+            '#000000', width, height, updating, this.cursordata );
+        } else {
+            x_axis = false;
+            y_axis = true;
+            console.log('AMH_j', data['channels'][j - 1]);
+            this.DrawChannel(   sample, 'line_eeg_1', data['channels'][j - 1], 0,
+            duration, x_axis, y_axis, 1, this.scale_multiplier[this.multiplier_pos],
+            '#ffffff', width, height, updating, this.cursordata );
+        }
         j++;
         }
     }
@@ -169,8 +137,6 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
             let i = 0;
             const time_parse      =   d3.timeParse( '%Y-%m-%d-%H:%M:%S:%L' );
             const time_format     =   d3.timeFormat( '%H:%M:%S' );
-            let color_pos = 0;
-            if (color_scale.length <= multiplier) {color_pos = color_scale.length; } else {color_pos = multiplier; }
             const chart_width     =   width;
             const chart_height    =   height;
             const padding         =   30;
@@ -194,19 +160,33 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
                 sample['time'] = scale_values[i];
                 i++;
             }
+
             const x_scale = d3.scaleTime()
             .domain([d3.min(channel_data, (d) => d['time']), d3.max(channel_data, (d) => d['time'])])
             .range([padding, chart_width - padding]);
+
             const y_scale = d3.scaleLinear()
-            .domain([d3.min(channel_data, (d) => d['value']), d3.max(channel_data, (d) => d['value'] * scale_multiplier * 0.005)])
-            .range([chart_height, padding]);
+//            .domain([d3.min(channel_data, (d) => d['value']), d3.max(channel_data, (d) => d['value'] * scale_multiplier * 0.005)])
+            .domain([- 1.05 * scale_multiplier, 1.05 * scale_multiplier])
+            .range([chart_height - 5, 5]);
+
             const line = d3.line()
                 .x((d) => x_scale(d['time']))
                 .y((d) => y_scale(d['value']));
-            current_channel.attr('width', chart_width).attr('height', chart_height);
-            // Create Axes
-            const x_axis = d3.axisBottom(x_scale).ticks(5).tickFormat(time_format);
-            const y_axis = d3.axisLeft(y_scale).ticks(5);
+
+            current_channel
+            .attr('width', chart_width)
+            .attr('height', chart_height);
+
+            // Create X Axis
+            const x_axis = d3.axisBottom(x_scale)
+            .ticks(5)
+            .tickFormat(time_format);
+
+            // Create Y Axis
+            const y_axis = d3.axisLeft(y_scale)
+            .ticks(5);
+
             if (x_axis_status) {
                 current_channel.selectAll('g').remove();
                 current_channel.append('g')
@@ -214,11 +194,13 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
                 .attr('transform', 'translate(0,' + (chart_height - padding) + ')')
                 .call(x_axis);
             }
-            current_channel.append('g')
-            .attr('class', 'axis axis--x')
-            .attr('transform', 'translate(20)')
-            .attr('id', 'y-axis')
-            .call(y_axis);
+            if (y_axis_status) {
+                current_channel.append('g')
+                .attr('id', 'y-axis')
+                .attr('class', 'axis axis--y')
+                .attr('transform', 'translate(' + padding + ')')
+                .call(y_axis);
+            }
             if ( updating ) {
                 current_channel
                 .select( '#id_' + <string>multiplier )
@@ -229,7 +211,7 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
                 .attr('transform', null)
                 .attr('fill', 'none')
                 .attr('class', 'line_eeg_1')
-                .attr('stroke', color_scale[color_pos - 1]);
+                .attr('stroke', color_scale);
             } else {
                 current_channel.append('path')
                 .datum(channel_data)
@@ -238,7 +220,11 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
                 .attr('transform', null)
                 .attr('fill', 'none')
                 .attr('class', 'line_eeg_1')
-                .attr('stroke', color_scale[color_pos - 1]);
+                .attr('stroke', color_scale);
+                if (x_axis_status) {
+                    current_channel
+                    .attr('class', 'channel-0');
+                }
             }
             current_channel.on('click', function(d) {
                 const cursor_scale = d3.scaleLinear()
@@ -262,7 +248,7 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
                 const abs_current_cursor_time = new Date(current_cursor_index);
                 cursordata.emit((Math.round(cursor_scale(this.current_cursor))));
                 let cursor;
-                if (current_channel.select('#cursor').empty()) {
+                if (current_channel.selectAll('#cursor').empty()) {
                     cursor = current_channel.append('rect');
                 } else {
                     cursor = current_channel.select('#cursor');
@@ -272,16 +258,53 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
                 .attr('id', 'cursor')
                 .attr('r', 5)
                 .attr('x' , this.current_cursor)
-                .attr('y' , 20)
+                .attr('y' , 0)
                 .attr('width' , cursor_scale_inverse(data_eeg.samplefrequency))
-                .attr('height' , chart_height - 60)
+                .attr('height' , chart_height )
                 .attr('stroke' , '#FF0000')
                 .attr('stroke-width' , 2)
                 .attr('opacity', 0.5);
             });
             }
     }
+    CheckStatus() {
+        // console.log('eegStatusVis:', this.EEG_Status_eeg);
+        const height = 50;
+        if (this.EEG_Status_eeg === 0) { return [1100, height]; }
+        if (this.EEG_Status_eeg === 1) { return [430, height]; }
+        if (this.EEG_Status_eeg === 2) { return [1100, height]; }
+        if (this.EEG_Status_eeg === 3) { return [430, height]; }
+        if (this.EEG_Status_eeg === 4) { return [430, height]; }
+    }
+    visualControl(event) {
+        if (this.visualization_type === 'Lines') { this.control_vis = false;
+        } else if (this.visualization_type === 'Horizon') { this.control_vis = true;
+        } else { this.control_vis = false; }
+    }
 
+    computeTimeScale(data) {
+        const startTime = data['debug']['time'];
+        const frequency = Math.max.apply(null, data['channels'].map(function(d) { return String(d['samplefrequency']); }));
+        const time_sample = 1 / frequency;
+        const max_samples = Math.max.apply(null, data['channels'].map(
+            d => d['data'].length
+            )
+        );
+        const startCurrentTime =  (startTime['startTime'] + startTime['index'] * time_sample); // Error mixing time with samples
+        const time_values = [];
+        for (let i = 0; i < max_samples; i++) {
+            time_values.push( startCurrentTime + i * time_sample);
+        }
+        const date_values = time_values.map(
+            d => {
+                const date = new Date( d * 1000 );
+                return date;
+            }
+        );
+        return date_values;
+    }
+
+    // For future use
     cubismDraw(data) {
         d3.select('#graph').selectAll('div').remove();
         const multip = this.scale_multiplier[this.multiplier_pos];
@@ -354,41 +377,5 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
             );
         });
         // d3.select('#graph').append('div').attr('class', 'axis axis--x').append('g').call(axis);
-    }
-    CheckStatus() {
-        // console.log('eegStatusVis:', this.EEG_Status_eeg);
-        const height = 70;
-        if (this.EEG_Status_eeg === 0) { return [1100, height]; }
-        if (this.EEG_Status_eeg === 1) { return [430, height]; }
-        if (this.EEG_Status_eeg === 2) { return [1100, height]; }
-        if (this.EEG_Status_eeg === 3) { return [430, height]; }
-        if (this.EEG_Status_eeg === 4) { return [430, height]; }
-    }
-    visualControl(event) {
-        if (this.visualization_type === 'Lines') { this.control_vis = false;
-        } else if (this.visualization_type === 'Horizon') { this.control_vis = true;
-        } else { this.control_vis = false; }
-    }
-
-    computeTimeScale(data) {
-        const startTime = data['debug']['time'];
-        const frequency = Math.max.apply(null, data['channels'].map(function(d) { return String(d['samplefrequency']); }));
-        const time_sample = 1 / frequency;
-        const max_samples = Math.max.apply(null, data['channels'].map(
-            d => d['data'].length
-            )
-        );
-        const startCurrentTime =  (startTime['startTime'] + startTime['index'] * time_sample); // Error mixing time with samples
-        const time_values = [];
-        for (let i = 0; i < max_samples; i++) {
-            time_values.push( startCurrentTime + i * time_sample);
-        }
-        const date_values = time_values.map(
-            d => {
-                const date = new Date( d * 1000 );
-                return date;
-            }
-        );
-        return date_values;
     }
 }
