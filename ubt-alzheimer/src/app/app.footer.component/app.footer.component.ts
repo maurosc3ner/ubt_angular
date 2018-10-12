@@ -10,6 +10,7 @@ export class AppFooterComponent implements OnChanges{
   @Output() portFromFooter = new EventEmitter();
   @Output() footerBridge = new EventEmitter();
   @Input() toogleBarsInput = 0;  //0 for connect / 1 for buttons
+  @Input() current_debug_bridge;
   visConnect: Boolean = true;
   visControls: Boolean = false;
 

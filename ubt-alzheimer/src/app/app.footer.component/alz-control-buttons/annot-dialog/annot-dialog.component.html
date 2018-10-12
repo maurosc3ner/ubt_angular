@@ -1,0 +1,18 @@
+<div>
+  <h2 md-dialog-title>Crear anotacion</h2>
+  <hr>
+  <div md-dialog-content>
+    Tiempo de la maquina para la anotación: {{data}}
+    <br>
+    Tipo: <input type="text" [(ngModel)]="annotType">
+    <br>
+    Descripción: <input type="text" [(ngModel)]="annotDesc">
+  </div>
+  <hr>
+  <div md-dialog-actions>
+        <button md-raised-button (click)="onCloseConfirm()">Aceptar</button>
+        <button md-raised-button (click)="onCloseCancel()">Cancelar</button>
+  </div>
+  
+</div>
+
