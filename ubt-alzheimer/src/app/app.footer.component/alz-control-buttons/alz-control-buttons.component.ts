@@ -2,6 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 import {AnnotDialogComponent} from './annot-dialog/annot-dialog.component';
 import { MatDialog } from '../../../../node_modules/@angular/material/dialog';
+import {MatButtonModule} from '@angular/material/button';
 
 @Component({
   selector: 'app-alz-control-buttons',

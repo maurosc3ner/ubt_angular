@@ -1,7 +1,28 @@
-<div class="alz-control">   
-    <button id='startBtn' type="button" (click)="onStartClick($event)">Obtener</button>
-    <button id='stopBtn' type="button" (click)="onStopClick($event)">Parar</button>
-    <button id='addAnnoBtn' type="button" (click)="onAddAnnoClick($event)">Anotar</button>
-    <button id='saveBtn' type="button" (click)="onSaveClick($event)">Guardar</button>
-
+<div class="container control-bar">
+    <div class="row main-container">
+        <div class="col-md-3 alz-control"> 
+            <button mat-raised-button (click)="onStartClick($event)">
+                <i class="material-icons">play_circle_filled</i>
+                Obtener
+            </button>
+        </div>
+        <div class="col-md-3 alz-control"> 
+            <button mat-raised-button (click)="onStopClick($event)">
+                <i class="material-icons">pause_circle_outline</i>
+                Parar
+            </button>
+        </div>
+        <div class="col-md-3 alz-control"> 
+            <button mat-raised-button  (click)="onAddAnnoClick($event)">
+                <i class="material-icons">playlist_add</i>
+                Anotar
+            </button>
+        </div>
+        <div class="col-md-3 alz-control">
+            <button id='saveBtn' type="button" (click)="onSaveClick($event)">
+                <i class="material-icons">save_alt</i>
+                Guardar
+            </button>
+        </div>
+    </div>
 </div>

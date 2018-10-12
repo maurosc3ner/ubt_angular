@@ -1,10 +1,66 @@
-.pleth-content-container {
-    background-color: rgb(255, 255, 255);
+.test .c3-legend-item {
+    fill: #9fabb1;
+ }
+
+ .test {
+    background-color: #4F5E63;
 }
 
-.ent100-content-container {
-    background-color: rgb(255, 255, 255);
+.test .c3-axis-x path,
+.test .c3-axis-x line,
+.test .c3-axis-y path,
+.test .c3-axis-y line {
+    stroke: white;
+}
+
+.test .c3-axis-x g,
+.test .c3-axis-y g,
+.test .c3-legend-item-data text,
+.test .c3-axis-y-label,
+.test .c3-axis-x-label,
+.test .c3-legend-item {
+    fill: whitesmoke;
+}
+
+.entre .c3-legend-item {
+    fill: #9fabb1;
+ }
+
+/* ent100 style 2 */
+
+.ent100 {
+    background-color: #ffffff;
+}
+.ent100 .c3-axis-x path,
+.ent100 .c3-axis-x line,
+.ent100 .c3-axis-y path,
+.ent100 .c3-axis-y line {
+    stroke: grey;
+}
+
+.ent100 .c3-axis-x g,
+.ent100 .c3-axis-y g,
+.ent100 .c3-legend-item-data text,
+.ent100 .c3-axis-y-label,
+.ent100 .c3-axis-x-label,
+.ent100 .c3-legend-item {
+    fill: grey;
 }
 
 
+/* entropy style 3 */
+/* .entre .c3-axis-x path,
+.entre .c3-axis-x line, */
+.entre .c3-axis-y path,
+.entre .c3-axis-y line {
+    stroke: #00ff00;
+}
 
+/* .entre .c3-axis-x g, */
+.entre .c3-axis-y g,
+.entre .c3-legend-item-data text,
+.entre .c3-axis-y-label,
+.entre .c3-axis-x-label,
+.entre .c3-legend-item {
+    fill: #00ff00;
+}

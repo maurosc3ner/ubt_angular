@@ -33,6 +33,8 @@ export class AppComponent{
       this.startStream(event);
     } else if ( event['state'] == 3){
       this.CurrentState = 3;
+    } else if ( event['state'] == 4){
+      this.stopStream(event);
     }
   }
 
@@ -66,6 +68,16 @@ export class AppComponent{
 
     this.mySocket.send(msg); 
     this.CurrentState=2;
+    this.mySocket.onmessage = event=>{
+      this.current_channels=JSON.parse(event.data);
+      //console.log(myObj);
+    };
+  }
+
+  stopStream(event){
+    let msg=JSON.stringify({"command": "stop_transfer"});
+    this.mySocket.send(msg);
+    this.CurrentState=1;
     this.mySocket.onmessage = event=>{
       this.current_channels=JSON.parse(event.data);
       //console.log(myObj);
