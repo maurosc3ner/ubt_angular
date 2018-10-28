@@ -23,23 +23,48 @@ export class AlzEegC3Component implements OnInit {
   fdPLETH: boolean;
   fdENT100: boolean;
   fdENTROPYRE: boolean;
+
+
   constructor() { }
 
   ngOnInit() {
     //PLETH
     this.fdPLETH=false;
-    this.dataPLETH = ['PLETH', 0,0,0,0,0];
+    this.dataPLETH = [ 'PLETH',0,0,0,0,0];
     this.chartPLETH = c3.generate({
       bindto: '#chartPLETH',
+      size: {
+        height: 200,
+        width: 1080
+      },
+      
       data: {
         columns: [
           this.dataPLETH
         ],
         type: 'spline'
       },
+      point: {
+        show: false
+      }, 
+      legend: {
+        show: false
+      },
+      tooltip: {
+        show: true,
+    
+        format: {
+            title: function (d) { return 'Value '; },
+            // value: function (value, ratio, id) {
+                
+            //     return format(value);
+            // }
+//            value: d3.format(',') // apply this format to both y and y2
+        }
       
+      },
       color: {
-        pattern: ['#0000ff']
+        pattern: ['#00ff00']
       },
       axis: {
         y: {
@@ -52,9 +77,15 @@ export class AlzEegC3Component implements OnInit {
             // outer-top
             // outer-middle
             // outer-bottom
-            },
-            max: 5,
-            min: -5
+          },
+          max: 5,
+          min: -5
+        },
+        x:{
+          label:{
+            text: 'Pleth',
+            position: 'inner-top'
+          }
         }
       }
     });
@@ -63,20 +94,59 @@ export class AlzEegC3Component implements OnInit {
     this.dataENT100 = ['ENT100', 0,0,0,0,0];
     this.chartENT100 = c3.generate({
       bindto: '#chartENT100',
+      size: {
+        height: 200,
+        width: 1080
+      },
       data: {
         columns: [
           this.dataENT100
         ],
         type: 'spline'
       },
+      point: {
+        show: false
+      }, 
+      tooltip: {
+        show: true,
+    
+        format: {
+            title: function (d) { return 'Value '; },
+            // value: function (value, ratio, id) {
+                
+            //     return format(value);
+            // }
+//            value: d3.format(',') // apply this format to both y and y2
+        }
       
+      },
+      legend: {
+        // position: 'right'
+        show: false
+      },
       color: {
-        pattern: ['#0000ff']
+        pattern: ['#1f77b4']
       },
       axis: {
         y: {
-            max: 100,
-            min: -100
+          label:{
+            text: 'Voltage (uV)',
+            position: 'outer-middle'
+            // inner-top : default
+            // inner-middle
+            // inner-bottom
+            // outer-top
+            // outer-middle
+            // outer-bottom
+          },
+          max: 100,
+          min: -100
+        },
+        x:{
+          label:{
+            text: 'ENT_100',
+            position: 'inner-top'
+          }
         }
       }
     });
@@ -85,35 +155,61 @@ export class AlzEegC3Component implements OnInit {
     this.dataENTROPYRE = ['ENTROPY_RE', 0,0,0,0,0];
     this.chartENTROPYRE = c3.generate({
       bindto: '#chartENTROPYRE',
+      size: {
+        height: 200,
+        width: 1080
+      },
       data: {
         columns: [
           this.dataENTROPYRE
         ],
         type: 'spline'
       },
+      tooltip: {
+        show: true,
+    
+        format: {
+            title: function (d) { return 'Value '; },
+            // value: function (value, ratio, id) {
+                
+            //     return format(value);
+            // }
+//            value: d3.format(',') // apply this format to both y and y2
+        }
+      
+      },
       point: {
         show: false
       }, 
+      legend: {
+        // position: 'right'
+        show: false
+      },
       color: {
-        pattern: ['#00ff00']
+        pattern: ['#ff7f0e']
       },
       axis: {
-        
         // stroke: rgb(255,255,255),
         y: {
-            label:{
-              text: 'Percentage (%)',
-              position: 'outer-middle'
-              // inner-top : default
-              // inner-middle
-              // inner-bottom
-              // outer-top
-              // outer-middle
-              // outer-bottom
-            },
-            max: 100,
-            min: -100
-        }
+          label:{
+            text: 'Percentage (%)',
+            position: 'outer-middle'
+            // inner-top : default
+            // inner-middle
+            // inner-bottom
+            // outer-top
+            // outer-middle
+            // outer-bottom
+          },
+          max: 120,
+          min: -10
+        },
+        x:{
+          label:{
+            text: 'ENTROPY_RE',
+            position: 'inner-top'
+          }
+        }  
       }
     });
     

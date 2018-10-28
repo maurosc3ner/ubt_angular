@@ -17,7 +17,10 @@ import {
   MatIconModule,
   MatFormFieldModule,
   MatSelectModule,
+  MatOptionModule,
   MatDialogModule,
+  MatDatepickerModule,
+  MatNativeDateModule,
   MatDividerModule} from '@angular/material';
 import { AlzControlButtonsComponent } from './app.footer.component/alz-control-buttons/alz-control-buttons.component';
 import { AlzConnectBarComponent } from './app.footer.component/alz-connect-bar/alz-connect-bar.component';
@@ -25,6 +28,7 @@ import { EegContentComponent } from './app.body.component/eeg-content/eeg-conten
 import { AnnotationContentComponent } from './app.body.component/annotation.content/annotation.content.component';
 import { AlzEegC3Component } from './app.body.component/alz-eeg-c3/alz-eeg-c3.component';
 import { AnnotDialogComponent } from './app.footer.component/alz-control-buttons/annot-dialog/annot-dialog.component';
+import { PatientDialogComponent } from './app.dialogs/patient-dialog/patient-dialog.component';
 
 
 
@@ -39,7 +43,8 @@ import { AnnotDialogComponent } from './app.footer.component/alz-control-buttons
     EegContentComponent,
     AnnotationContentComponent,
     AlzEegC3Component,
-    AnnotDialogComponent
+    AnnotDialogComponent,
+    PatientDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -51,13 +56,17 @@ import { AnnotDialogComponent } from './app.footer.component/alz-control-buttons
     MatButtonModule,
     MatIconModule,
     MatFormFieldModule,
+    MatNativeDateModule,
     MatSelectModule,
+    MatOptionModule,
+    MatDatepickerModule,
     HttpModule,
     MatDialogModule,
     MatDividerModule
   ],
   entryComponents: [
-    AnnotDialogComponent
+    AnnotDialogComponent,
+    PatientDialogComponent
   ],
   providers: [AlzServices],
   bootstrap: [AppComponent]

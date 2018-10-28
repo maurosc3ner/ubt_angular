@@ -56,6 +56,12 @@ export class AlzControlButtonsComponent implements OnInit {
     this.annoControlBar.emit(msg);
   }
 
+  onSaveClick(event){
+    let msg=  {'state':5};
+    //console.log('acb-onStartClick',msg); probado y OK
+    this.startControlBar.emit(msg);
+  };
+
   isEmpty(obj) {
     return Object.keys(obj).every(k => !Object.keys(obj[k]).length)
   }
