@@ -1,4 +1,6 @@
 import { Component, Input, Output } from '@angular/core';
+import { MatDialog } from '../../node_modules/@angular/material/dialog';
+import { PatientDialogComponent } from './app.dialogs/patient-dialog/patient-dialog.component';
 // import { AlzServices } from './app.services/alzservices';
 
 @Component({
@@ -14,9 +16,9 @@ export class AppComponent{
   myPort;
   mySocket;
   @Input() testInput;
-  
-  // constructor(private myServices: AlzServices) {
-  // }
+  patientDialogResult={};
+
+  constructor(public patientDialog: MatDialog) { }
 
   onChangeStatus(event) {
     this.CurrentState = event;
@@ -33,6 +35,20 @@ export class AppComponent{
       this.startStream(event);
     } else if ( event['state'] == 3){
       this.CurrentState = 3;
+    } else if ( event['state'] == 4){
+      this.stopStream(event);
+    } else if ( event['state'] == 5){
+      //this.stopStream(event);
+      let dialogRef=this.patientDialog.open(PatientDialogComponent,{
+        width: '1024px',
+        height: '600px',
+        data: 'test'
+      });
+  
+      dialogRef.afterClosed().subscribe(result=>{
+        console.log(result);
+        this.patientDialogResult=result;
+      });
     }
   }
 
@@ -66,6 +82,16 @@ export class AppComponent{
 
     this.mySocket.send(msg); 
     this.CurrentState=2;
+    this.mySocket.onmessage = event=>{
+      this.current_channels=JSON.parse(event.data);
+      //console.log(myObj);
+    };
+  }
+
+  stopStream(event){
+    let msg=JSON.stringify({"command": "stop_transfer"});
+    this.mySocket.send(msg);
+    this.CurrentState=1;
     this.mySocket.onmessage = event=>{
       this.current_channels=JSON.parse(event.data);
       //console.log(myObj);

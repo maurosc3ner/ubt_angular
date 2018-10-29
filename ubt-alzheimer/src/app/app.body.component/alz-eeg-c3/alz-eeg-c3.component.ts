@@ -6,22 +6,8 @@ import { rgb } from '../../../../node_modules/@types/d3';
   selector: 'app-alz-eeg-c3',
   encapsulation: ViewEncapsulation.None,
   templateUrl: './alz-eeg-c3.component.html', 
-  //styleUrls: ['./alz-eeg-c3.component.css'],
-  styles: [`
-     .line {
-       fill: red;
-    }
+  styleUrls: ['./alz-eeg-c3.component.css']
 
-    .inverted .c3 c3-chart-arcs-background {
-      background-color: #4F5E63;
-    }
-    .inverted text.c3-text { 
-      fill: whitesmoke!important;
-      stroke: whitesmoke!important;
-      stroke-opacity: 0.5!important;
-    }
-
-  `]
   
 })
 export class AlzEegC3Component implements OnInit {
@@ -37,28 +23,69 @@ export class AlzEegC3Component implements OnInit {
   fdPLETH: boolean;
   fdENT100: boolean;
   fdENTROPYRE: boolean;
+
+
   constructor() { }
 
   ngOnInit() {
     //PLETH
     this.fdPLETH=false;
-    this.dataPLETH = ['PLETH', 0,0,0,0,0];
+    this.dataPLETH = [ 'PLETH',0,0,0,0,0];
     this.chartPLETH = c3.generate({
       bindto: '#chartPLETH',
+      size: {
+        height: 200,
+        width: 1080
+      },
+      
       data: {
         columns: [
           this.dataPLETH
         ],
         type: 'spline'
       },
+      point: {
+        show: false
+      }, 
+      legend: {
+        show: false
+      },
+      tooltip: {
+        show: true,
+    
+        format: {
+            title: function (d) { return 'Value '; },
+            // value: function (value, ratio, id) {
+                
+            //     return format(value);
+            // }
+//            value: d3.format(',') // apply this format to both y and y2
+        }
       
+      },
       color: {
-        pattern: ['#1f77b4']
+        pattern: ['#00ff00']
       },
       axis: {
         y: {
-            max: 5,
-            min: -5
+          label:{
+            text: 'Voltage (mV)',
+            position: 'outer-middle'
+            // inner-top : default
+            // inner-middle
+            // inner-bottom
+            // outer-top
+            // outer-middle
+            // outer-bottom
+          },
+          max: 5,
+          min: -5
+        },
+        x:{
+          label:{
+            text: 'Pleth',
+            position: 'inner-top'
+          }
         }
       }
     });
@@ -67,20 +94,59 @@ export class AlzEegC3Component implements OnInit {
     this.dataENT100 = ['ENT100', 0,0,0,0,0];
     this.chartENT100 = c3.generate({
       bindto: '#chartENT100',
+      size: {
+        height: 200,
+        width: 1080
+      },
       data: {
         columns: [
           this.dataENT100
         ],
         type: 'spline'
       },
+      point: {
+        show: false
+      }, 
+      tooltip: {
+        show: true,
+    
+        format: {
+            title: function (d) { return 'Value '; },
+            // value: function (value, ratio, id) {
+                
+            //     return format(value);
+            // }
+//            value: d3.format(',') // apply this format to both y and y2
+        }
       
+      },
+      legend: {
+        // position: 'right'
+        show: false
+      },
       color: {
-        pattern: ['#0000ff']
+        pattern: ['#1f77b4']
       },
       axis: {
         y: {
-            max: 100,
-            min: -100
+          label:{
+            text: 'Voltage (uV)',
+            position: 'outer-middle'
+            // inner-top : default
+            // inner-middle
+            // inner-bottom
+            // outer-top
+            // outer-middle
+            // outer-bottom
+          },
+          max: 100,
+          min: -100
+        },
+        x:{
+          label:{
+            text: 'ENT_100',
+            position: 'inner-top'
+          }
         }
       }
     });
@@ -89,25 +155,61 @@ export class AlzEegC3Component implements OnInit {
     this.dataENTROPYRE = ['ENTROPY_RE', 0,0,0,0,0];
     this.chartENTROPYRE = c3.generate({
       bindto: '#chartENTROPYRE',
+      size: {
+        height: 200,
+        width: 1080
+      },
       data: {
         columns: [
           this.dataENTROPYRE
         ],
         type: 'spline'
       },
+      tooltip: {
+        show: true,
+    
+        format: {
+            title: function (d) { return 'Value '; },
+            // value: function (value, ratio, id) {
+                
+            //     return format(value);
+            // }
+//            value: d3.format(',') // apply this format to both y and y2
+        }
+      
+      },
       point: {
         show: false
       }, 
+      legend: {
+        // position: 'right'
+        show: false
+      },
       color: {
-        pattern: ['#00ff00']
+        pattern: ['#ff7f0e']
       },
       axis: {
-        
         // stroke: rgb(255,255,255),
         y: {
-            max: 100,
-            min: -100
-        }
+          label:{
+            text: 'Percentage (%)',
+            position: 'outer-middle'
+            // inner-top : default
+            // inner-middle
+            // inner-bottom
+            // outer-top
+            // outer-middle
+            // outer-bottom
+          },
+          max: 120,
+          min: -10
+        },
+        x:{
+          label:{
+            text: 'ENTROPY_RE',
+            position: 'inner-top'
+          }
+        }  
       }
     });
     
@@ -123,8 +225,9 @@ export class AlzEegC3Component implements OnInit {
     if (!this.isEmpty(this.current_data) && this.current_data["debug"]["command"]=="request_channels"){
       //console.log('EC3-ngOnChanges',this.current_data);
       this.current_data["channels"].forEach((currentChannel,index, array)=>{
-        console.log('EC3-ngOnChanges',currentChannel["label"]);
+        
         if (currentChannel["label"]=='PLETH'){
+          // console.log('EC3-ngOnChanges',currentChannel);
           if (this.dataPLETH.length<=300 && this.fdPLETH==false){
             for ( let i = 0; i < currentChannel["data"].length; i += 1 ) {
               this.dataPLETH.push(currentChannel["data"][i]);
@@ -146,6 +249,7 @@ export class AlzEegC3Component implements OnInit {
           });
         } //end fi PLETH
         else if (currentChannel["label"]=='ENT_100'){
+          // console.log('EC3-nocENT100',currentChannel);
           if (this.dataENT100.length<=500 && this.fdPLETH==false){
             for ( let i = 0; i < 100; i += 1 ) {
               this.dataENT100.push(currentChannel["data"][i]);
@@ -167,6 +271,7 @@ export class AlzEegC3Component implements OnInit {
           });
         } //end fi ENT100
         else if (currentChannel["label"]=='ENTROPY RE'){
+          // console.log('EC3-nocENTRE',currentChannel);
           if (this.dataENTROPYRE.length<=5 && this.fdPLETH==false){
             for ( let i = 0; i < currentChannel["data"].length; i += 1 ) {
               this.dataENTROPYRE.push(currentChannel["data"][i]);

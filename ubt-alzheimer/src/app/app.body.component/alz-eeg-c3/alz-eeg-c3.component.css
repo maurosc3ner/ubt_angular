@@ -1,10 +1,118 @@
-.pleth-content-container {
-    background-color: rgb(255, 255, 255);
+.test .c3-legend-item {
+    fill: #009fee;
+ }
+
+ .test {
+    background-color: rgb(0, 0, 0);
 }
 
-.ent100-content-container {
-    background-color: rgb(255, 255, 255);
+/* eje y */
+.test .c3-axis-x path,
+/* .test .c3-axis-y path, */
+.test .c3-axis-y line {
+    stroke: white;
+}
+/* eje x */
+/* .test .c3-axis-x line, */
+.test .c3-axis-x .tick {
+    fill: black;
+  }
+
+.test .c3-axis-x g,
+.test .c3-axis-y g,
+.test .c3-legend-item-data text,
+.test .c3-axis-y-label,
+.test .c3-axis-x-label,
+.test .c3-legend-item {
+    fill: whitesmoke;
+}
+/* for the tooltip text color */
+.test .c3-tooltip-container {
+    color:black;
+}
+
+
+.entre .c3-legend-item {
+    fill: #9fabb1;
+ }
+
+/* ent100 style 2 */
+.ent100 {
+    background-color: rgb(0, 0, 0);
+}
+
+/* eje x */
+.ent100 .c3-axis-x path{
+    stroke: white;
+}
+.ent100 .c3-axis-x line,
+.ent100 .c3-axis-x .tick{
+    stroke: black;
+}
+.ent100 .c3-axis-y path,
+.ent100 .c3-axis-y line {
+    stroke: white;
+}
+.ent100 .c3-axis-x g{
+    stroke: black;
+}
+
+/* eje y */
+.ent100 .c3-axis-y path{
+    stroke: black;
+}
+.ent100 .c3-axis-y g,
+.ent100 .c3-legend-item-data text,
+.ent100 .c3-axis-y-label,
+.ent100 .c3-axis-x-label,
+.ent100 .c3-legend-item {
+    fill: white;
+}
+
+/* for the tooltip text color */
+.ent100 .c3-tooltip-container {
+    color:black;
 }
 
 
 
+
+
+
+
+
+
+
+
+
+
+/* entropy style 3 */
+/* .entre .c3-axis-x path,
+.entre .c3-axis-x line, */
+
+
+/* eje x */
+.entre .c3-axis-x path{
+    stroke : white;
+}
+
+/* eje y */
+.entre .c3-axis-y path{
+    stroke: black;
+}
+.entre .c3-axis-y line {
+    stroke: white;
+}
+/* .entre .c3-axis-x g, */
+.entre .c3-axis-y g,
+.entre .c3-legend-item-data text,
+.entre .c3-axis-y-label,
+.entre .c3-axis-x-label,
+.entre .c3-legend-item {
+    fill: white;
+}
+
+/* for the tooltip text color */
+.entre .c3-tooltip-container {
+    color:black;
+}

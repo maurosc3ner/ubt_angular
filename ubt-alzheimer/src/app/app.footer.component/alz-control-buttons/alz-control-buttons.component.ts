@@ -2,6 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 import {AnnotDialogComponent} from './annot-dialog/annot-dialog.component';
 import { MatDialog } from '../../../../node_modules/@angular/material/dialog';
+import {MatButtonModule} from '@angular/material/button';
 
 @Component({
   selector: 'app-alz-control-buttons',
@@ -54,6 +55,12 @@ export class AlzControlButtonsComponent implements OnInit {
     //console.log('acb-onAddAnnoClick'); probado y OK
     this.annoControlBar.emit(msg);
   }
+
+  onSaveClick(event){
+    let msg=  {'state':5};
+    //console.log('acb-onStartClick',msg); probado y OK
+    this.startControlBar.emit(msg);
+  };
 
   isEmpty(obj) {
     return Object.keys(obj).every(k => !Object.keys(obj[k]).length)
