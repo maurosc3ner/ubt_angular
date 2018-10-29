@@ -40,7 +40,6 @@ function openEDFScript(pathFileName,currentData) {
     });
 }; 
 
-
 function jumpEDFScript(filename,currentData) {
     //Aqui va llamado a rutina de python
     //TODO 
@@ -191,7 +190,6 @@ function loretaScript(currentData) {
 }; 
 
 function edfFromFile(startPath, msg) {
-   
     var results = [];
     if (!fs.existsSync(__dirname + startPath)) {
         console.log("-EC-eff- no dir ", startPath);

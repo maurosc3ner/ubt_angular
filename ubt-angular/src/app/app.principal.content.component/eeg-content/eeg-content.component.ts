@@ -20,7 +20,7 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
     control_vis: Boolean = false;
     handle_data: any;
     channel_num: Array<any>;
-    scale_multiplier = [20, 60, 200];
+    scale_multiplier = [20, 50, 200];
     multiplier_pos = 0;
     current_cursor = 0;
     current_cursor_position = 0;
@@ -36,7 +36,7 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
         // console.log('AMHOnchangeseegcomponent', this.current_data, this.Command_eeg);
         if (this.Command_eeg == null) {
             if (this.current_data === undefined || JSON.stringify(this.current_data) === '{}') {
-                console.log('AMHOnundefined', this.current_data, this.Command_eeg);
+                // console.log('AMHOnundefined', this.current_data, this.Command_eeg);
                 this.delete_channel(2);
              } else {
                 // console.log('AMHStartTime', this.current_data['debug']['time']);
@@ -98,7 +98,7 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
     let j = 0;
     d3.selectAll('#y-axis').remove();
     for (const sample of channel_array) {
-        console.log('AMH_j', j);
+        // console.log('AMH_j', j);
         if (j === 0) {
             x_axis = true;
             y_axis = false;
@@ -108,7 +108,7 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
         } else {
             x_axis = false;
             y_axis = true;
-            console.log('AMH_j', data['channels'][j - 1]);
+            // console.log('AMH_j', data['channels'][j - 1]);
             this.DrawChannel(   sample, 'line_eeg_1', data['channels'][j - 1], 0,
             duration, x_axis, y_axis, 1, this.scale_multiplier[this.multiplier_pos],
             '#ffffff', width, height, updating, this.cursordata );
@@ -226,7 +226,7 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
                     .attr('class', 'channel-0');
                 }
             }
-            current_channel.on('click', function(d) {
+            current_channel.on('click', (d, d3index, nodes) =>  {
                 const cursor_scale = d3.scaleLinear()
                 .domain([padding, chart_width + padding])
                 .range([0, 2500]);
@@ -234,7 +234,7 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
                 .domain([0, 2500])
                 .range([padding, chart_width + padding
                 ]);
-                const current_mouse = d3.mouse(this)[0];
+                const current_mouse = d3.mouse(nodes[d3index])[0];
                 if (current_mouse < padding) {
                     this.current_cursor = padding;
                 } else if (current_mouse + cursor_scale_inverse(data_eeg.samplefrequency) > chart_width) {
@@ -248,33 +248,38 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
                 const abs_current_cursor_time = new Date(current_cursor_index);
                 cursordata.emit((Math.round(cursor_scale(this.current_cursor))));
                 let cursor;
-                if (current_channel.selectAll('#cursor').empty()) {
-                    cursor = current_channel.append('rect');
-                } else {
-                    cursor = current_channel.select('#cursor');
+                //
+                for (const sample of this.channel_num) {
+                    if (sample.selectAll('#cursor').empty()) {
+                        cursor = sample.append('rect');
+                    } else {
+                        cursor = sample.select('#cursor');
+                    }
+                    cursor
+                    .transition()
+                    .duration(1000)
+                    .attr('id', 'cursor')
+                    .attr('r', 5)
+                    .attr('x' , this.current_cursor)
+                    .attr('y' , 0)
+                    .attr('width' , cursor_scale_inverse(data_eeg.samplefrequency))
+                    .attr('height' , chart_height )
+                    .attr('stroke' , '#FF0000')
+                    .attr('stroke-width' , 2)
+                    .attr('opacity', 0.5);
                 }
-                cursor.transition()
-                .duration(1000)
-                .attr('id', 'cursor')
-                .attr('r', 5)
-                .attr('x' , this.current_cursor)
-                .attr('y' , 0)
-                .attr('width' , cursor_scale_inverse(data_eeg.samplefrequency))
-                .attr('height' , chart_height )
-                .attr('stroke' , '#FF0000')
-                .attr('stroke-width' , 2)
-                .attr('opacity', 0.5);
             });
             }
     }
+
     CheckStatus() {
         // console.log('eegStatusVis:', this.EEG_Status_eeg);
-        const height = 50;
-        if (this.EEG_Status_eeg === 0) { return [1100, height]; }
-        if (this.EEG_Status_eeg === 1) { return [430, height]; }
-        if (this.EEG_Status_eeg === 2) { return [1100, height]; }
-        if (this.EEG_Status_eeg === 3) { return [430, height]; }
-        if (this.EEG_Status_eeg === 4) { return [430, height]; }
+        const height = 70;
+        if (this.EEG_Status_eeg === 0) { return [1300, height]; }
+        if (this.EEG_Status_eeg === 1) { return [480, height]; }
+        if (this.EEG_Status_eeg === 2) { return [1300, height]; }
+        if (this.EEG_Status_eeg === 3) { return [480, height]; }
+        if (this.EEG_Status_eeg === 4) { return [480, height]; }
     }
     visualControl(event) {
         if (this.visualization_type === 'Lines') { this.control_vis = false;
@@ -290,8 +295,11 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
             d => d['data'].length
             )
         );
+
         const startCurrentTime =  (startTime['startTime'] + startTime['index'] * time_sample); // Error mixing time with samples
+
         const time_values = [];
+
         for (let i = 0; i < max_samples; i++) {
             time_values.push( startCurrentTime + i * time_sample);
         }
@@ -316,30 +324,27 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
                     return f['value'];
                 });
             });
-        const extent = [ -5 * multip, 5 * multip ];
+
+        const extent = [ -5 * multip,
+            5 * multip ];
+
         const spectral = [
-        '#66c2a5',
-        '#abdda4',
-        '#fee08b',
-        '#f46d43',
-        '#d53e4f',
-        '#66c2a5',
-        '#abdda4',
-        '#fee08b',
-        '#f46d43',
-        '#d53e4f'
-        ];
+        '#66c2a5', '#abdda4', '#fee08b', '#f46d43', '#d53e4f',
+        '#66c2a5', '#abdda4', '#fee08b', '#f46d43', '#d53e4f'];
+
         const context = cubism
         .context()
         .step(step_cubic)
         .size(1100)
         .stop();
+
         const horizon = context
         .horizon()
         .height([70])
         .mode(['mirror'])
         .extent(extent)
         .colors(spectral);
+
         const revalues = function temp(name) {
             return context.metric(
                 function(start, stop, step, callback) {
@@ -352,6 +357,7 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
                 callback(null, values);
                 }, name);
         };
+
         const renames = data['channels'].map(function(d) { return String(d['id']); });
         horizon.metric(revalues);
         d3.select('#graph').selectAll('.horizon')
