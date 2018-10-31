@@ -83,7 +83,7 @@ export class AlzEegC3Component implements OnInit {
         },
         x:{
           label:{
-            text: 'Pleth',
+            text: 'PLETH',
             position: 'inner-top'
           }
         }

@@ -12,7 +12,7 @@ export class AppFooterComponent implements OnChanges{
   @Input() toogleBarsInput = 0;  //0 for connect / 1 for buttons
   @Input() current_debug_bridge;
   visConnect: Boolean = true;
-  visControls: Boolean = true;
+  visControls: Boolean = false;
 
   constructor() {
   }
@@ -35,11 +35,11 @@ export class AppFooterComponent implements OnChanges{
   ngOnChanges() {
     //console.log('afc-ngOnChanges nuevo dato',this.toogleBarsInput);
     if ( this.toogleBarsInput == 1 || this.toogleBarsInput == 2 || this.toogleBarsInput == 3){
-      this.visConnect = true;
+      this.visConnect = false;
       this.visControls = true;
     }else if ( this.toogleBarsInput == 0) {
       this.visConnect = true;
-      this.visControls = true;
+      this.visControls = false;
     }
   }
   

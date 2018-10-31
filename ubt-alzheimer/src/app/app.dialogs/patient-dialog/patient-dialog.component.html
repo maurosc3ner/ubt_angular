@@ -1,44 +1,68 @@
-<div>
+<div md-dialog-content class="form-dialog">
   <h2 md-dialog-title>Información del Paciente</h2>
-  Código de administrador: <input type="text" [(ngModel)]="adminCode">
   <mat-form-field>
-    <input matInput [matDatepicker]="dp3" placeholder="Fecha de la sesión" disabled>
-    <mat-datepicker-toggle matSuffix [for]="dp3"></mat-datepicker-toggle>
-    <mat-datepicker #dp3 disabled="false"></mat-datepicker>
+    <input matInput placeholder="Código de administrador" [(ngModel)]="adminCode">
   </mat-form-field>
-  Equipo: <input type="text" [(ngModel)]="equipment">
-  <mat-divider></mat-divider>
-  <h4>Sexo</h4>
+
+
   <mat-form-field>
+      <input matInput [matDatepicker]="picker" placeholder="Choose a date">
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
+
+  <mat-form-field>
+      <input matInput placeholder="Equipo" [(ngModel)]="equipment">
+ </mat-form-field>
+
+  <mat-divider></mat-divider> 
+
+  <!-- <mat-form-field>
+    <label>Sexo</label>
     <select matNativeControl required>
       <option value="m">Masculino</option>
       <option value="f">Femenino</option>
     </select>
-  </mat-form-field>
-  <mat-divider></mat-divider>
-  <div md-dialog-content>
-    Código de paciente: <input type="text" [(ngModel)]="patientCode">
-    <br>
-    Nombre del paciente: <input type="text" [(ngModel)]="patientName">
-    <br>
-    Información adicional del paciente: <input type="text" [(ngModel)]="patientAdditional">
-  </div>
-  <mat-divider></mat-divider>
-  <div md-dialog-content>
-    Información adicional de la grabación: <input type="text" [(ngModel)]="recordingAdditional">
-    <br>
-    Técnico encargado: <input type="text" [(ngModel)]="technician">
-  </div>
+  </mat-form-field> -->
 
-  <div class="mdc-text-field">
-    <input type="text" id="my-text-field" class="mdc-text-field__input">
-    <label class="mdc-floating-label" for="my-text-field">Hint text</label>
-    <div class="mdc-line-ripple"></div>
-  </div>
+  <mat-form-field>
+        <mat-select placeholder="Sexo">
+          <mat-option value="f">Femenino</mat-option>
+          <mat-option value="m">Masculino</mat-option>
+        </mat-select>
+    </mat-form-field>
+
   <mat-divider></mat-divider>
+
+  <mat-form-field>
+      <input matInput [(ngModel)]="patientCode" placeholder="Código de paciente">
+  </mat-form-field>
+  <mat-form-field>
+      <input matInput [(ngModel)]="patientName" placeholder="Nombre del paciente">
+  </mat-form-field>
+  <mat-form-field>
+      <input matInput [(ngModel)]="patientAdditional" placeholder="Información adicional del paciente">
+  </mat-form-field>
+
+  <mat-divider></mat-divider>
+
+  <mat-form-field>
+      <input matInput placeholder="Información adicional de la grabación" [(ngModel)]="recordingAdditional">
+  </mat-form-field>
+  <mat-form-field>
+      <input matInput placeholder="Técnico encargado" [(ngModel)]="technician">
+  </mat-form-field>
+
+  <mat-divider></mat-divider>
+
   <div md-dialog-actions>
-        <button md-raised-button (click)="onCloseConfirm()">Aceptar</button>
-        <button md-raised-button (click)="onCloseCancel()">Cancelar</button>
+    <button id='cancelBtnDialog' type="button" (click)="onCloseCancel()">
+      <i class="material-icons">highlight_off</i>
+      Cancelar
+    </button>
+    <button id='saveBtnDialog' type="button" (click)="onCloseConfirm()">
+        <i class="material-icons">done</i>
+        Aceptar
+    </button>
   </div>
-  
 </div>

@@ -1,0 +1,12 @@
+button,
+a {
+  margin-right: 8px;
+  border-radius: 30px;
+  /* height: 50px; */
+  width: 120px;
+  border: 2px solid whitesmoke;
+  padding-right: 20px;
+  padding-top: -25px;
+  background-color: #0097A7;
+  color: whitesmoke;
+}

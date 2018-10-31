@@ -17,8 +17,19 @@ export class AppComponent{
   mySocket;
   @Input() testInput;
   patientDialogResult={};
+  public currentSession={};
+  
 
-  constructor(public patientDialog: MatDialog) { }
+
+
+  constructor(public patientDialog: MatDialog) {
+    this.currentSession["patientInfo"]={};
+    this.currentSession["annotations"]={
+      "size" : 0,
+      "items" :[]
+    };
+
+  }
 
   onChangeStatus(event) {
     this.CurrentState = event;
@@ -48,6 +59,9 @@ export class AppComponent{
       dialogRef.afterClosed().subscribe(result=>{
         console.log(result);
         this.patientDialogResult=result;
+        this.saveStream(result,event);
+        this.stopStream(event);
+
       });
     }
   }
@@ -97,6 +111,38 @@ export class AppComponent{
       //console.log(myObj);
     };
   }
+
+  /*
+
+  */
+  saveStream(patientInfo,event) {
+    this.currentSession["command"]="get_edf";
+    this.currentSession["patientInfo"]=patientInfo;
+    
+
+    // let msg=JSON.stringify({
+    //   "command": "get_edf",
+    //   "patientInfo": {
+    //     "adminCode": "",
+    //     "birthDate": 0,
+    //     "equipment": "",
+    //     "gender": 0,
+    //     "patientCode": "",
+    //     "patientName": "",
+    //     "patientAdditional": "jh",
+    //     "recordingAdditional": "",
+    //     "technician": ""
+    // }});
+
+    console.log(JSON.stringify(this.currentSession));
+    this.mySocket.send(JSON.stringify(this.currentSession));
+    this.CurrentState=0;
+    this.mySocket.onmessage = event=>{
+      this.current_channels=JSON.parse(event.data);
+      this.stopStream(event);
+      //console.log(myObj);
+    };
+}
 
   
 }

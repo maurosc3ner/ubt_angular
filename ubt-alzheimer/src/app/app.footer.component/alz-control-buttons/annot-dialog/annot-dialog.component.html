@@ -1,17 +1,33 @@
 <div>
-  <h2 md-dialog-title>Crear anotacion</h2>
+  <h2 md-dialog-title>Crear anotación</h2>
   <hr>
   <div md-dialog-content>
     Tiempo de la maquina para la anotación: {{data}}
-    <br>
-    Tipo: <input type="text" [(ngModel)]="annotType">
-    <br>
-    Descripción: <input type="text" [(ngModel)]="annotDesc">
+    <mat-divider></mat-divider>
+    <mat-form-field>
+        <mat-select placeholder="Tipo">
+          <mat-option value="1">Opt 1</mat-option>
+          <mat-option value="2">Opt 2</mat-option>
+          <mat-option value="3">Opt 3</mat-option>
+          <mat-option value="4">Opt 4</mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput placeholder="Descripción" [(ngModel)]="annotDesc">
+    </mat-form-field>
+
   </div>
-  <hr>
+  <mat-divider></mat-divider>
   <div md-dialog-actions>
-        <button md-raised-button (click)="onCloseConfirm()">Aceptar</button>
-        <button md-raised-button (click)="onCloseCancel()">Cancelar</button>
+    <button id='cancelBtnDialog' type="button" (click)="onCloseCancel()">
+        <i class="material-icons">highlight_off</i>
+        Cancelar
+    </button>
+    <button id='saveBtnDialog' type="button" (click)="onCloseConfirm()">
+        <i class="material-icons">done</i>
+        Aceptar
+    </button>
   </div>
   
 </div>

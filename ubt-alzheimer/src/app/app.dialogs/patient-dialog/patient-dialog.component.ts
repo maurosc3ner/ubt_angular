@@ -1,5 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatSelectModule } from '@angular/material';
+import {MatInputModule} from '@angular/material';
 import { MatDialogRef, MAT_DIALOG_DATA } from '../../../../node_modules/@angular/material/dialog';
 @Component({
   selector: 'app-patient-dialog',
