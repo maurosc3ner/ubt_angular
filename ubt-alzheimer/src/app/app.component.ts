@@ -49,7 +49,7 @@ export class AppComponent{
     } else if ( event['state'] == 4){
       this.stopStream(event);
     } else if ( event['state'] == 5){
-      //this.stopStream(event);
+     
       let dialogRef=this.patientDialog.open(PatientDialogComponent,{
         width: '1024px',
         height: '600px',
@@ -118,21 +118,6 @@ export class AppComponent{
   saveStream(patientInfo,event) {
     this.currentSession["command"]="get_edf";
     this.currentSession["patientInfo"]=patientInfo;
-    
-
-    // let msg=JSON.stringify({
-    //   "command": "get_edf",
-    //   "patientInfo": {
-    //     "adminCode": "",
-    //     "birthDate": 0,
-    //     "equipment": "",
-    //     "gender": 0,
-    //     "patientCode": "",
-    //     "patientName": "",
-    //     "patientAdditional": "jh",
-    //     "recordingAdditional": "",
-    //     "technician": ""
-    // }});
 
     console.log(JSON.stringify(this.currentSession));
     this.mySocket.send(JSON.stringify(this.currentSession));

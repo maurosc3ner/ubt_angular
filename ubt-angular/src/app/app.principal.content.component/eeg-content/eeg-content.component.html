@@ -1,15 +1,22 @@
 <div class="container-fluid">
-        <div class="row">
-            <div class="col">
-                <mat-form-field >
-                    <label>Información del paciente:</label>
-                    <mat-select (selectionChange)="visualControl($event)" [(value)]="visualization_type">
-                        <mat-option value="Lines">Lines</mat-option>
-                        <mat-option value="Horizon" disabled>Horizon</mat-option>
-                    </mat-select>
-                </mat-form-field>
-            </div>
+    <div class="row">
+        <div class="col">
+            <mat-slider min="20" max="200" tickInterval="1" value={{scale_multiplier[multiplier_pos]}} thumbLabel=true></mat-slider>
         </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col">
+            <mat-form-field >
+                <label>Información del paciente:</label>
+                <mat-select (selectionChange)="visualControl($event)" [(value)]="visualization_type">
+                    <mat-option value="Lines">Lines</mat-option>
+                    <mat-option value="Horizon" disabled>Horizon</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+    </div>
     <div class="row">
         <div class="col">
             <button mat-stroked-button (click)="click_multiplier($event, false)"  class="material-cust-small-button" data-toggle="tooltip" data-placement="top" title="Reducir amplitud">

@@ -50,3 +50,15 @@
     .inputfile + label {
       display: none;
     }
+
+
+
+    .example-button {
+      margin-top: 16px;
+      min-width: 1%;
+      vertical-align: middle;
+    }
+    
+    .example-tooltip-red {
+      background: #b71c1c;
+    }

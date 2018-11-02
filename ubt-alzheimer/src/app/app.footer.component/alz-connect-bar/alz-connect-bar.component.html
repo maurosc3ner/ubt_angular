@@ -1,5 +1,15 @@
-<input type="text" [(ngModel)]="port">
+<!-- <input type="text" [(ngModel)]="port"> -->
+<mat-form-field class="example-small-width">
+    <input matInput type="num" placeholder="Puerto" pattern="^[0-9]*$" [(ngModel)]="port" value=8890 maxlength="5" minlength="4" required>
+</mat-form-field>
+
+<!-- 
 <button id='cancelBtnDialog' type="button" (click)="onConnectClick($event)">
     <i class="material-icons">input</i>
     Conectar
+</button> -->
+
+<button mat-raised-button (click)="onConnectClick($event)">
+        <i class="material-icons">input</i>
+        Conectar
 </button>

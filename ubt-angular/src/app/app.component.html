@@ -1,17 +1,19 @@
 <!--The content below is only a placeholder and can be replaced.-->
 <!-- Stack the columns on mobile by making one full-width and the other half-width -->
 <div class="container-fluid">
-<div class="row main-container" >
-  <div class="col-12 col-md-12">
-      <app-title-bar-component></app-title-bar-component>
+  <div class="row main-container" >
+    <div class="col-12 col-md-12">
+        <app-title-bar-component></app-title-bar-component>
+    </div>
   </div>
-</div>
-<div class="row main-container">
-  <div class="col">
-      <app-principal-content-component [Status]='StatusControl' [Command_Control]='CommandControl'></app-principal-content-component>
+  <div class="row main-container">
+    <div class="col">
+        <app-principal-content-component [Status]='StatusControl' [Command_Control]='CommandControl'></app-principal-content-component>
+    </div>
   </div>
-</div>
-<div class="row main-container" style="padding: 10px 0px 0px 0px">
-  <div class="col">
-    <app-control-bar-component (StatusEvent)='onChangeStatus($event)'  (CoomandEvent)='onCommandReceived($event)'></app-control-bar-component>
+  <div class="row main-container" style="padding: 10px 0px 0px 0px">
+    <div class="col">
+      <app-control-bar-component (StatusEvent)='onChangeStatus($event)'  (CoomandEvent)='onCommandReceived($event)'></app-control-bar-component>
+  </div>
+  </div>
 </div>

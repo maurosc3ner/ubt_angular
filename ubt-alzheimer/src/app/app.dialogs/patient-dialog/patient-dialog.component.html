@@ -1,68 +1,61 @@
 <div md-dialog-content class="form-dialog">
-  <h2 md-dialog-title>Información del Paciente</h2>
-  <mat-form-field>
-    <input matInput placeholder="Código de administrador" [(ngModel)]="adminCode">
-  </mat-form-field>
-
-
-  <mat-form-field>
-      <input matInput [matDatepicker]="picker" placeholder="Choose a date">
-      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-      <mat-datepicker #picker></mat-datepicker>
-  </mat-form-field>
-
-  <mat-form-field>
-      <input matInput placeholder="Equipo" [(ngModel)]="equipment">
- </mat-form-field>
-
-  <mat-divider></mat-divider> 
-
-  <!-- <mat-form-field>
-    <label>Sexo</label>
-    <select matNativeControl required>
-      <option value="m">Masculino</option>
-      <option value="f">Femenino</option>
-    </select>
-  </mat-form-field> -->
-
-  <mat-form-field>
+    <h2 md-dialog-title>Información del Paciente</h2>
+    <mat-divider></mat-divider>
+    <mat-form-field appearance="outline">
+        <mat-label>Código de administrador</mat-label>
+        <input matInput placeholder="" [(ngModel)]="adminCode">
+        <mat-icon matSuffix>mode_edit</mat-icon>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+        <mat-label>Fecha de la sesión</mat-label>
+        <input matInput [matDatepicker]="picker" placeholder="">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+        <mat-label>Equipo</mat-label>
+        <input matInput placeholder="Equipo" [(ngModel)]="equipment">
+    </mat-form-field>
+    <mat-form-field appearance="outline">
         <mat-select placeholder="Sexo">
-          <mat-option value="f">Femenino</mat-option>
-          <mat-option value="m">Masculino</mat-option>
+            <mat-option value="f">Femenino</mat-option>
+            <mat-option value="m">Masculino</mat-option>
         </mat-select>
     </mat-form-field>
-
-  <mat-divider></mat-divider>
-
-  <mat-form-field>
-      <input matInput [(ngModel)]="patientCode" placeholder="Código de paciente">
-  </mat-form-field>
-  <mat-form-field>
-      <input matInput [(ngModel)]="patientName" placeholder="Nombre del paciente">
-  </mat-form-field>
-  <mat-form-field>
-      <input matInput [(ngModel)]="patientAdditional" placeholder="Información adicional del paciente">
-  </mat-form-field>
-
-  <mat-divider></mat-divider>
-
-  <mat-form-field>
-      <input matInput placeholder="Información adicional de la grabación" [(ngModel)]="recordingAdditional">
-  </mat-form-field>
-  <mat-form-field>
-      <input matInput placeholder="Técnico encargado" [(ngModel)]="technician">
-  </mat-form-field>
-
-  <mat-divider></mat-divider>
-
-  <div md-dialog-actions>
-    <button id='cancelBtnDialog' type="button" (click)="onCloseCancel()">
-      <i class="material-icons">highlight_off</i>
-      Cancelar
-    </button>
-    <button id='saveBtnDialog' type="button" (click)="onCloseConfirm()">
+    <mat-form-field appearance="outline">
+        <mat-label>ID del paciente</mat-label>
+        <input matInput [(ngModel)]="patientCode" placeholder="">
+        <mat-icon matSuffix>mode_edit</mat-icon>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+        <mat-label>Nombre del paciente</mat-label>
+        <input matInput [(ngModel)]="patientName" placeholder="">
+        <mat-icon matSuffix>mode_edit</mat-icon>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+        <mat-label>Información adicional del paciente</mat-label>
+        <input matInput [(ngModel)]="patientAdditional" placeholder="">
+        <mat-icon matSuffix>mode_edit</mat-icon>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+        <mat-label>Información adicional de la grabación</mat-label>
+        <input matInput placeholder="" [(ngModel)]="recordingAdditional">
+        <mat-icon matSuffix>mode_edit</mat-icon>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+        <mat-label>Técnico encargado</mat-label>
+        <input matInput placeholder="" [(ngModel)]="technician">
+        <mat-icon matSuffix>mode_edit</mat-icon>
+    </mat-form-field>
+   
+    <div md-dialog-actions>
+        <button id='cancelBtnDialog' type="button" (click)="onCloseCancel()">
+        <i class="material-icons">highlight_off</i>
+        Cancelar
+        </button>
+        <button id='saveBtnDialog' type="button" (click)="onCloseConfirm()">
         <i class="material-icons">done</i>
         Aceptar
-    </button>
-  </div>
+        </button>
+    </div>
 </div>

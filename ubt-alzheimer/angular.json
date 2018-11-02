@@ -32,7 +32,6 @@
               "./node_modules/bootstrap/dist/css/bootstrap.min.css"
             ],
             "scripts": [
-              "src/assets/cubism/cubism.js"
             ]
           },
           "configurations": {

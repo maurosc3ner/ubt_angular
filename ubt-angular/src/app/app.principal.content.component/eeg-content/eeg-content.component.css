@@ -19,4 +19,10 @@
 .axis > path, .tick, .tick > line {
   stroke: rgb(255, 255, 255);
 }
+
+
+/* slider */
+mat-slider {
+  width: 300px;
+}
   

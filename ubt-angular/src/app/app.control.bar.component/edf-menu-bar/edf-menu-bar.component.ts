@@ -1,9 +1,10 @@
-import { Component, Output, EventEmitter, ViewChild } from '@angular/core';
+import { Component, Output, EventEmitter, ViewChild, ViewEncapsulation } from '@angular/core';
 
 @Component({
   selector: 'app-edf-menu-bar',
   templateUrl: './edf-menu-bar.component.html',
-  styleUrls: ['./edf-menu-bar.component.css']
+  styleUrls: ['./edf-menu-bar.component.css'],
+  encapsulation: ViewEncapsulation.None,
 })
 export class EdfMenuBarComponent {
   @Output() esiclick = new EventEmitter();

@@ -10,3 +10,41 @@ a {
   background-color: #0097A7;
   color: whitesmoke;
 }
+
+.mat-raised-button{
+  margin-left: 8px;
+  background-color: #0097A7;
+  color: white;
+  font-size: 1.2em;
+  border: 4px solid whitesmoke;
+}
+
+
+.example-small-width {
+  width: 50%;
+  height: 50px;
+}
+
+.mat-focused .mat-form-field-label {
+  /*change color of label*/
+  color: #0097A7 !important;
+}
+
+.mat-form-field-label {
+  /*change color of label*/
+  color: whitesmoke !important;
+}
+
+.mat-form-field-underline {
+/*change color of underline*/
+background-color: lightgray !important;
+} 
+
+.mat-form-field-ripple {
+/*change color of underline when focused*/
+background-color: #0097A7 !important;
+} 
+
+label{
+  font-size: 1.5em !important;
+}

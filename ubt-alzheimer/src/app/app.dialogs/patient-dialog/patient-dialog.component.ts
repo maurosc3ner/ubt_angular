@@ -1,11 +1,11 @@
-import { Component, OnInit, Inject } from '@angular/core';
-import { MatSelectModule } from '@angular/material';
-import {MatInputModule} from '@angular/material';
+import { Component, OnInit, Inject, ViewEncapsulation } from '@angular/core';
+
 import { MatDialogRef, MAT_DIALOG_DATA } from '../../../../node_modules/@angular/material/dialog';
 @Component({
   selector: 'app-patient-dialog',
   templateUrl: './patient-dialog.component.html',
-  styleUrls: ['./patient-dialog.component.css']
+  styleUrls: ['./patient-dialog.component.css'],
+  encapsulation: ViewEncapsulation.None,
 })
 export class PatientDialogComponent implements OnInit {
 

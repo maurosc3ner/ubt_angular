@@ -34,6 +34,8 @@ import {
   MatFormFieldModule,
   MatSelectModule
 } from '@angular/material';
+import {MatTooltipModule} from '@angular/material/tooltip';
+import {MatSliderModule} from '@angular/material/slider';
 
 
 @NgModule({
@@ -63,6 +65,8 @@ import {
     MatIconModule,
     MatFormFieldModule,
     MatSelectModule,
+    MatTooltipModule,
+    MatSliderModule,
     HttpModule,
     NgIoModule.forRoot(config)
   ],
