@@ -127,11 +127,9 @@ ngOnInit() {
       .subscribe((response: Response) => response);
   }
 
-  bridgeSignals(event){
+  bridgeSignals(event) {
     console.log('EC-apc-bridgeSignals llegue arriba', event);
-    // this.Status=0;
-    // this.ngOnChanges();
-    this.componentsBridge.emit(0);
+    this.componentsBridge.emit(event);
   }
 
   notchFilter() {

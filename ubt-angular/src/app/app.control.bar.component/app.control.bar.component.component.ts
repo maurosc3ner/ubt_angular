@@ -6,7 +6,7 @@ import {D3Service } from '../app.services/d3/d3.service';
   templateUrl: './app.control.bar.component.component.html',
   styleUrls: ['./app.control.bar.component.component.css']
 })
-export class AppControlBarComponent {
+export class AppControlBarComponent implements OnChanges {
   @Output() StatusEvent = new EventEmitter();
   @Output() CoomandEvent = new EventEmitter();
   @Input() newStatusEvent;
@@ -19,12 +19,14 @@ export class AppControlBarComponent {
   AnnotToggle: Boolean = false;
   TopoPlotToggle: Boolean = false;
 
-  ngOnChanges(): void {
-    console.log('EC-onchanges',this.newStatusEvent);
-    // this.onTopoFilter(true);
-    console.log('AMH-Checkstatus', this.status, this.ESIToggle, this.PlaneToggle, this.AnnotToggle, this.TopoPlotToggle);
-    
-    
+  ngOnChanges() {
+    console.log('EC-onchanges', this.newStatusEvent);
+    if ( this.TopoPlotToggle === true ) {this.TopoPlotToggle = false; }
+    if ( this.AnnotToggle === true ) {this.AnnotToggle = false; }
+    if ( this.ESIToggle === true ) {this.ESIToggle = false; }
+    if ( this.PlaneToggle === true ) {this.PlaneToggle = false; }
+    this.status = this.checkStatus(this.ESIToggle, this.PlaneToggle, this.AnnotToggle, this.TopoPlotToggle);
+    this.StatusEvent.emit(this.status);
   }
 
   checkStatus(ESIToggle, PlaneToggle, AnnotToggle, TopoPlotToggle) {
@@ -90,7 +92,6 @@ export class AppControlBarComponent {
     this.StatusEvent.emit(this.status);
   }
   onTopoFilter(event) {
-    console.log("onTopoFilter",event);
     if (this.TopoPlotToggle === true) {
       this.TopoPlotToggle = false;
     } else {

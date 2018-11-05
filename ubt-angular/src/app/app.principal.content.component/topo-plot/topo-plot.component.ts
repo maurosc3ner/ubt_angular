@@ -1,7 +1,7 @@
 // meterlo a assets
 // registro en angular.json
 // declare en el component
-import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output, OnChanges } from '@angular/core';
 import { assertPreviousIsParent } from '../../../../node_modules/@angular/core/src/render3/instructions';
 
 @Component({
@@ -9,14 +9,12 @@ import { assertPreviousIsParent } from '../../../../node_modules/@angular/core/s
   templateUrl: './topo-plot.component.html',
   styleUrls: ['./topo-plot.component.css']
 })
-export class TopoPlotComponent implements OnInit {
-@Input() topoplotImg;
-@Output() closeFromTopoplot=new EventEmitter();
-
+export class TopoPlotComponent implements OnInit, OnChanges {
+  @Input() topoplotImg;
+  @Output() closeFromTopoplot = new EventEmitter();
   constructor() { }
 
   ngOnInit() {
-
   }
 
   ngOnChanges() {
@@ -32,12 +30,9 @@ export class TopoPlotComponent implements OnInit {
     img.src = this.topoplotImg;
   }
 
-  ngAfterContentInit() {
-  }
-
-  onClose(){
+  onClose() {
     console.log('cerrar topoplot');
-    this.closeFromTopoplot.emit(4);
+    this.closeFromTopoplot.emit(0);
   }
 
 }
