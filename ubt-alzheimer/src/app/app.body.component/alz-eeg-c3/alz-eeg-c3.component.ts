@@ -35,7 +35,7 @@ export class AlzEegC3Component implements OnInit {
       bindto: '#chartPLETH',
       size: {
         height: 200,
-        width: 1080
+        // width: 1080
       },
       
       data: {
