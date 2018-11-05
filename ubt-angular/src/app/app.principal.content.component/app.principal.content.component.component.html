@@ -7,7 +7,7 @@
       <app-eeg-content  [Command_eeg]='Command_Control' [EEG_Status_eeg]='Status' [current_data]='patient_current_data' (cursordata)='onCursorEvent($event)' ></app-eeg-content>
     </div>
     <div class="col topo-plot-container" *ngIf="visTopoPLot">
-      <app-topo-plot [topoplotImg]='srcTopoPlot' ></app-topo-plot>
+      <app-topo-plot [topoplotImg]='srcTopoPlot' (closeFromTopoplot)='bridgeSignals($event)' ></app-topo-plot>
     </div>
     <div class="col td-content-container" *ngIf="visESI">
       <app-td-content [brainFrontColors]='brainColors'></app-td-content>

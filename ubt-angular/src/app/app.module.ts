@@ -36,7 +36,8 @@ import {
   MatTableModule, 
   MatPaginatorModule, 
   MatSortModule,
-  MatPaginatorIntl
+  MatPaginatorIntl,
+  MatCardModule
 } from '@angular/material';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatSliderModule} from '@angular/material/slider';
@@ -76,7 +77,8 @@ import {MyPaginator} from './app.principal.content.component/annot-table/myPagin
     NgIoModule.forRoot(config),
     MatTableModule,
     MatPaginatorModule,
-    MatSortModule
+    MatSortModule,
+    MatCardModule
   ],
   providers: [ D3Service,
     { provide: MatPaginatorIntl, useClass: MyPaginator}

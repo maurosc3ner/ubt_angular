@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnChanges, OnDestroy } from '@angular/core';
+import { Component, Input, OnInit, OnChanges, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { D3Service } from '../app.services/d3/d3.service';
 import {last, tap, take, finalize} from 'rxjs/operators';
 import {throwError} from 'rxjs';
@@ -11,6 +11,9 @@ import {throwError} from 'rxjs';
 export class AppPrincipalContentComponent implements OnInit, OnChanges {
   @Input() Status: number;
   @Input() Command_Control;
+  @Output() componentsBridge=new EventEmitter();
+
+
   visAnno: boolean;
   visEEG: boolean;
   visESI: boolean;
@@ -122,6 +125,13 @@ ngOnInit() {
         }
       }))
       .subscribe((response: Response) => response);
+  }
+
+  bridgeSignals(event){
+    console.log('EC-apc-bridgeSignals llegue arriba', event);
+    // this.Status=0;
+    // this.ngOnChanges();
+    this.componentsBridge.emit(0);
   }
 
   notchFilter() {
