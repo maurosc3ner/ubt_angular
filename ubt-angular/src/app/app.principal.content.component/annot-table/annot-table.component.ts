@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild,  Input, OnChanges } from '@angular/core';
+import { Component, OnInit, ViewChild,  Input,Output, EventEmitter, OnChanges } from '@angular/core';
 import { MatPaginator, MatSort } from '@angular/material';
 import { AnnotTableDataSource } from './annot-table-datasource';
 
@@ -12,6 +12,7 @@ export class AnnotTableComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
   dataSource: AnnotTableDataSource;
   @Input() current_data = null;
+  @Output() closeFromTable = new EventEmitter();
  
 
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
@@ -31,4 +32,11 @@ export class AnnotTableComponent implements OnInit {
       // this.annotations = this.current_data['annotations']['items'];
     }
   }
+
+  onClose() {
+    console.log('cerrar topoplot');
+    this.closeFromTable.emit(0);
+  }
+  
+
 }

@@ -1,10 +1,10 @@
-.material-cust-small-button {
+.eeg-card material-cust-small-button {
     width: auto;
     min-width: 1%;
     vertical-align: middle;
   }
   
-  .material-cust-small-button-icon {
+  .eeg-card > material-cust-small-button-icon {
     width: auto;
     min-width: 1%;
     vertical-align: middle;
@@ -17,8 +17,8 @@
 
 /* D3 Styles are called from the main style header*/
 .axis > path, .tick, .tick > line {
-  /* stroke: rgb(255, 255, 255); */
-  stroke: rgb(0, 0, 0);
+  stroke: rgb(255, 255, 255);
+  /* stroke: rgb(0, 0, 0); */
 }
 
 
@@ -39,11 +39,11 @@ mat-slider {
     width: 100%;
     border-radius: 3px;
     padding: 0px;
-    background-color: white;
+    background-color: black;
 }
   
 .eeg-title{
-  color: black;
+  color: white;
   margin: 10px;
 }
   

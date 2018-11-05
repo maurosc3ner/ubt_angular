@@ -16,7 +16,7 @@
 
 
 
-import { AfterViewInit, Component,OnInit, ElementRef, Input, ViewChild, OnChanges } from '@angular/core';
+import { AfterViewInit, Component,OnInit, ElementRef, Input, Output, EventEmitter, ViewChild, OnChanges } from '@angular/core';
 // import * as THREE from 'three';
 import * as THREE from 'three-full';
 import { validateHorizontalPosition } from '../../../../node_modules/@angular/cdk/overlay';
@@ -33,6 +33,8 @@ export class TdContentComponent implements AfterViewInit, OnChanges {
   private camera: THREE.PerspectiveCamera;
   private controls: THREE.OrbitControls;
   colorFromFile = {};
+
+  @Output() closeFromLoreta = new EventEmitter();
 
   private get canvas() : HTMLCanvasElement {
     return this.canvasRef.nativeElement;
@@ -482,5 +484,10 @@ export class TdContentComponent implements AfterViewInit, OnChanges {
     // this.updateCubeColors();
     this.updateBrainColors();
     //this.startRenderingLoop();
+  }
+
+  onClose() {
+    console.log('cerrar topoplot');
+    this.closeFromLoreta.emit(0);
   }
 }

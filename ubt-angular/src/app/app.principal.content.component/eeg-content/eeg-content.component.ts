@@ -26,7 +26,7 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
     current_cursor_position = 0;
     current_scale: Array<any>;
     color_scale: Array<string> = [
-         '#000000',
+         '#ffffff',
     ];
     constructor(private d3service: D3Service) {
     }
@@ -111,7 +111,7 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
             // console.log('AMH_j', data['channels'][j - 1]);
             this.DrawChannel(   sample, 'line_eeg_1', data['channels'][j - 1], 0,
             duration, x_axis, y_axis, 1, this.scale_multiplier[this.multiplier_pos],
-            '#000000', width, height, updating, this.cursordata );
+            '#ffffff', width, height, updating, this.cursordata );
         }
         j++;
         }

@@ -1,154 +1,145 @@
-<mat-card class="eeg-card">
-    <mat-card-header>
-      <div mat-card-avatar class="example-header-image"></div>
-      <mat-card-title class="eeg-title">EEG</mat-card-title>
-    </mat-card-header>
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col">
-                <mat-slider min="20" max="200" tickInterval="1" value={{scale_multiplier[multiplier_pos]}} thumbLabel=true></mat-slider>
-            </div>
+<div class="container-fluid">
+    <!-- <div class="row">
+        <div class="col">
+            <mat-slider min="20" max="200" tickInterval="1" value={{scale_multiplier[multiplier_pos]}} thumbLabel=true></mat-slider>
         </div>
-    
-    
-        <div class="row">
-            <div class="col">
-                <mat-form-field >
-                    <label>Información del paciente:</label>
-                    <mat-select (selectionChange)="visualControl($event)" [(value)]="visualization_type">
-                        <mat-option value="Lines">Lines</mat-option>
-                        <mat-option value="Horizon" disabled>Horizon</mat-option>
-                    </mat-select>
-                </mat-form-field>
-            </div>
+    </div> -->
+
+
+    <div class="row">
+        <div class="col">
+            <mat-form-field >
+                <label>Información del paciente:</label>
+                <mat-select (selectionChange)="visualControl($event)" [(value)]="visualization_type">
+                    <mat-option value="Lines">Lines</mat-option>
+                    <mat-option value="Horizon" disabled>Horizon</mat-option>
+                </mat-select>
+            </mat-form-field>
         </div>
-        <div class="row">
-            <div class="col">
-                <button mat-stroked-button (click)="click_multiplier($event, false)"  class="material-cust-small-button" data-toggle="tooltip" data-placement="top" title="Reducir amplitud">
-                    <mat-icon class="material-cust-small-button-icon">remove</mat-icon>
-                </button> 
-                &nbsp; 
-                {{scale_multiplier[multiplier_pos]}}mV 
-                &nbsp;
-                <button mat-stroked-button (click)="click_multiplier($event, true)"  class="material-cust-small-button" data-toggle="tooltip" data-placement="top" title="Incrementar amplitud">
-                    <mat-icon class="material-cust-small-button-icon">add</mat-icon>
-                </button>
-            </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <button mat-stroked-button (click)="click_multiplier($event, false)"  class="material-cust-small-button" data-toggle="tooltip" data-placement="top" title="Reducir amplitud">
+                <mat-icon class="material-cust-small-button-icon">remove</mat-icon>
+            </button> 
+            &nbsp; 
+            {{scale_multiplier[multiplier_pos]}}mV 
+            &nbsp;
+            <button mat-stroked-button (click)="click_multiplier($event, true)"  class="material-cust-small-button" data-toggle="tooltip" data-placement="top" title="Incrementar amplitud">
+                <mat-icon class="material-cust-small-button-icon">add</mat-icon>
+            </button>
         </div>
-        <div class="row" [ngClass]="{'controlclass':control_vis===true}" >
-            <div class="col">
-                <svg id="channel20"></svg>
-            </div>
+    </div>
+    <div class="row" [ngClass]="{'controlclass':control_vis===true}" >
+        <div class="col">
+            <svg id="channel20"></svg>
         </div>
-        <div class="row" [ngClass]="{'controlclass':control_vis===true}" >
-            <div class="col">
-                <svg id="channel19"></svg>
-            </div>
+    </div>
+    <div class="row" [ngClass]="{'controlclass':control_vis===true}" >
+        <div class="col">
+            <svg id="channel19"></svg>
         </div>
-        <div class="row" [ngClass]="{'controlclass':control_vis===true}" >
-            <div class="col">
-                <svg id="channel18"></svg>
-            </div>
+    </div>
+    <div class="row" [ngClass]="{'controlclass':control_vis===true}" >
+        <div class="col">
+            <svg id="channel18"></svg>
         </div>
-        <div class="row" [ngClass]="{'controlclass':control_vis===true}" >
-            <div class="col">
-                <svg id="channel17"></svg>
-            </div>
+    </div>
+    <div class="row" [ngClass]="{'controlclass':control_vis===true}" >
+        <div class="col">
+            <svg id="channel17"></svg>
         </div>
-        <div class="row" [ngClass]="{'controlclass':control_vis===true}" >
-            <div class="col">
-                <svg id="channel16"></svg>
-            </div>
+    </div>
+    <div class="row" [ngClass]="{'controlclass':control_vis===true}" >
+        <div class="col">
+            <svg id="channel16"></svg>
         </div>
-        <div class="row" [ngClass]="{'controlclass':control_vis===true}" >
-            <div class="col">
-                <svg id="channel15"></svg>
-            </div>
+    </div>
+    <div class="row" [ngClass]="{'controlclass':control_vis===true}" >
+        <div class="col">
+            <svg id="channel15"></svg>
         </div>
-        <div class="row" [ngClass]="{'controlclass':control_vis===true}" >
-            <div class="col">
-                <svg id="channel14"></svg>
-            </div>
+    </div>
+    <div class="row" [ngClass]="{'controlclass':control_vis===true}" >
+        <div class="col">
+            <svg id="channel14"></svg>
         </div>
-        <div class="row" [ngClass]="{'controlclass':control_vis===true}" >
-            <div class="col">
-                <svg id="channel13"></svg>
-            </div>
+    </div>
+    <div class="row" [ngClass]="{'controlclass':control_vis===true}" >
+        <div class="col">
+            <svg id="channel13"></svg>
         </div>
-        <div class="row" [ngClass]="{'controlclass':control_vis===true}" >
-            <div class="col">
-                <svg id="channel12"></svg>
-            </div>
+    </div>
+    <div class="row" [ngClass]="{'controlclass':control_vis===true}" >
+        <div class="col">
+            <svg id="channel12"></svg>
         </div>
-        <div class="row" [ngClass]="{'controlclass':control_vis===true}" >
-            <div class="col">
-                <svg id="channel11"></svg>
-            </div>
+    </div>
+    <div class="row" [ngClass]="{'controlclass':control_vis===true}" >
+        <div class="col">
+            <svg id="channel11"></svg>
         </div>
-        <div class="row" [ngClass]="{'controlclass':control_vis===true}" >
-            <div class="col">
-                <svg id="channel10"></svg>
-            </div>
+    </div>
+    <div class="row" [ngClass]="{'controlclass':control_vis===true}" >
+        <div class="col">
+            <svg id="channel10"></svg>
         </div>
-        <div class="row" [ngClass]="{'controlclass':control_vis===true}" >
-            <div class="col">
-                <svg id="channel9"></svg>
-            </div>
+    </div>
+    <div class="row" [ngClass]="{'controlclass':control_vis===true}" >
+        <div class="col">
+            <svg id="channel9"></svg>
         </div>
-        <div class="row" [ngClass]="{'controlclass':control_vis===true}" >
-            <div class="col">
-                <svg id="channel8"></svg>
-            </div>
+    </div>
+    <div class="row" [ngClass]="{'controlclass':control_vis===true}" >
+        <div class="col">
+            <svg id="channel8"></svg>
         </div>
-        <div class="row" [ngClass]="{'controlclass':control_vis===true}" >
-            <div class="col">
-                <svg id="channel7"></svg>
-            </div>
+    </div>
+    <div class="row" [ngClass]="{'controlclass':control_vis===true}" >
+        <div class="col">
+            <svg id="channel7"></svg>
         </div>
-        <div class="row" [ngClass]="{'controlclass':control_vis===true}" >
-            <div class="col">
-                <svg id="channel6"></svg>
-            </div>
+    </div>
+    <div class="row" [ngClass]="{'controlclass':control_vis===true}" >
+        <div class="col">
+            <svg id="channel6"></svg>
         </div>
-        <div class="row" [ngClass]="{'controlclass':control_vis===true}" >
-            <div class="col">
-                <svg id="channel5"></svg>
-            </div>
+    </div>
+    <div class="row" [ngClass]="{'controlclass':control_vis===true}" >
+        <div class="col">
+            <svg id="channel5"></svg>
         </div>
-        <div class="row" [ngClass]="{'controlclass':control_vis===true}" >
-            <div class="col">
-                <svg id="channel4"></svg>
-            </div>
+    </div>
+    <div class="row" [ngClass]="{'controlclass':control_vis===true}" >
+        <div class="col">
+            <svg id="channel4"></svg>
         </div>
-        <div class="row" [ngClass]="{'controlclass':control_vis===true}" >
-            <div class="col">
-                <svg id="channel3"></svg>
-            </div>
+    </div>
+    <div class="row" [ngClass]="{'controlclass':control_vis===true}" >
+        <div class="col">
+            <svg id="channel3"></svg>
         </div>
-        <div class="row" [ngClass]="{'controlclass':control_vis===true}" >
-            <div class="col">
-                <svg id="channel2"></svg>
-            </div>
+    </div>
+    <div class="row" [ngClass]="{'controlclass':control_vis===true}" >
+        <div class="col">
+            <svg id="channel2"></svg>
         </div>
-        <div class="row" [ngClass]="{'controlclass':control_vis===true}" >
-            <div class="col">
-                <svg id="channel1"></svg>
-            </div>
+    </div>
+    <div class="row" [ngClass]="{'controlclass':control_vis===true}" >
+        <div class="col">
+            <svg id="channel1"></svg>
         </div>
-        <div class="row" [ngClass]="{'controlclass':control_vis===true}" >
-            <div class="col">
-                <svg id="channel0"></svg>
-            </div>
+    </div>
+    <div class="row" [ngClass]="{'controlclass':control_vis===true}" >
+        <div class="col">
+            <svg id="channel0"></svg>
         </div>
-        <div class="row" [ngClass]="{'controlclass':control_vis===false}">
-            <div class="col">
-                <div id="body"> 
-                    <div id="graph"></div>
-                </div>
+    </div>
+    <div class="row" [ngClass]="{'controlclass':control_vis===false}">
+        <div class="col">
+            <div id="body"> 
+                <div id="graph"></div>
             </div>
         </div>
     </div>
-    <!-- <mat-card-actions>
-      <button mat-button (click)="onClose()">Close</button>
-    </mat-card-actions> -->
-</mat-card>
+</div>
