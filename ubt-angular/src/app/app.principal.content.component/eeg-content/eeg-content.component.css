@@ -17,12 +17,33 @@
 
 /* D3 Styles are called from the main style header*/
 .axis > path, .tick, .tick > line {
-  stroke: rgb(255, 255, 255);
+  /* stroke: rgb(255, 255, 255); */
+  stroke: rgb(0, 0, 0);
 }
 
 
 /* slider */
 mat-slider {
   width: 300px;
+}
+
+/* card styles*/
+
+.example-header-image {
+  background-image: url('../../../assets/control-bar/if_Menu_2001884.png');
+  background-size: cover;
+}
+
+.eeg-card {
+/* max-width: 400px; */
+    width: 100%;
+    border-radius: 3px;
+    padding: 0px;
+    background-color: white;
+}
+  
+.eeg-title{
+  color: black;
+  margin: 10px;
 }
   

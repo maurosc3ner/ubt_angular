@@ -1,5 +1,11 @@
-<div id="3Dinfo">
-    3D View for Loreta
-</div>
-<canvas #canvas (window:resize)="onResize($event)"></canvas>
-<div id="bv-gui"></div>
+<mat-card class="loreta-card">
+    <mat-card-header>
+      <div mat-card-avatar class="example-header-image"></div>
+      <mat-card-title class="loreta-title">Loreta</mat-card-title>
+    </mat-card-header>
+    <canvas #canvas (window:resize)="onResize($event)"></canvas>
+
+    <mat-card-actions>
+      <button mat-button (click)="onClose()">Close</button>
+    </mat-card-actions>
+</mat-card>
