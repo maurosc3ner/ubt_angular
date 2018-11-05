@@ -83,7 +83,8 @@ ngOnInit() {
       this.visESI = true;
       this.visPlane = true;
       this.visTopoPLot = false;
-    } else if (this.Status === 3) {
+    } else if (this.Status === 3) { // EEG + Anotaciones
+      console.log(this.patient_current_data);
       this.visAnno = true;
       this.visEEG = true;
       this.visESI = false;

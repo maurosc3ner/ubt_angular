@@ -32,12 +32,16 @@ import {
   MatButtonModule,
   MatIconModule,
   MatFormFieldModule,
-  MatSelectModule
+  MatSelectModule, 
+  MatTableModule, 
+  MatPaginatorModule, 
+  MatSortModule,
+  MatPaginatorIntl
 } from '@angular/material';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatSliderModule} from '@angular/material/slider';
-
-
+import { AnnotTableComponent } from './app.principal.content.component/annot-table/annot-table.component';
+import {MyPaginator} from './app.principal.content.component/annot-table/myPaginatorClass';
 @NgModule({
   declarations: [
     AppComponent,
@@ -53,7 +57,8 @@ import {MatSliderModule} from '@angular/material/slider';
     EdfMenuBarComponent,
     EdfControlButtonsComponent,
     PlaneViewComponent,
-    AnnotationContentComponent
+    AnnotationContentComponent,
+    AnnotTableComponent
   ],
   imports: [
     BrowserModule,
@@ -68,9 +73,14 @@ import {MatSliderModule} from '@angular/material/slider';
     MatTooltipModule,
     MatSliderModule,
     HttpModule,
-    NgIoModule.forRoot(config)
+    NgIoModule.forRoot(config),
+    MatTableModule,
+    MatPaginatorModule,
+    MatSortModule
   ],
-  providers: [ D3Service ],
+  providers: [ D3Service,
+    { provide: MatPaginatorIntl, useClass: MyPaginator}
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

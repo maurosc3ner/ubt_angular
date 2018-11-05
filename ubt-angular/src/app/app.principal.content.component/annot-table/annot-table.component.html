@@ -1,0 +1,26 @@
+<div class="mat-elevation-z8 annot-table">
+  <mat-table #table [dataSource]="dataSource" matSort aria-label="Elements">
+
+    <!-- Tiempo  -->
+    <ng-container matColumnDef="onset">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Tiempo</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{row.onset}}</mat-cell>
+    </ng-container>
+
+    <!-- Evento  -->
+    <ng-container matColumnDef="description">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Evento</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{row.description}}</mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+  </mat-table>
+
+  <mat-paginator #paginator
+    [length]="dataSource.data.length"
+    [pageIndex]="0"
+    [pageSize]="5"
+    [pageSizeOptions]="[5]" aria-label=" Anotaciones:">
+  </mat-paginator>
+</div>
