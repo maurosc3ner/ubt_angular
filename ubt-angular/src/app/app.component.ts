@@ -9,18 +9,18 @@ export class AppComponent {
   title = 'app';
   public StatusControl = 0;
   public CommandControl;
+  public mainBridge = 0;
 
-  mainBridge;
-
-  onChangesToolbar(event){
-    console.log('EC-app-',event);
-    this.mainBridge=event;
-    //this.mainBridge.emit();
+  onChangesToolbar(event) {
+    if (this.mainBridge === 0) {
+      this.mainBridge = 1;
+    } else {
+      this.mainBridge = 0;
+    }
   }
 
   onChangeStatus(event) {
     this.StatusControl = event;
-    
   }
   onCommandReceived(event) {
     this.CommandControl = event;
