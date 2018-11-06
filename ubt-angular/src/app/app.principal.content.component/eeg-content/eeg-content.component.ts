@@ -92,8 +92,8 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
 
     init_channels() {
         const channel_array: Array<any> = [];
-        const reference = document.getElementById('reference');
-        for (let n = this.current_data['channels'].length ; n > -1; n--) {
+        const div_number = this.current_data['channels'].length + 1;
+        for (let n = div_number; n > -1; n--) {
         const divrow = document.createElement('div');
         this.renderer.addClass(divrow, 'row');
         const divcol = document.createElement('div');
@@ -102,10 +102,9 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
         const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
         this.renderer.setAttribute(svg, 'id', 'channel' + n.toString());
         this.renderer.appendChild(divcol, svg);
-        // this.renderer.insertBefore(this.eegmain, divrow, reference);
         this.renderer.appendChild(this.eegmain.nativeElement, divrow);
         }
-        for (let n = 0 ; n < this.current_data['channels'].length + 1; n++) {
+        for (let n = 0 ; n < div_number + 1; n++) {
             const current_channel = d3.select('#channel' + n);
             channel_array.push(current_channel);
         }
@@ -120,8 +119,8 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
     let j = 0;
     d3.selectAll('#y-axis').remove();
     for (const sample of channel_array) {
-        // console.log('AMH_j', j);
-        if (j === 0) {
+        console.log('AMH_j', j, channel_array.length);
+        if (j === 0 || j === channel_array.length - 1) {
             x_axis = true;
             y_axis = false;
             this.DrawChannel(   sample, 'line_eeg_1', data['channels'][0], 0,
