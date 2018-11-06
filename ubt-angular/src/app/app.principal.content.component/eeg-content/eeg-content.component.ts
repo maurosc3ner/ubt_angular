@@ -1,7 +1,15 @@
-import { Component, Input, AfterContentInit, OnChanges, Output, EventEmitter } from '@angular/core';
+import {
+    Component,
+    Input,
+    AfterContentInit,
+    OnChanges,
+    Output,
+    EventEmitter,
+    ViewChild,
+    ElementRef,
+    Renderer2
+} from '@angular/core';
 import { D3Service } from '../../app.services/d3/d3.service';
-
-import { Response } from '@angular/http';
 
 import * as d3 from 'd3';
 declare let cubism: any;
@@ -16,6 +24,7 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
     @Input() Command_eeg: Array<number>;
     @Input() current_data: any = null;
     @Output() cursordata = new EventEmitter();
+    @ViewChild('eegmain') eegmain: ElementRef;
     visualization_type: String = 'Lines';
     control_vis: Boolean = false;
     handle_data: any;
@@ -28,7 +37,7 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
     color_scale: Array<string> = [
          '#ffffff',
     ];
-    constructor(private d3service: D3Service) {
+    constructor(private d3service: D3Service, private renderer: Renderer2) {
     }
     ngAfterContentInit() {
     }
@@ -83,6 +92,19 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
 
     init_channels() {
         const channel_array: Array<any> = [];
+        const reference = document.getElementById('reference');
+        for (let n = this.current_data['channels'].length ; n > -1; n--) {
+        const divrow = document.createElement('div');
+        this.renderer.addClass(divrow, 'row');
+        const divcol = document.createElement('div');
+        this.renderer.addClass(divcol, 'col');
+        this.renderer.appendChild(divrow, divcol);
+        const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        this.renderer.setAttribute(svg, 'id', 'channel' + n.toString());
+        this.renderer.appendChild(divcol, svg);
+        // this.renderer.insertBefore(this.eegmain, divrow, reference);
+        this.renderer.appendChild(this.eegmain.nativeElement, divrow);
+        }
         for (let n = 0 ; n < this.current_data['channels'].length + 1; n++) {
             const current_channel = d3.select('#channel' + n);
             channel_array.push(current_channel);
