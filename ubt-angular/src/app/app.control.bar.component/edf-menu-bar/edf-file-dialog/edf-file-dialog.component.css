@@ -1,0 +1,38 @@
+.file-card {
+    width: 100%;
+    border-radius:  5px 5px 5px 5px;
+    padding: 0px;
+    /* background-color: rgb(0,0,0); */
+}
+
+.file-header-image {
+    background-image: url('../../../../assets/control-bar/folderIcon.png');
+    background-size: cover;
+    border: 2px solid white;
+}
+.file-card-title{
+    color: black;
+    margin: 10px;
+}
+
+.mat-card-header {
+    background-color:white;
+} 
+
+.mat-card-actions{
+    background-color:white;
+    margin: 10px;
+} 
+
+.file-radio-group {
+    display: inline-flex;
+    flex-direction: column;
+  }
+  
+.file-radio-button {
+margin: 5px;
+}
+
+.example-selected-value {
+margin: 15px 0;
+}

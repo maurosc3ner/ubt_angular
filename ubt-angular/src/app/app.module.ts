@@ -37,12 +37,17 @@ import {
   MatPaginatorModule, 
   MatSortModule,
   MatPaginatorIntl,
-  MatCardModule
+  MatCardModule,
+  MatDialogModule
 } from '@angular/material';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatSliderModule} from '@angular/material/slider';
 import { AnnotTableComponent } from './app.principal.content.component/annot-table/annot-table.component';
 import {MyPaginator} from './app.principal.content.component/annot-table/myPaginatorClass';
+import {MatMenuModule} from '@angular/material/menu';
+import {MatRadioModule} from '@angular/material/radio';
+import { EdfFileDialogComponent } from './app.control.bar.component/edf-menu-bar/edf-file-dialog/edf-file-dialog.component';
+import { FormsModule } from '@angular/forms';
 @NgModule({
   declarations: [
     AppComponent,
@@ -59,7 +64,8 @@ import {MyPaginator} from './app.principal.content.component/annot-table/myPagin
     EdfControlButtonsComponent,
     PlaneViewComponent,
     AnnotationContentComponent,
-    AnnotTableComponent
+    AnnotTableComponent,
+    EdfFileDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -78,7 +84,14 @@ import {MyPaginator} from './app.principal.content.component/annot-table/myPagin
     MatTableModule,
     MatPaginatorModule,
     MatSortModule,
-    MatCardModule
+    MatCardModule,
+    MatMenuModule,
+    MatDialogModule,
+    MatRadioModule,
+    FormsModule
+  ],
+  entryComponents: [
+    EdfFileDialogComponent
   ],
   providers: [ D3Service,
     { provide: MatPaginatorIntl, useClass: MyPaginator}

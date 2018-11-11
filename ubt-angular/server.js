@@ -16,7 +16,7 @@ var interval;
 function openEDFScript(pathFileName,currentData) { 
     var options = { 
       mode: 'json',       
-        args: [pathFileName,232000] 
+        args: [pathFileName,0] 
     };    
     var readerShell = new PythonShell('/backend/pythonscripts/edfReader.py',options);
     var asyncMessage;
@@ -38,14 +38,14 @@ function openEDFScript(pathFileName,currentData) {
         console.log('-EC-edfReader-The exit signal was: ' + signal);
         console.log('-EC-edfReader-finished');  
     });
-}; 
-
+};   
+    
 function jumpEDFScript(filename,currentData) {
     //Aqui va llamado a rutina de python
     //TODO 
     //console.log('-EC-jumpEDFScript- calling python edfNavigator.py');
     var options = {
-	  mode: 'json',
+	  mode: 'json', 
 	  args: [filename,currentData.debug.time.index,10] 
 	};
     PythonShell.run('/backend/pythonscripts/edfNavigator.py', options, function (err, results) {
@@ -123,36 +123,64 @@ function ocularScript(currentData) {
 };
 
 // este debe ser el topoplot 
-function topoPlotScript(currentData) {
-    var options = {
+// function topoPlotScript(currentData) {
+//     var options = {
+// 	  mode: 'binary',
+// 	  args: [] 
+//     };   
+//     // console.log('-EC-topoPlot-',JSON.stringify(currentData.channels[0]['id']));
+//     var topoPlotShell = new PythonShell('/backend/pythonscripts/topoplot/topoFilter.py');
+
+//     topoPlotShell.send(JSON.stringify(currentData.channels));
+
+//     topoPlotShell.on('message', function (message) {
+  
+//       });  
+//     // end the input stream and allow the process to exit
+//     topoPlotShell.end(function (err,code,signal) {
+//         if (err) throw err;
+//         // lectura desde disco
+//         fs.readFile(path.join(__dirname, 'temptopo.png'), function(err, buf){
+//             if (err) throw err;
+//             // it's possible to embed binary data
+//             // within arbitrarily-complex objects
+//             io.emit('topo_plot', { image: true, buffer: buf.toString('base64') });
+//             console.log('-EC-topoplot-The exit code was: ' + code);
+//             console.log('-EC-topoplot-The exit signal was: ' + signal);
+//             console.log('-EC-topoplot-finished'); 
+//         });
+        
+//     }); 
+// };
+
+
+async function topoPlotScript(currentData) {
+    let options = {
 	  mode: 'binary',
 	  args: [] 
     };   
     // console.log('-EC-topoPlot-',JSON.stringify(currentData.channels[0]['id']));
-    var topoPlotShell = new PythonShell('/backend/pythonscripts/topoplot/topoFilter.py');
+    let topoPlotShell = new PythonShell('/backend/pythonscripts/topoplot/topoFilter.py');
 
-    topoPlotShell.send(JSON.stringify(currentData.channels));
-
-    topoPlotShell.on('message', function (message) {
-        // received a message sent from the Python script (a simple "print" statement)
-        //  console.log(message.toString('base64'));
-        //  io.emit("topo_plot", { image: true, buffer: message});  
-      });  
+    let startProcess = await topoPlotShell.send(JSON.stringify(currentData.channels));
+    // let startProcess = await topoPlotShell.on('message', function (message) {});  
     // end the input stream and allow the process to exit
-    topoPlotShell.end(function (err,code,signal) {
+    let endProcess = await topoPlotShell.end(function (err,code,signal) {
         if (err) throw err;
-        // lectura desde disco
-        fs.readFile(path.join(__dirname, 'temptopo.png'), function(err, buf){
-            if (err) throw err;
-            // it's possible to embed binary data
-            // within arbitrarily-complex objects
-            io.emit('topo_plot', { image: true, buffer: buf.toString('base64') });
-            console.log('-EC-topoplot-The exit code was: ' + code);
-            console.log('-EC-topoplot-The exit signal was: ' + signal);
-            console.log('-EC-topoplot-finished'); 
-        });
-        
+        return {"code": code, "signal":signal};
     }); 
+    console.log(endProcess.code);
+    let readImage = await fs.readFile(path.join(__dirname, 'temptopo.png'), (err, data) => {
+        if (err) throw err;
+        return { image: true, buffer: data.toString('base64') };
+    });
+     console.log(readImage);
+    return {
+        code: endProcess.code,
+        signal: endProcess.signal,
+        img:  readImage
+    } 
+
 };
   
 /**  
@@ -189,6 +217,8 @@ function loretaScript(currentData) {
     });
 }; 
 
+
+
 function edfFromFile(startPath, msg) {
     var results = [];
     if (!fs.existsSync(__dirname + startPath)) {
@@ -208,6 +238,31 @@ function edfFromFile(startPath, msg) {
 io.on('connection', function(socket) {
     actSockets++;
     console.log('a user connected');
+
+    socket.on('load_patients', function(msg) {
+        console.log('EC-load_patients call',msg.debug);
+        //since it is an async call, io.emit should go into the python-shell callback
+        let message ={
+            'files':[]
+        }
+        let edfPath='/backend/server_data';
+        let joinedPath=path.join(__dirname+edfPath);
+        if (!fs.existsSync(__dirname + edfPath)) {
+            console.log("-EC-eff- no dir ", edfPath);
+        } else {
+            console.log(joinedPath)
+            fs.readdir(joinedPath, (err, files) =>{
+                console.log('files:',files);
+                for (let file=0; file<files.length; file++) {
+                    message.files.push({
+                        'name':files[file],
+                        'value':file
+                    });
+                }
+                io.emit("load_patients", message);
+            });
+        }
+    });
 
     socket.on('load_edf', function(msg) {
         console.log(msg.debug);
@@ -236,11 +291,28 @@ io.on('connection', function(socket) {
         
     });
 
-    socket.on('topo_plot', function(msg) {
-        console.log("-EC-topo_plot-Start");
-        topoPlotScript(msg);
-        
+
+
+
+    //no promise
+    // socket.on('topo_plot', function(msg) {
+    //     console.log("-EC-topo_plot-Start");
+    //     topoPlotScript(msg);
+    // });
+    // with promises
+    socket.on('topo_plot',(msg) => {
+        console.log("-EC-topo_plot-Start with promises"); 
+        topoPlotScript(msg).
+        then(results =>{
+            console.log('-EC-topoplot-The exit code was: ' + results.code);
+            console.log('-EC-topoplot-The exit signal was: ' + results.signal);
+            console.log('-EC-topoplot-finished'); 
+            io.emit('topo_plot', results.img);
+        })
+        .catch(err => console.error(err));
     });
+    
+    
 
     socket.on('loreta_filter', function(msg) {
         console.log("-EC-loreta_filter-Start");

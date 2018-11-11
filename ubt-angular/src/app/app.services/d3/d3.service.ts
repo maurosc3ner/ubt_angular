@@ -28,6 +28,18 @@ export class D3Service {
         return this.http.get('http://localhost:3000/tests');
     }
 
+    loadPatients(): any {
+        const debug = {};
+        debug['command'] = 'load_patients';
+        const payload = {
+            'debug' : debug
+        };
+        this.socket.emit('load_patients', payload);
+        const response = this.socket.fromEvent('load_patients');
+        console.log('EC-loadPatients-response received:',response);
+        return response;
+    }
+
     getPatientInfo(msg: string, current_data: any): any {
         const debug = {};
         debug['command'] = 'load_edf';

@@ -200,7 +200,7 @@ ngOnInit() {
     if (this.Status === 4) { // EEG+topoplot
       this.topoPlot(patient_data_copy);
     }
-    if (this.Status === 1) { // EEG+topoplot
+    if (this.Status === 1) { // EEG+loreta
       this.loretaFilter(patient_data_copy);
     }
   }

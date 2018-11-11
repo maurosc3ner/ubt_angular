@@ -1,85 +1,89 @@
-<div class="container">
+<div class="container-fluid">
   <div class="row">
-    <div class="col-3 col-md-3 speed-top">
-      <p>OpenEDF</p>
-    </div>
-    <div class="col-3 col-md-3 speed-top">
-      <p>Clear</p>
-    </div>
-    <div class="col-3 col-md-3 speed-top"> 
-      <p>Notch</p>
-    </div>
-    <div class="col-3 col-md-3 speed-top"> 
-      <p>Ocular </p>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-3 col-md-3">
+    <div class="col-2 col-md-2">
       <input id="fileInput" name="file" type="file" (change)="OpenEDF($event)" [hidden]="true" #fileinput>
-      <button mat-stroked-button (click)="SelectFiles(fileinput)" class="material-cust-small-button" data-toggle="tooltip" data-placement="top" title="Abrir archivo EDF">
-        <mat-icon class="material-cust-small-button-icon">folder_open</mat-icon>
-      </button>
-    </div>
-    <div class="col-3 col-md-3">
-      <button mat-stroked-button (click)="Clear()" class="material-cust-small-button" data-toggle="tooltip" data-placement="top" title="Cerrar archivo actual">
-        <mat-icon class="material-cust-small-button-icon">remove</mat-icon>
-      </button>
-      <!-- <button mat-raised-button
+      <button mat-raised-button color="primary" (click)="SelectFiles(fileinput)" 
         matTooltip="Info about the action"
-        matTooltipClass="example-tooltip-red"
+        matTooltipClass="edf-menu-tooltip"
         aria-label="Button that shows a red tooltip"
         class="material-cust-small-button">
-        <mat-icon class="material-cust-small-button-icon">remove</mat-icon>
-        Cerrar
-      </button> -->
-    </div>    
-    <div class="col-3 col-md-3">
-      <button mat-stroked-button (click)="notchFilter()" class="material-cust-small-button" data-toggle="tooltip" data-placement="top" title="Aplicar filtro Notch">
-        <mat-icon class="material-cust-small-button-icon">filter</mat-icon>
+        <mat-icon class="material-cust-small-button-icon">folder_open</mat-icon>
+        Cargar 
       </button>
     </div>
-    <div class="col-3 col-md-3">
-      <button mat-stroked-button (click)="ocularFilter()" class="material-cust-small-button" data-toggle="tooltip" data-placement="top" title="Aplicar filtro ocular">
-        <mat-icon class="material-cust-small-button-icon">filter</mat-icon>
-      </button>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-3 col-md-3">
-      <button mat-stroked-button (click)="AnnoLoad()" class="material-cust-small-button" data-toggle="tooltip" data-placement="top" title="Anotaciones">
-        <mat-icon class="material-cust-small-button-icon">edit</mat-icon>
-      </button>
-    </div>
-    <div class="col-3 col-md-3">
-      <button mat-stroked-button (click)="TopoPlot()" class="material-cust-small-button" data-toggle="tooltip" data-placement="top" title="Estimar topoplot">
-        <mat-icon class="material-cust-small-button-icon">radio_button_checked</mat-icon>
-      </button>
-    </div>
-    <div class="col-3 col-md-3">
-      <button mat-stroked-button (click)="ESILoad()" class="material-cust-small-button" data-toggle="tooltip" data-placement="top" title="Estimar Loreta">
-        <mat-icon class="material-cust-small-button-icon">image_search</mat-icon>
-      </button>
-    </div>
-    <div class="col-3 col-md-3">
-      <!-- <button mat-stroked-button (click)="PlaneLoad()" class="material-cust-small-button" data-toggle="tooltip" data-placement="top" title="Abrir archivo MRI" disabled>
-        <mat-icon class="material-cust-small-button-icon">image</mat-icon>
-      </button> -->
-      
+    <div class="col-2 col-md-2">
+        <button mat-raised-button color="primary" (click)="OpenEDFDialog(fileinput)" 
+          matTooltip="Info about the action"
+          matTooltipClass="edf-menu-tooltip"
+          aria-label="Button that shows a red tooltip"
+          class="material-cust-small-button">
+          <mat-icon class="material-cust-small-button-icon">folder_open</mat-icon>
+          Tree 
+        </button>
+      </div>
 
+    <div class="col-2 col-md-2">
+        <button mat-raised-button color="primary" (click)="Clear()" 
+        matTooltip="Cerrar archivo actual"
+        matTooltipClass="edf-menu-tooltip"
+        aria-label="Button that shows a red tooltip"
+        class="material-cust-small-button">
+            <mat-icon class="material-cust-small-button-icon">clear_all</mat-icon>
+            Limpiar
+        </button>
     </div>
-  </div>
-  <div class="row">
-    <div class="col-3 col-md-3 speed-bottom">
-      <p>Anno</p>
+
+    <div class="col-2 col-md-2">
+      <button mat-raised-button color="primary" (click)="AnnoLoad()" 
+        matTooltip="Ver anotaciones del paciente"
+        matTooltipClass="edf-menu-tooltip"
+        aria-label="Button that shows a red tooltip" 
+        class="material-cust-small-button">
+        <mat-icon class="material-cust-small-button-icon">edit</mat-icon>
+        Anotaciones
+      </button>
     </div>
-    <div class="col-3 col-md-3 speed-bottom">
-      <p>Topo</p>
+
+    <div class="col-2 col-md-2">
+      <button mat-raised-button color="primary" [matMenuTriggerFor]="menu"
+        matTooltip="Filtros"
+        matTooltipClass="edf-menu-tooltip"
+        aria-label="Button that shows a red tooltip" 
+        class="material-cust-small-button">
+        <mat-icon class="material-cust-small-button-icon">filter</mat-icon>
+        Filtros
+      </button>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item (click)="notchFilter()">Notch</button>
+        <button mat-menu-item color="primary" (click)="ocularFilter()">Ocular</button>
+      </mat-menu>
     </div>
-    <div class="col-3 col-md-3 speed-bottom"> 
-      <p>Loreta</p>
+    
+    <div class="col-2 col-md-2">
+      <button mat-raised-button color="primary" (click)="TopoPlot()" 
+        matTooltip="Estimar topoplot"
+        matTooltipClass="edf-menu-tooltip"
+        aria-label="Button that shows a red tooltip" 
+        class="material-cust-small-button">
+        <mat-icon class="material-cust-small-button-icon">radio_button_checked</mat-icon>
+        Topoplot
+      </button>
     </div>
-    <div class="col-3 col-md-3 speed-bottom"> 
-      <p>MRI </p>
+    <div class="col-2 col-md-2">
+      <button  mat-raised-button color="primary" (click)="ESILoad()"
+        matTooltip="Estimar Loreta"
+        matTooltipClass="edf-menu-tooltip"
+        aria-label="Button that shows a red tooltip" 
+        class="material-cust-small-button">
+        <mat-icon class="material-cust-small-button-icon">image_search</mat-icon>
+        Loreta
+      </button>
     </div>
+    <!-- <div class="col-3 col-md-3">
+      <button mat-stroked-button (click)="PlaneLoad()" class="material-cust-small-button" data-toggle="tooltip" data-placement="top" title="Abrir archivo MRI" disabled>
+        <mat-icon class="material-cust-small-button-icon">image</mat-icon>
+      </button>
+    </div> -->
+    
   </div>
 </div>
