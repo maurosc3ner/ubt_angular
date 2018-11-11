@@ -1,6 +1,6 @@
 <div class="container-fluid">
   <div class="row">
-    <div class="col-2 col-md-2">
+    <!-- <div class="col-2 col-md-2">
       <input id="fileInput" name="file" type="file" (change)="OpenEDF($event)" [hidden]="true" #fileinput>
       <button mat-raised-button color="primary" (click)="SelectFiles(fileinput)" 
         matTooltip="Info about the action"
@@ -10,15 +10,15 @@
         <mat-icon class="material-cust-small-button-icon">folder_open</mat-icon>
         Cargar 
       </button>
-    </div>
+    </div> -->
     <div class="col-2 col-md-2">
         <button mat-raised-button color="primary" (click)="OpenEDFDialog(fileinput)" 
-          matTooltip="Info about the action"
+          matTooltip="Cargar paciente (.EDF)"
           matTooltipClass="edf-menu-tooltip"
           aria-label="Button that shows a red tooltip"
           class="material-cust-small-button">
           <mat-icon class="material-cust-small-button-icon">folder_open</mat-icon>
-          Tree 
+          Cargar
         </button>
       </div>
 

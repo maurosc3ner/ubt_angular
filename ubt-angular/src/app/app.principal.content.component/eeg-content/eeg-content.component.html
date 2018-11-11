@@ -13,13 +13,23 @@
     </div>
     <div class="row">
         <div class="col">
-            <button mat-stroked-button (click)="click_multiplier($event, false)"  class="material-cust-small-button" data-toggle="tooltip" data-placement="top" title="Reducir amplitud">
+            <button mat-raised-button color="primary"
+            matTooltip="Reducir amplitud"
+            matTooltipClass="edf-menu-tooltip"
+            aria-label="Button that shows a red tooltip"
+            class="material-cust-small-button"
+            (click)="click_multiplier($event, false)" >
                 <mat-icon class="material-cust-small-button-icon">remove</mat-icon>
             </button> 
             &nbsp; 
             {{scale_multiplier[multiplier_pos]}}mV 
             &nbsp;
-            <button mat-stroked-button (click)="click_multiplier($event, true)"  class="material-cust-small-button" data-toggle="tooltip" data-placement="top" title="Incrementar amplitud">
+            <button mat-raised-button color="primary"
+            matTooltip="Incrementar amplitud"
+            matTooltipClass="edf-menu-tooltip"
+            aria-label="Button that shows a red tooltip"
+            class="material-cust-small-button"
+            (click)="click_multiplier($event, true)">
                 <mat-icon class="material-cust-small-button-icon">add</mat-icon>
             </button>
         </div>
