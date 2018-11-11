@@ -96,11 +96,16 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
         for (let n = div_number; n > -1; n--) {
         const divrow = document.createElement('div');
         this.renderer.addClass(divrow, 'row');
+        this.renderer.addClass(divrow, 'mt-0');
+        this.renderer.addClass(divrow, 'mb-0');
+        this.renderer.addClass(divrow, 'row-eeg');
         const divcol = document.createElement('div');
-        this.renderer.addClass(divcol, 'col');
+        this.renderer.addClass(divcol, 'col-md-12');
+        this.renderer.addClass(divcol, 'no-padding');
         this.renderer.appendChild(divrow, divcol);
         const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
         this.renderer.setAttribute(svg, 'id', 'channel' + n.toString());
+        this.renderer.addClass(svg, 'fit-padding');
         this.renderer.appendChild(divcol, svg);
         this.renderer.appendChild(this.eegmain.nativeElement, divrow);
         }
@@ -119,20 +124,20 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
     let j = 0;
     d3.selectAll('#y-axis').remove();
     for (const sample of channel_array) {
-        console.log('AMH_j', j, channel_array.length);
+//        console.log('AMH_j', j, channel_array.length);
         if (j === 0 || j === channel_array.length - 1) {
             x_axis = true;
             y_axis = false;
             this.DrawChannel(   sample, 'line_eeg_1', data['channels'][0], 0,
             duration, x_axis, y_axis, 1, this.scale_multiplier[this.multiplier_pos],
-            '#000000', width, height, updating, this.cursordata );
+            '#000000', width, height, updating, this.cursordata, 0, j );
         } else {
             x_axis = false;
             y_axis = true;
             // console.log('AMH_j', data['channels'][j - 1]);
             this.DrawChannel(   sample, 'line_eeg_1', data['channels'][j - 1], 0,
             duration, x_axis, y_axis, 1, this.scale_multiplier[this.multiplier_pos],
-            '#ffffff', width, height, updating, this.cursordata );
+            '#ffffff', width, height, updating, this.cursordata, 1, j );
         }
         j++;
         }
@@ -151,7 +156,9 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
         width,
         height,
         updating = false,
-        cursordata
+        cursordata,
+        channel_number_flag,
+        j = 0
     ) {
         if (data_eeg.length !== 0) {
             const channel_data: Array<JSON> = JSON.parse(JSON.stringify(data_eeg.data));
@@ -160,7 +167,7 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
             const time_format     =   d3.timeFormat( '%H:%M:%S' );
             const chart_width     =   width;
             const chart_height    =   height;
-            const padding         =   30;
+            const padding         =   40;
             const scale_values = [];
             this.current_scale.forEach(
             function(date) {
@@ -181,7 +188,6 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
                 sample['time'] = scale_values[i];
                 i++;
             }
-
             const x_scale = d3.scaleTime()
             .domain([d3.min(channel_data, (d) => d['time']), d3.max(channel_data, (d) => d['time'])])
             .range([padding, chart_width - padding]);
@@ -192,8 +198,8 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
             .range([chart_height - 5, 5]);
 
             const line = d3.line()
-                .x((d) => x_scale(d['time']))
-                .y((d) => y_scale(d['value']));
+            .x((d) => x_scale(d['time']))
+            .y((d) => y_scale(d['value']));
 
             current_channel
             .attr('width', chart_width)
@@ -247,60 +253,186 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
                     .attr('class', 'channel-0');
                 }
             }
+            if (channel_number_flag === 1 ) {
+                current_channel.append('text')
+                .text('Ch' + j)
+                .attr('x' , 0)
+                .attr('y', 35)
+                .attr('transform', 'translate(-25,50) rotate(-90)')
+                .attr('class', 'text_channel')
+                ;
+            }
             current_channel.on('click', (d, d3index, nodes) =>  {
+                const cursor_width = 2500;
                 const cursor_scale = d3.scaleLinear()
-                .domain([padding, chart_width + padding])
-                .range([0, 2500]);
+                .domain([
+                    padding,
+                    chart_width + padding
+                ])
+                .range([
+                    0,
+                    cursor_width
+                ]);
                 const cursor_scale_inverse = d3.scaleLinear()
-                .domain([0, 2500])
-                .range([padding, chart_width + padding
+                .domain([
+                    0,
+                    cursor_width
+                ])
+                .range([
+                    padding,
+                    chart_width + padding
                 ]);
                 const current_mouse = d3.mouse(nodes[d3index])[0];
+                console.log(current_mouse, chart_width);
                 if (current_mouse < padding) {
                     this.current_cursor = padding;
-                } else if (current_mouse + cursor_scale_inverse(data_eeg.samplefrequency) > chart_width) {
-                    this.current_cursor = chart_width - cursor_scale_inverse(data_eeg.samplefrequency) + padding;
+                } else if (current_mouse > chart_width - cursor_scale_inverse(data_eeg.samplefrequency) - padding ) {
+                    this.current_cursor = chart_width - cursor_scale_inverse(data_eeg.samplefrequency) - padding;
                 } else {
                     this.current_cursor = current_mouse;
                 }
                 const start_time_index = channel_data[0]['time'].getTime();
                 const current_cursor_index = start_time_index
-                + (Math.round(cursor_scale(this.current_cursor)) * (1 / data_eeg.samplefrequency)) * 1000;
+                + (cursor_scale(this.current_cursor) * (1 / data_eeg.samplefrequency)) * 1000;
                 const abs_current_cursor_time = new Date(current_cursor_index);
+                const current_cursor_index_end = start_time_index
+                // tslint:disable-next-line:max-line-length
+                + (Math.round(cursor_scale(this.current_cursor + cursor_scale_inverse(data_eeg.samplefrequency))) * (1 / data_eeg.samplefrequency)) * 1000;
+                const abs_current_cursor_end_time = new Date(current_cursor_index_end);
                 cursordata.emit((Math.round(cursor_scale(this.current_cursor))));
-                let cursor;
-                //
-                for (const sample of this.channel_num) {
-                    if (sample.selectAll('#cursor').empty()) {
-                        cursor = sample.append('rect');
-                    } else {
-                        cursor = sample.select('#cursor');
+                let cursor_box, cursor_line, cursor_line_end, cursor_label, cursor_label_end;
+                if (channel_number_flag === 1) {
+                    let channel_count = 0;
+                    for (const sample of this.channel_num) {
+                        if (channel_count === 0 || channel_count === this.channel_num.length - 1) {
+                            if (sample.select('#cursor_label' + channel_count).empty()) {
+                                cursor_label = sample.append('text');
+                            } else {
+                                cursor_label = sample.select('#cursor_label' + channel_count);
+                            }
+                            const label_value = abs_current_cursor_time;
+                            let date = new Date(label_value);
+                            let year = date.getFullYear();
+                            let month = date.getMonth();
+                            let day = date.getDay();
+                            let hour = date.getHours();
+                            let minute = date.getMinutes();
+                            let second = date.getSeconds();
+                            let milisecond = date.getMilliseconds();
+                            const cursor_date_text =
+                            hour + ':' + minute + ':' + second + ':' + milisecond;
+                            cursor_label
+                            .transition()
+                            .duration(1000)
+                            .attr('id', 'cursor_label' + channel_count)
+                            .text(cursor_date_text)
+                            .attr('class', 'text_channel')
+                            .attr('x' , this.current_cursor);
+                            if (channel_count === 0) {
+                                cursor_label.attr('y' , 12);
+                            }
+                            if (channel_count !== 0) {
+                                cursor_label.attr('y' , 65);
+                            }
+                            if (sample.select('#cursor_label' + channel_count).empty()) {
+                                cursor_label_end = sample.append('text');
+                            } else {
+                                cursor_label_end = sample.select('#cursor_label_end' + channel_count);
+                            }
+                            const label_value_end = abs_current_cursor_end_time;
+                            date = new Date(label_value_end);
+                            year = date.getFullYear();
+                            month = date.getMonth();
+                            day = date.getDay();
+                            hour = date.getHours();
+                            minute = date.getMinutes();
+                            second = date.getSeconds();
+                            milisecond = date.getMilliseconds();
+                            const cursor_date_text_end =
+                            hour + ':' + minute + ':' + second + ':' + milisecond;
+                            cursor_label_end
+                            .transition()
+                            .duration(1000)
+                            .attr('id', 'cursor_label_end' + channel_count)
+                            .text(cursor_date_text_end)
+                            .attr('class', 'text_channel')
+                            .attr('x' , this.current_cursor + cursor_scale_inverse(data_eeg.samplefrequency));
+                            if (channel_count === 0) {
+                                cursor_label_end.attr('y' , 12);
+                            }
+                            if (channel_count !== 0) {
+                                cursor_label_end.attr('y' , 65);
+                            }
+                            channel_count ++;
+                            continue;
+                        } else {
+                            if (sample.select('#cursor_box' + channel_count).empty()) {
+                                cursor_box = sample.append('rect');
+                            } else {
+                                cursor_box = sample.select('#cursor_box' + channel_count);
+                            }
+                            cursor_box
+                            .transition()
+                            .duration(1000)
+                            .attr('id', 'cursor_box' + channel_count)
+                            .attr('x' , this.current_cursor)
+                            .attr('y' , 0)
+                            .attr('width', cursor_scale_inverse(data_eeg.samplefrequency))
+                            .attr('height', chart_height )
+                            .attr('fill', 'green')
+                            .attr('stroke-width', 0)
+                            .attr('opacity', 0.15);
+                            if (sample.select('#cursor_line' + channel_count).empty()) {
+                                cursor_line = sample.append('line');
+                            } else {
+                                cursor_line = sample.select('#cursor_line' + channel_count);
+                            }
+                            cursor_line
+                            .transition()
+                            .duration(1000)
+                            .attr('id', 'cursor_line' + channel_count)
+                            .attr('x1', this.current_cursor)     // x position of the first end of the line
+                            .attr('y1', 0)      // y position of the first end of the line
+                            .attr('x2', this.current_cursor)
+                            .attr('y2', chart_height)
+                            .attr('class', 'cursor-line')
+                            ;
+
+                            if (sample.select('#cursor_line_end' + channel_count).empty()) {
+                                cursor_line_end = sample.append('line');
+                            } else {
+                                cursor_line_end = sample.select('#cursor_line_end' + channel_count);
+                            }
+                            cursor_line_end
+                            .transition()
+                            .duration(1000)
+                            .attr('id', 'cursor_line_end' + channel_count)
+                            // tslint:disable-next-line:max-line-length
+                            .attr('x1', this.current_cursor + cursor_scale_inverse(data_eeg.samplefrequency))     // x position of the first end of the line
+                            .attr('y1', 0)      // y position of the first end of the line
+                            .attr('x2', this.current_cursor + cursor_scale_inverse(data_eeg.samplefrequency))
+                            .attr('y2', chart_height)
+                            .attr('class', 'cursor-line')
+                            ;
+
+                            channel_count ++;
+                        }
                     }
-                    cursor
-                    .transition()
-                    .duration(1000)
-                    .attr('id', 'cursor')
-                    .attr('r', 5)
-                    .attr('x' , this.current_cursor)
-                    .attr('y' , 0)
-                    .attr('width' , cursor_scale_inverse(data_eeg.samplefrequency))
-                    .attr('height' , chart_height )
-                    .attr('stroke' , '#FF0000')
-                    .attr('stroke-width' , 2)
-                    .attr('opacity', 0.5);
                 }
             });
-            }
+        }
     }
 
     CheckStatus() {
         // console.log('eegStatusVis:', this.EEG_Status_eeg);
         const height = 70;
-        if (this.EEG_Status_eeg === 0) { return [1300, height]; }
-        if (this.EEG_Status_eeg === 1) { return [480, height]; }
-        if (this.EEG_Status_eeg === 2) { return [1300, height]; }
-        if (this.EEG_Status_eeg === 3) { return [480, height]; }
-        if (this.EEG_Status_eeg === 4) { return [480, height]; }
+        // tslint:disable-next-line:no-unused-expression
+        const width_component = this.eegmain.nativeElement.offsetWidth;
+        if (this.EEG_Status_eeg === 0) { return [width_component, height]; }
+        if (this.EEG_Status_eeg === 1) { return [width_component, height]; }
+        if (this.EEG_Status_eeg === 2) { return [width_component, height]; }
+        if (this.EEG_Status_eeg === 3) { return [width_component, height]; }
+        if (this.EEG_Status_eeg === 4) { return [width_component, height]; }
     }
     visualControl(event) {
         if (this.visualization_type === 'Lines') { this.control_vis = false;

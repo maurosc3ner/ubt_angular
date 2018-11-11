@@ -11,7 +11,7 @@ import {throwError} from 'rxjs';
 export class AppPrincipalContentComponent implements OnInit, OnChanges {
   @Input() Status: number;
   @Input() Command_Control;
-  @Output() componentsBridge=new EventEmitter();
+  @Output() componentsBridge = new EventEmitter();
 
 
   visAnno: boolean;

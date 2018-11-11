@@ -193,3 +193,28 @@ h1, h2 {
 .mat-select-arrow {
   color: rgba(128,0,128,1);
 }
+
+.fit-padding {
+  padding: 0 !important;
+  margin: 0 !important;
+  border: none;
+}
+
+.row-eeg {
+  height: 70px;
+}
+
+.cursor-line {
+ stroke: #00FF00;
+ stroke-dasharray: 2;
+}
+
+.cursor-text {
+  font: 10px sans-serif;
+  color: white;
+}
+
+.text_channel{
+  font: 10px sans-serif;
+  fill: greenyellow;
+}
