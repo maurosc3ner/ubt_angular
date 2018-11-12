@@ -12,8 +12,6 @@ export class AppPrincipalContentComponent implements OnInit, OnChanges {
   @Input() Status: number;
   @Input() Command_Control;
   @Output() componentsBridge = new EventEmitter();
-
-
   visAnno: boolean;
   visEEG: boolean;
   visESI: boolean;
@@ -38,14 +36,14 @@ ngOnInit() {
   this.visPlane = false;
 }
   ngOnChanges() {
-    console.log(this.Command_Control);
-    console.log(this.Status);
+    console.log('Command', this.Command_Control);
+    console.log('Status', this.Status);
       if (this.Command_Control == null) { } else {
         if (this.Command_Control[0] === 0 ) {
           this.notchFilter();
         } else if (this.Command_Control[0] === 1 ) {
             this.patient_current_data = JSON.parse('{}');
-            this.patientfile = '';
+            this.patientfile = null;
         } else if (this.Command_Control[0] === 2 ) {
             this.patientfile = this.Command_Control[1];
             this.assignData();
