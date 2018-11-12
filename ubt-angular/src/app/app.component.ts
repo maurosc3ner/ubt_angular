@@ -21,6 +21,7 @@ export class AppComponent {
 
   onChangeStatus(event) {
     this.StatusControl = event;
+    console.log('AMG', event);
   }
   onCommandReceived(event) {
     this.CommandControl = event;
