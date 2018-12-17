@@ -1,360 +1,832 @@
-import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  ViewEncapsulation
+} from '@angular/core';
 import * as c3 from 'c3';
-import { rgb } from '../../../../node_modules/@types/d3';
+import {
+  rgb
+} from '../../../../node_modules/@types/d3';
 
 @Component({
   selector: 'app-alz-eeg-c3',
   encapsulation: ViewEncapsulation.None,
-  templateUrl: './alz-eeg-c3.component.html', 
+  templateUrl: './alz-eeg-c3.component.html',
   styleUrls: ['./alz-eeg-c3.component.css']
 
-  
+
 })
 export class AlzEegC3Component implements OnInit {
   @Input() EEG_Status_eeg;
   @Input() current_data = null;
   chartPLETH;
-  chartENT100;
-  chartENTROPYRE;
-  dataPLETH=[];
-  dataENT100=[];
-  dataENTROPYRE=[]
-  dataPLETH_x;
+  dataPLETH = [];
   fdPLETH: boolean;
+
+  chartENT100;
+  dataENT100 = [];
   fdENT100: boolean;
+
+  chartENTROPYRE;
+  dataENTROPYRE = [];
   fdENTROPYRE: boolean;
 
+  chartENTROPYSE;
+  dataENTROPYSE = [];
+  fdENTROPYSE: boolean;
 
-  constructor() { }
+  chartENTROPYBSR;
+  dataENTROPYBSR = [];
+  fdENTROPYBSR: boolean;
+
+  chartECGHR;
+  dataECGHR = [];
+  fdECGHR: boolean;
+
+  chartECGIMP;
+  dataECGIMP = [];
+  fdECGIMP: boolean;
+
+  chartNIBPMEAN;
+  dataNIBPMEAN = [];
+  fdNIBPMEAN: boolean;
+
+  chartNIBPDIA;
+  dataNIBPDIA = [];
+  fdNIBPDIA: boolean;
+
+  constructor() {}
 
   ngOnInit() {
-    //PLETH
-    this.fdPLETH=false;
-    this.dataPLETH = [ 'PLETH',0,0,0,0,0];
-    this.chartPLETH = c3.generate({
-      bindto: '#chartPLETH',
-      size: {
-        height: 200,
-        // width: 1080
-      },
-      
-      data: {
-        columns: [
-          this.dataPLETH
-        ],
-        type: 'spline'
-      },
-      point: {
-        show: false
-      }, 
-      legend: {
-        show: false
-      },
-      tooltip: {
-        show: true,
-    
-        format: {
-            title: function (d) { return 'Value '; },
-            // value: function (value, ratio, id) {
-                
-            //     return format(value);
-            // }
-//            value: d3.format(',') // apply this format to both y and y2
-        }
-      
-      },
-      color: {
-        pattern: ['#00ff00']
-      },
-      axis: {
-        y: {
-          label:{
-            text: 'Voltage (mV)',
-            position: 'outer-middle'
-            // inner-top : default
-            // inner-middle
-            // inner-bottom
-            // outer-top
-            // outer-middle
-            // outer-bottom
+      //PLETH
+      this.fdPLETH = false;
+      this.dataPLETH = ['PLETH', 0, 0, 0, 0, 0];
+      this.chartPLETH = c3.generate({
+          bindto: '#chartPLETH',
+          size: {
+              height: 200,
+              // width: 1080
           },
-          max: 5,
-          min: -5
-        },
-        x:{
-          label:{
-            text: 'PLETH',
-            position: 'inner-top'
-          }
-        }
-      }
-    });
-    //ENT_100
-    this.fdENT100=false;
-    this.dataENT100 = ['ENT100', 0,0,0,0,0];
-    this.chartENT100 = c3.generate({
-      bindto: '#chartENT100',
-      size: {
-        height: 200,
-        width: 1080
-      },
-      data: {
-        columns: [
-          this.dataENT100
-        ],
-        type: 'spline'
-      },
-      point: {
-        show: false
-      }, 
-      tooltip: {
-        show: true,
-    
-        format: {
-            title: function (d) { return 'Value '; },
-            // value: function (value, ratio, id) {
-                
-            //     return format(value);
-            // }
-//            value: d3.format(',') // apply this format to both y and y2
-        }
-      
-      },
-      legend: {
-        // position: 'right'
-        show: false
-      },
-      color: {
-        pattern: ['#1f77b4']
-      },
-      axis: {
-        y: {
-          label:{
-            text: 'Voltage (uV)',
-            position: 'outer-middle'
-            // inner-top : default
-            // inner-middle
-            // inner-bottom
-            // outer-top
-            // outer-middle
-            // outer-bottom
+
+          data: {
+              columns: [
+                  this.dataPLETH
+              ],
+              type: 'spline'
           },
-          max: 100,
-          min: -100
-        },
-        x:{
-          label:{
-            text: 'ENT_100',
-            position: 'inner-top'
-          }
-        }
-      }
-    });
-    //ENTROPY_RE
-    this.fdENTROPYRE=false;
-    this.dataENTROPYRE = ['ENTROPY_RE', 0,0,0,0,0];
-    this.chartENTROPYRE = c3.generate({
-      bindto: '#chartENTROPYRE',
-      size: {
-        height: 200,
-        width: 1080
-      },
-      data: {
-        columns: [
-          this.dataENTROPYRE
-        ],
-        type: 'spline'
-      },
-      tooltip: {
-        show: true,
-    
-        format: {
-            title: function (d) { return 'Value '; },
-            // value: function (value, ratio, id) {
-                
-            //     return format(value);
-            // }
-//            value: d3.format(',') // apply this format to both y and y2
-        }
-      
-      },
-      point: {
-        show: false
-      }, 
-      legend: {
-        // position: 'right'
-        show: false
-      },
-      color: {
-        pattern: ['#ff7f0e']
-      },
-      axis: {
-        // stroke: rgb(255,255,255),
-        y: {
-          label:{
-            text: 'Percentage (%)',
-            position: 'outer-middle'
-            // inner-top : default
-            // inner-middle
-            // inner-bottom
-            // outer-top
-            // outer-middle
-            // outer-bottom
+          point: {
+              show: false
           },
-          max: 120,
-          min: -10
-        },
-        x:{
-          label:{
-            text: 'ENTROPY_RE',
-            position: 'inner-top'
+          legend: {
+              show: false
+          },
+          tooltip: {
+              show: true,
+
+              format: {
+                  title: function(d) {
+                      return 'Value ';
+                  },
+                  // value: function (value, ratio, id) {
+
+                  //     return format(value);
+                  // }
+                  //            value: d3.format(',') // apply this format to both y and y2
+              }
+
+          },
+          color: {
+              pattern: ['#00ff00']
+          },
+          axis: {
+              y: {
+                  label: {
+                      text: 'Voltage (mV)',
+                      position: 'outer-middle'
+                      // inner-top : default
+                      // inner-middle
+                      // inner-bottom
+                      // outer-top
+                      // outer-middle
+                      // outer-bottom
+                  },
+                  max: 5,
+                  min: -5
+              },
+              x: {
+                  label: {
+                      text: 'PLETH',
+                      position: 'inner-top'
+                  }
+              }
           }
-        }  
-      }
-    });
-    
-  
+      });
+      //ENT_100
+      this.fdENT100 = false;
+      this.dataENT100 = ['ENT100', 0, 0, 0, 0, 0];
+      this.chartENT100 = c3.generate({
+          bindto: '#chartENT100',
+          size: {
+              height: 200,
+              width: 1080
+          },
+          data: {
+              columns: [
+                  this.dataENT100
+              ],
+              type: 'spline'
+          },
+          point: {
+              show: false
+          },
+          tooltip: {
+              show: true,
+
+              format: {
+                  title: function(d) {
+                      return 'Value ';
+                  },
+                  // value: function (value, ratio, id) {
+
+                  //     return format(value);
+                  // }
+                  //            value: d3.format(',') // apply this format to both y and y2
+              }
+
+          },
+          legend: {
+              // position: 'right'
+              show: false
+          },
+          color: {
+              pattern: ['#1f77b4']
+          },
+          axis: {
+              y: {
+                  label: {
+                      text: 'Voltage (uV)',
+                      position: 'outer-middle'
+                      // inner-top : default
+                      // inner-middle
+                      // inner-bottom
+                      // outer-top
+                      // outer-middle
+                      // outer-bottom
+                  },
+                  max: 100,
+                  min: -100
+              },
+              x: {
+                  label: {
+                      text: 'ENT_100',
+                      position: 'inner-top'
+                  }
+              }
+          }
+      });
+      //ECGHR
+      this.fdECGHR = false;
+      this.dataECGHR = ['ECGHR', 0, 0, 0, 0, 0];
+      this.chartECGHR = c3.generate({
+          bindto: '#chartECGHR',
+          size: {
+              height: 200,
+              width: 1080
+          },
+          data: {
+              columns: [
+                  this.dataECGHR
+              ],
+              type: 'spline'
+          },
+          point: {
+              show: false
+          },
+          tooltip: {
+              show: true,
+              format: {
+                  title: function(d) {
+                      return 'Value ';
+                  },
+              }
+          },
+          legend: {
+              show: false
+          },
+          color: {
+              pattern: ['#E4A0F7']
+          },
+          axis: {
+              y: {
+                  label: {
+                      text: 'Voltage (uV)',
+                      position: 'outer-middle'
+                  },
+                  max: 100,
+                  min: -100
+              },
+              x: {
+                  label: {
+                      text: 'ECG_HR',
+                      position: 'inner-top'
+                  }
+              }
+          }
+      }); // end fi ECG_HR
+      //ECG IMP-RR
+      this.fdECGIMP = false;
+      this.dataECGIMP = ['ECGIMP', 0, 0, 0, 0, 0];
+      this.chartECGIMP = c3.generate({
+          bindto: '#chartECGIMP',
+          size: {
+              height: 200,
+              width: 1080
+          },
+          data: {
+              columns: [
+                  this.dataECGIMP
+              ],
+              type: 'spline'
+          },
+          point: {
+              show: false
+          },
+          tooltip: {
+              show: true,
+              format: {
+                  title: function(d) {
+                      return 'Value ';
+                  },
+              }
+          },
+          legend: {
+              show: false
+          },
+          color: {
+              pattern: ['#B200ED']
+          },
+          axis: {
+              y: {
+                  label: {
+                      text: 'Voltage (uV)',
+                      position: 'outer-middle'
+                  },
+                  max: 100,
+                  min: -100
+              },
+              x: {
+                  label: {
+                      text: 'ECG_IMP-RR',
+                      position: 'inner-top'
+                  }
+              }
+          }
+      }); // end fi ECG_HR
+
+      //ENTROPY_RE
+      this.fdENTROPYRE = false;
+      this.dataENTROPYRE = ['ENTROPY_RE', 0, 0, 0, 0, 0];
+      this.chartENTROPYRE = c3.generate({
+          bindto: '#chartENTROPYRE',
+          size: {
+              height: 200,
+              width: 1080
+          },
+          data: {
+              columns: [
+                  this.dataENTROPYRE
+              ],
+              type: 'spline'
+          },
+          tooltip: {
+              show: true,
+
+              format: {
+                  title: function(d) {
+                      return 'Value ';
+                  }
+              }
+
+          },
+          point: {
+              show: false
+          },
+          legend: {
+              // position: 'right'
+              show: false
+          },
+          color: {
+              pattern: ['#fc6600']
+          },
+          axis: {
+              // stroke: rgb(255,255,255),
+              y: {
+                  label: {
+                      text: 'Percentage (%)',
+                      position: 'outer-middle'
+                      // inner-top : default
+                      // inner-middle
+                      // inner-bottom
+                      // outer-top
+                      // outer-middle
+                      // outer-bottom
+                  },
+                  max: 120,
+                  min: -10
+              },
+              x: {
+                  label: {
+                      text: 'ENTROPY_RE',
+                      position: 'inner-top'
+                  }
+              }
+          }
+      });
+      //ENTROPY_SE
+      this.fdENTROPYSE = false;
+      this.dataENTROPYSE = ['ENTROPY_SE', 0, 0, 0, 0, 0];
+      this.chartENTROPYSE = c3.generate({
+          bindto: '#chartENTROPYSE',
+          size: {
+              height: 200,
+              width: 1080
+          },
+          data: {
+              columns: [
+                  this.dataENTROPYSE
+              ],
+              type: 'spline'
+          },
+          tooltip: {
+              show: true,
+              format: {
+                  title: function(d) {
+                      return 'Value ';
+                  },
+              }
+          },
+          point: {
+              show: false
+          },
+          legend: {
+              show: false
+          },
+          color: {
+              pattern: ['#F9812A']
+          },
+          axis: {
+              y: {
+                  label: {
+                      text: 'Percentage (%)',
+                      position: 'outer-middle'
+                  },
+                  max: 120,
+                  min: -10
+              },
+              x: {
+                  label: {
+                      text: 'ENTROPY_SE',
+                      position: 'inner-top'
+                  }
+              }
+          }
+      });
+      //ENTROPY_BSR
+      this.fdENTROPYBSR = false;
+      this.dataENTROPYBSR = ['ENTROPY_BSR', 0, 0, 0, 0, 0];
+      this.chartENTROPYBSR = c3.generate({
+          bindto: '#chartENTROPYBSR',
+          size: {
+              height: 200,
+              width: 1080
+          },
+          data: {
+              columns: [
+                  this.dataENTROPYBSR
+              ],
+              type: 'spline'
+          },
+          tooltip: {
+              show: true,
+              format: {
+                  title: function(d) {
+                      return 'Value ';
+                  },
+              }
+          },
+          point: {
+              show: false
+          },
+          legend: {
+              show: false
+          },
+          color: {
+              pattern: ['#FFBF00']
+          },
+          axis: {
+              y: {
+                  label: {
+                      text: 'Percentage (%)',
+                      position: 'outer-middle'
+                  },
+                  max: 120,
+                  min: -10
+              },
+              x: {
+                  label: {
+                      text: 'ENTROPY_BSR',
+                      position: 'inner-top'
+                  }
+              }
+          }
+      });
+
+      // NIBP MEAN
+      this.fdNIBPMEAN = false;
+      this.dataNIBPMEAN = ['NIBP_MEAN', 0, 0, 0, 0, 0];
+      this.chartNIBPMEAN = c3.generate({
+          bindto: '#chartNIBPMEAN',
+          size: {
+              height: 200,
+              width: 1080
+          },
+          data: {
+              columns: [
+                  this.dataNIBPMEAN
+              ],
+              type: 'spline'
+          },
+          tooltip: {
+              show: true,
+              format: {
+                  title: function(d) {
+                      return 'Value ';
+                  },
+              }
+          },
+          point: {
+              show: false
+          },
+          legend: {
+              show: false
+          },
+          color: {
+              pattern: ['#89CFEF']
+          },
+          axis: {
+              y: {
+                  label: {
+                      text: 'Percentage (%)',
+                      position: 'outer-middle'
+                  },
+                  max: 120,
+                  min: -10
+              },
+              x: {
+                  label: {
+                      text: 'NIBP_MEAN',
+                      position: 'inner-top'
+                  }
+              }
+          }
+      });
+      //NIBP DIA
+      this.fdNIBPDIA = false;
+      this.dataNIBPDIA = ['NIBP_DIA', 0, 0, 0, 0, 0];
+      this.chartNIBPDIA = c3.generate({
+          bindto: '#chartNIBPDIA',
+          size: {
+              height: 200,
+              width: 1080
+          },
+          data: {
+              columns: [
+                  this.dataNIBPDIA
+              ],
+              type: 'spline'
+          },
+          tooltip: {
+              show: true,
+              format: {
+                  title: function(d) {
+                      return 'Value ';
+                  },
+              }
+          },
+          point: {
+              show: false
+          },
+          legend: {
+              show: false
+          },
+          color: {
+              pattern: ['#95C8D8']
+          },
+          axis: {
+              y: {
+                  label: {
+                      text: 'Percentage (%)',
+                      position: 'outer-middle'
+                  },
+                  max: 120,
+                  min: -10
+              },
+              x: {
+                  label: {
+                      text: 'NIBP_DIA',
+                      position: 'inner-top'
+                  }
+              }
+          }
+      });
+
 
   }
 
   ngOnChanges() {
-    
-    // this.current_data["channels"].forEach((currentChannel,index, array)=>{
-    //   console.log('EC3-channels traverse',currentChannel,index);
-    // });
-    if (!this.isEmpty(this.current_data) && this.current_data["debug"]["command"]=="request_channels"){
-      //console.log('EC3-ngOnChanges',this.current_data);
-      this.current_data["channels"].forEach((currentChannel,index, array)=>{
-        
-        if (currentChannel["label"]=='PLETH'){
-          // console.log('EC3-ngOnChanges',currentChannel);
-          if (this.dataPLETH.length<=300 && this.fdPLETH==false){
-            for ( let i = 0; i < currentChannel["data"].length; i += 1 ) {
-              this.dataPLETH.push(currentChannel["data"][i]);
-            } 
-          }else{
-            this.dataPLETH=[];
-            this.dataPLETH.push('PLETH');
-            for ( let i = 0; i < currentChannel["data"].length; i += 1 ) {
-              this.dataPLETH.push(currentChannel["data"][i]);
-            }
-            this.fdPLETH=true;
-          } //end esle
-          this.chartPLETH.flow({
-            columns: [
-              this.dataPLETH
-            ],
-            duration: 250,
-            length: currentChannel["data"].length
+
+      if (!this.isEmpty(this.current_data) && this.current_data["debug"]["command"] == "request_channels") {
+          console.log('EC3-ngOnChanges', this.current_data);
+          this.current_data["channels"].forEach((currentChannel, index, array) => {
+              /*
+               * Waves 
+               * Pleth, ENT100
+               */
+              if (currentChannel["label"] == 'PLETH') {
+                  // console.log('EC3-ngOnChanges',currentChannel);
+                  if (this.dataPLETH.length <= 300 && this.fdPLETH == false) {
+                      for (let i = 0; i < currentChannel["data"].length; i += 1) {
+                          this.dataPLETH.push(currentChannel["data"][i]);
+                      }
+                  } else {
+                      this.dataPLETH = [];
+                      this.dataPLETH.push('PLETH');
+                      for (let i = 0; i < currentChannel["data"].length; i += 1) {
+                          this.dataPLETH.push(currentChannel["data"][i]);
+                      }
+                      this.fdPLETH = true;
+                  } //end esle
+                  this.chartPLETH.flow({
+                      columns: [
+                          this.dataPLETH
+                      ],
+                      duration: 250,
+                      length: currentChannel["data"].length
+                  });
+              } //end fi PLETH
+              else if (currentChannel["label"] == 'ENT_100') {
+                  // console.log('EC3-nocENT100',currentChannel);
+                  if (this.dataENT100.length <= 500 && this.fdPLETH == false) {
+                      for (let i = 0; i < 100; i += 1) {
+                          this.dataENT100.push(currentChannel["data"][i]);
+                      }
+                  } else {
+                      this.dataENT100 = [];
+                      this.dataENT100.push('ENT100');
+                      for (let i = 0; i < 100; i += 1) {
+                          this.dataENT100.push(currentChannel["data"][i]);
+                      }
+                      this.fdENT100 = true;
+                  } //end esle
+                  this.chartENT100.flow({
+                      columns: [
+                          this.dataENT100
+                      ],
+                      duration: 250,
+                      length: 100
+                  });
+              } //end fi ENT100
+
+              /* Tendencias
+              * "CO2 ET", "CO2 FI", 
+              * "ECG HR", "ECG IMP-RR", 
+              * "ENTROPY BSR", "ENTROPY RE", "ENTROPY SE", 
+              * "NIBP DIA", "NIBP MEAN", "NIBP SYS", 
+              * "TEMP (t1)"
+
+              */
+              else if (currentChannel["label"] == 'ENTROPY RE') {
+                  // console.log('EC3-nocENTRE',currentChannel);
+                  if (this.dataENTROPYRE.length <= 5 && this.fdPLETH == false) {
+                      for (let i = 0; i < currentChannel["data"].length; i += 1) {
+                          this.dataENTROPYRE.push(currentChannel["data"][i]);
+                      }
+                  } else {
+                      this.dataENTROPYRE = [];
+                      this.dataENTROPYRE.push('ENTROPY_RE');
+                      for (let i = 0; i < currentChannel["data"].length; i += 1) {
+                          this.dataENTROPYRE.push(currentChannel["data"][i]);
+                      }
+                      this.fdENTROPYRE = true;
+                  } //end esle
+                  this.chartENTROPYRE.flow({
+                      columns: [
+                          this.dataENTROPYRE
+                      ],
+                      duration: 250,
+                      length: currentChannel["data"].length
+                  });
+              } //end fi ENTROPY RE
+              // ENTROPY SE
+              else if (currentChannel["label"] == 'ENTROPY SE') {
+                  // console.log('EC3-nocENTRE',currentChannel);
+                  if (this.dataENTROPYSE.length <= 5 && this.fdENTROPYSE == false) {
+                      for (let i = 0; i < currentChannel["data"].length; i += 1) {
+                          this.dataENTROPYSE.push(currentChannel["data"][i]);
+                      }
+                  } else {
+                      this.dataENTROPYSE = [];
+                      this.dataENTROPYSE.push('ENTROPY_SE');
+                      for (let i = 0; i < currentChannel["data"].length; i += 1) {
+                          this.dataENTROPYSE.push(currentChannel["data"][i]);
+                      }
+                      this.fdENTROPYSE = true;
+                  } //end esle
+                  this.chartENTROPYSE.flow({
+                      columns: [
+                          this.dataENTROPYSE
+                      ],
+                      duration: 250,
+                      length: currentChannel["data"].length
+                  });
+              } //end fi ENTROPY SE
+              // ENTROPY BSR
+              else if (currentChannel["label"] == 'ENTROPY BSR') {
+                  console.log('EC3- BSR', currentChannel);
+                  if (this.dataENTROPYBSR.length <= 5 && this.fdENTROPYBSR == false) {
+                      for (let i = 0; i < currentChannel["data"].length; i += 1) {
+                          this.dataENTROPYBSR.push(currentChannel["data"][i]);
+                      }
+                  } else {
+                      this.dataENTROPYBSR = [];
+                      this.dataENTROPYBSR.push('ENTROPY_BSR');
+                      for (let i = 0; i < currentChannel["data"].length; i += 1) {
+                          this.dataENTROPYBSR.push(currentChannel["data"][i]);
+                      }
+                      this.fdENTROPYBSR = true;
+                  } //end esle
+                  this.chartENTROPYBSR.flow({
+                      columns: [
+                          this.dataENTROPYBSR
+                      ],
+                      duration: 250,
+                      length: currentChannel["data"].length
+                  });
+              } //end fi ENTROPY BSR
+              // ECGHR
+              else if (currentChannel["label"] == 'ECG HR') {
+                  //  console.log('EC3-nocENTRE',currentChannel);
+                  if (this.dataECGHR.length <= 5 && this.fdECGHR == false) {
+                      for (let i = 0; i < currentChannel["data"].length; i += 1) {
+                          this.dataECGHR.push(currentChannel["data"][i]);
+                      }
+                  } else {
+                      this.dataECGHR = [];
+                      this.dataECGHR.push('ECGHR');
+                      for (let i = 0; i < currentChannel["data"].length; i += 1) {
+                          this.dataECGHR.push(currentChannel["data"][i]);
+                      }
+                      this.fdECGHR = true;
+                  } //end esle
+                  this.chartECGHR.flow({
+                      columns: [
+                          this.dataECGHR
+                      ],
+                      duration: 250,
+                      length: currentChannel["data"].length
+                  });
+              } //end fi ECGHR
+              // ECGIMP
+              else if (currentChannel["label"] == 'ECG IMP-RR') {
+                  //  console.log('EC3-nocENTRE',currentChannel);
+                  if (this.dataECGIMP.length <= 5 && this.fdECGIMP == false) {
+                      for (let i = 0; i < currentChannel["data"].length; i += 1) {
+                          this.dataECGIMP.push(currentChannel["data"][i]);
+                      }
+                  } else {
+                      this.dataECGIMP = [];
+                      this.dataECGIMP.push('ECGIMP');
+                      for (let i = 0; i < currentChannel["data"].length; i += 1) {
+                          this.dataECGIMP.push(currentChannel["data"][i]);
+                      }
+                      this.fdECGIMP = true;
+                  } //end esle
+                  this.chartECGIMP.flow({
+                      columns: [
+                          this.dataECGIMP
+                      ],
+                      duration: 250,
+                      length: currentChannel["data"].length
+                  });
+              } //end fi ECGIMP
+              // NIBP MEAN
+              else if (currentChannel["label"] == 'NIBP MEAN') {
+                  //  console.log('EC3-nocENTRE',currentChannel);
+                  if (this.dataNIBPMEAN.length <= 5 && this.fdNIBPMEAN == false) {
+                      for (let i = 0; i < currentChannel["data"].length; i += 1) {
+                          this.dataNIBPMEAN.push(currentChannel["data"][i]);
+                      }
+                  } else {
+                      this.dataNIBPMEAN = [];
+                      this.dataNIBPMEAN.push('NIBP_MEAN');
+                      for (let i = 0; i < currentChannel["data"].length; i += 1) {
+                          this.dataNIBPMEAN.push(currentChannel["data"][i]);
+                      }
+                      this.fdNIBPMEAN = true;
+                  } //end esle
+                  this.chartNIBPMEAN.flow({
+                      columns: [
+                          this.dataNIBPMEAN
+                      ],
+                      duration: 250,
+                      length: currentChannel["data"].length
+                  });
+              } //end fi NIBPMEAN
+              // NIBP DIA
+              else if (currentChannel["label"] == 'NIBP DIA') {
+                  //  console.log('EC3-nocENTRE',currentChannel);
+                  if (this.dataNIBPDIA.length <= 5 && this.fdNIBPDIA == false) {
+                      for (let i = 0; i < currentChannel["data"].length; i += 1) {
+                          this.dataNIBPDIA.push(currentChannel["data"][i]);
+                      }
+                  } else {
+                      this.dataNIBPDIA = [];
+                      this.dataNIBPDIA.push('NIBP_DIA');
+                      for (let i = 0; i < currentChannel["data"].length; i += 1) {
+                          this.dataNIBPDIA.push(currentChannel["data"][i]);
+                      }
+                      this.fdNIBPDIA = true;
+                  } //end esle
+                  this.chartNIBPDIA.flow({
+                      columns: [
+                          this.dataNIBPDIA
+                      ],
+                      duration: 250,
+                      length: currentChannel["data"].length
+                  });
+              } //end fi NIBPDIA
           });
-        } //end fi PLETH
-        else if (currentChannel["label"]=='ENT_100'){
-          // console.log('EC3-nocENT100',currentChannel);
-          if (this.dataENT100.length<=500 && this.fdPLETH==false){
-            for ( let i = 0; i < 100; i += 1 ) {
-              this.dataENT100.push(currentChannel["data"][i]);
-            } 
-          }else{
-            this.dataENT100=[];
-            this.dataENT100.push('ENT100');
-            for ( let i = 0; i < 100; i += 1 ) {
-              this.dataENT100.push(currentChannel["data"][i]);
-            }
-            this.fdENT100=true;
-          } //end esle
-          this.chartENT100.flow({
-            columns: [
-              this.dataENT100
-            ],
-            duration: 250,
-            length: 100
-          });
-        } //end fi ENT100
-        else if (currentChannel["label"]=='ENTROPY RE'){
-          // console.log('EC3-nocENTRE',currentChannel);
-          if (this.dataENTROPYRE.length<=5 && this.fdPLETH==false){
-            for ( let i = 0; i < currentChannel["data"].length; i += 1 ) {
-              this.dataENTROPYRE.push(currentChannel["data"][i]);
-            } 
-          }else{
-            this.dataENTROPYRE=[];
-            this.dataENTROPYRE.push('ENTROPY_RE');
-            for ( let i = 0; i < currentChannel["data"].length; i += 1 ) {
-              this.dataENTROPYRE.push(currentChannel["data"][i]);
-            }
-            this.fdENTROPYRE=true;
-          } //end esle
-          this.chartENTROPYRE.flow({
-            columns: [
-              this.dataENTROPYRE
-            ],
-            duration: 250,
-            length: currentChannel["data"].length
-          });
-        } //end fi ENTROPY RE
+
+      }
 
 
-      });
-
-    }
-
-    
   }
 
   ngAfterViewInit() {
-    
+
   }
 
-  onAddClick(event){
-    
+  onAddClick(event) {
 
-// console.log('EC3-onAddClick',this.dataPLETH,this.dataPLETH.length);
-    if (this.dataPLETH.length<=12 && this.fdPLETH==false){
-      this.dataPLETH.push(this.getRndInteger(1,10));
-      this.dataPLETH.push(this.getRndInteger(1,10));
-      this.dataENT100.push(this.getRndInteger(1,10));
-      this.dataENT100.push(this.getRndInteger(1,10));
-      this.dataENTROPYRE.push(this.getRndInteger(1,10));
-      this.dataENTROPYRE.push(this.getRndInteger(1,10));
-    }else{
-      this.dataPLETH=['PLETH' ,this.getRndInteger(1,10),this.getRndInteger(1,10)];
-      this.fdPLETH=true;
-      this.dataENT100=['ENT100' ,this.getRndInteger(1,10),this.getRndInteger(1,10)];
-      this.fdENT100=true;
-      this.dataENTROPYRE=['ENTROPY_RE' ,this.getRndInteger(-100,100),this.getRndInteger(-100,100)];
-      this.fdENTROPYRE=true;
-    }
-      console.log('EC3-onAddClick',this.dataPLETH,this.dataPLETH.length);
+
+      // console.log('EC3-onAddClick',this.dataPLETH,this.dataPLETH.length);
+      if (this.dataPLETH.length <= 12 && this.fdPLETH == false) {
+          this.dataPLETH.push(this.getRndInteger(1, 10));
+          this.dataPLETH.push(this.getRndInteger(1, 10));
+          this.dataENT100.push(this.getRndInteger(1, 10));
+          this.dataENT100.push(this.getRndInteger(1, 10));
+          this.dataENTROPYRE.push(this.getRndInteger(1, 10));
+          this.dataENTROPYRE.push(this.getRndInteger(1, 10));
+      } else {
+          this.dataPLETH = ['PLETH', this.getRndInteger(1, 10), this.getRndInteger(1, 10)];
+          this.fdPLETH = true;
+          this.dataENT100 = ['ENT100', this.getRndInteger(1, 10), this.getRndInteger(1, 10)];
+          this.fdENT100 = true;
+          this.dataENTROPYRE = ['ENTROPY_RE', this.getRndInteger(-100, 100), this.getRndInteger(-100, 100)];
+          this.fdENTROPYRE = true;
+      }
+      console.log('EC3-onAddClick', this.dataPLETH, this.dataPLETH.length);
       this.chartPLETH.flow({
-        columns: [
-          this.dataPLETH
-        ],
-        duration: 0,
-        length:2
+          columns: [
+              this.dataPLETH
+          ],
+          duration: 0,
+          length: 2
       });
 
       this.chartENT100.flow({
-        columns: [
-          this.dataENT100
-        ],
-        duration: 0,
-        length:2
+          columns: [
+              this.dataENT100
+          ],
+          duration: 0,
+          length: 2
       });
       this.chartENTROPYRE.flow({
-        columns: [
-          this.dataENTROPYRE
-        ],
-        duration: 0,
-        length:2
+          columns: [
+              this.dataENTROPYRE
+          ],
+          duration: 0,
+          length: 2
       });
   }
 
   getRndInteger(min, max) {
-    return Math.floor(Math.random() * (max - min) ) + min;
-  } 
+      return Math.floor(Math.random() * (max - min)) + min;
+  }
 
   isEmpty(obj) {
-    return Object.keys(obj).every(k => !Object.keys(obj[k]).length)
+      return Object.keys(obj).every(k => !Object.keys(obj[k]).length)
   }
 
 

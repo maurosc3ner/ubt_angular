@@ -10,10 +10,17 @@
   padding: 0px !important;
 }
 
-.material-cust-small-button {
-  min-width: 5%;
+/* .material-cust-small-button {
+  min-width: 50%;
   vertical-align: middle;
   margin-right: 8px;
+} */
+
+.myrow button,
+.myrow a {
+  min-width: 50%;
+  margin-right: 18px;
+  min-width: 12px;
 }
 
 .material-cust-small-button-icon {

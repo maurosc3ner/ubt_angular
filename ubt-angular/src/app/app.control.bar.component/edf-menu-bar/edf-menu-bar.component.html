@@ -1,5 +1,5 @@
 <div class="container-fluid">
-  <div class="row">
+  <div class="row myrow">
     <!-- <div class="col-2 col-md-2">
       <input id="fileInput" name="file" type="file" (change)="OpenEDF($event)" [hidden]="true" #fileinput>
       <button mat-raised-button color="primary" (click)="SelectFiles(fileinput)" 
@@ -58,7 +58,9 @@
         <button mat-menu-item color="primary" (click)="ocularFilter()">Ocular</button>
       </mat-menu>
     </div>
-    
+  <!-- </div> -->
+
+  <!-- <div class="row myrow"> -->
     <div class="col-2 col-md-2">
       <button mat-raised-button color="primary" (click)="TopoPlot()" 
         matTooltip="Estimar topoplot"
@@ -78,12 +80,11 @@
         <mat-icon class="material-cust-small-button-icon">image_search</mat-icon>
         Loreta
       </button>
-    </div>
-    <!-- <div class="col-3 col-md-3">
-      <button mat-stroked-button (click)="PlaneLoad()" class="material-cust-small-button" data-toggle="tooltip" data-placement="top" title="Abrir archivo MRI" disabled>
-        <mat-icon class="material-cust-small-button-icon">image</mat-icon>
-      </button>
-    </div> -->
-    
+      </div>
+      <!-- <div class="col-2 col-md-2">
+        <button mat-stroked-button (click)="PlaneLoad()" class="material-cust-small-button" data-toggle="tooltip" data-placement="top" title="Abrir archivo MRI" disabled>
+          <mat-icon class="material-cust-small-button-icon">image</mat-icon>
+        </button>
+      </div> -->
   </div>
 </div>
