@@ -28,6 +28,15 @@ export class AlzEegC3Component implements OnInit {
   dataENT100 = [];
   fdENT100: boolean;
 
+//   "CO2 ET", "CO2 FI",
+  chartCO2ET;
+  dataCO2ET = [];
+  fdCO2ET: boolean;
+
+  chartCO2FI;
+  dataCO2FI = [];
+  fdCO2FI: boolean;
+
   chartENTROPYRE;
   dataENTROPYRE = [];
   fdENTROPYRE: boolean;
@@ -56,6 +65,14 @@ export class AlzEegC3Component implements OnInit {
   dataNIBPDIA = [];
   fdNIBPDIA: boolean;
 
+  chartNIBPSYS;
+  dataNIBPSYS = [];
+  fdNIBPSYS: boolean;
+
+  //"TEMP (t1)"
+  chartTEMPT1;
+  dataTEMPT1 = [];
+  fdTEMPT1: boolean;
   constructor() {}
 
   ngOnInit() {
@@ -129,7 +146,7 @@ export class AlzEegC3Component implements OnInit {
           bindto: '#chartENT100',
           size: {
               height: 200,
-              width: 1080
+            //   width: 1080
           },
           data: {
               columns: [
@@ -185,6 +202,104 @@ export class AlzEegC3Component implements OnInit {
               }
           }
       });
+      //CO2ET
+      this.fdCO2ET = false;
+      this.dataCO2ET = ['CO2ET', 0, 0, 0, 0, 0];
+      this.chartCO2ET = c3.generate({
+          bindto: '#chartCO2ET',
+          size: {
+              height: 200,
+            //   width: 1080
+          },
+          data: {
+              columns: [
+                  this.dataCO2ET
+              ],
+              type: 'spline'
+          },
+          point: {
+              show: false
+          },
+          tooltip: {
+              show: true,
+              format: {
+                  title: function(d) {
+                      return 'Value ';
+                  },
+              }
+          },
+          legend: {
+              show: false
+          },
+          color: {
+              pattern: ['#F8DE7E'] //mellow yellow
+          },
+          axis: {
+              y: {
+                  label: {
+                      text: 'Voltage (uV)',
+                      position: 'outer-middle'
+                  },
+                  max: 5,
+                  min: -1
+              },
+              x: {
+                  label: {
+                      text: 'CO2_ET',
+                      position: 'inner-top'
+                  }
+              }
+          }
+      }); // end fi CO2_ET
+      //CO2FI
+      this.fdCO2FI = false;
+      this.dataCO2FI = ['CO2FI', 0, 0, 0, 0, 0];
+      this.chartCO2FI = c3.generate({
+          bindto: '#chartCO2FI',
+          size: {
+              height: 200,
+            //   width: 1080
+          },
+          data: {
+              columns: [
+                  this.dataCO2FI
+              ],
+              type: 'spline'
+          },
+          point: {
+              show: false
+          },
+          tooltip: {
+              show: true,
+              format: {
+                  title: function(d) {
+                      return 'Value ';
+                  },
+              }
+          },
+          legend: {
+              show: false
+          },
+          color: {
+              pattern: ['#FFD300'] //cyber yellow
+          },
+          axis: {
+              y: {
+                  label: {
+                      text: 'Voltage (uV)',
+                      position: 'outer-middle'
+                  },
+                  max: 5,
+                  min: -1
+              },
+              x: {
+                  label: {
+                      text: 'CO2_FI',
+                      position: 'inner-top'
+                  }
+              }
+          }
+      }); // end fi CO2_ET
       //ECGHR
       this.fdECGHR = false;
       this.dataECGHR = ['ECGHR', 0, 0, 0, 0, 0];
@@ -333,7 +448,7 @@ export class AlzEegC3Component implements OnInit {
                       // outer-bottom
                   },
                   max: 120,
-                  min: -10
+                  min: -120
               },
               x: {
                   label: {
@@ -382,7 +497,7 @@ export class AlzEegC3Component implements OnInit {
                       position: 'outer-middle'
                   },
                   max: 120,
-                  min: -10
+                  min: -120
               },
               x: {
                   label: {
@@ -540,6 +655,104 @@ export class AlzEegC3Component implements OnInit {
               }
           }
       });
+      //NIBP SYS
+      this.fdNIBPSYS = false;
+      this.dataNIBPSYS = ['NIBP_SYS', 0, 0, 0, 0, 0];
+      this.chartNIBPSYS = c3.generate({
+          bindto: '#chartNIBPSYS',
+          size: {
+              height: 200,
+              width: 1080
+          },
+          data: {
+              columns: [
+                  this.dataNIBPSYS
+              ],
+              type: 'spline'
+          },
+          tooltip: {
+              show: true,
+              format: {
+                  title: function(d) {
+                      return 'Value ';
+                  },
+              }
+          },
+          point: {
+              show: false
+          },
+          legend: {
+              show: false
+          },
+          color: {
+              pattern: ['#0080FF']
+          },
+          axis: {
+              y: {
+                  label: {
+                      text: 'Percentage (%)',
+                      position: 'outer-middle'
+                  },
+                  max: 120,
+                  min: -10
+              },
+              x: {
+                  label: {
+                      text: 'NIBP_SYS',
+                      position: 'inner-top'
+                  }
+              }
+          }
+      });
+      //TEMP T1
+      this.fdTEMPT1 = false;
+      this.dataTEMPT1 = ['TEMPT1', 0, 0, 0, 0, 0];
+      this.chartTEMPT1 = c3.generate({
+          bindto: '#chartTEMPT1',
+          size: {
+              height: 200,
+              width: 1080
+          },
+          data: {
+              columns: [
+                  this.dataTEMPT1
+              ],
+              type: 'spline'
+          },
+          tooltip: {
+              show: true,
+              format: {
+                  title: function(d) {
+                      return 'Value ';
+                  },
+              }
+          },
+          point: {
+              show: false
+          },
+          legend: {
+              show: false
+          },
+          color: {
+              pattern: ['#0080FF']
+          },
+          axis: {
+              y: {
+                  label: {
+                      text: 'Percentage (%)',
+                      position: 'outer-middle'
+                  },
+                  max: 120,
+                  min: -10
+              },
+              x: {
+                  label: {
+                      text: 'TEMP T1',
+                      position: 'inner-top'
+                  }
+              }
+          }
+      });
 
 
   }
@@ -547,15 +760,15 @@ export class AlzEegC3Component implements OnInit {
   ngOnChanges() {
 
       if (!this.isEmpty(this.current_data) && this.current_data["debug"]["command"] == "request_channels") {
-          console.log('EC3-ngOnChanges', this.current_data);
+          //console.log('EC3-ngOnChanges', this.current_data);
           this.current_data["channels"].forEach((currentChannel, index, array) => {
               /*
                * Waves 
                * Pleth, ENT100
                */
               if (currentChannel["label"] == 'PLETH') {
-                  // console.log('EC3-ngOnChanges',currentChannel);
-                  if (this.dataPLETH.length <= 300 && this.fdPLETH == false) {
+                  console.log('EC3-ngOnChanges PLETH',currentChannel["data"].length);
+                  if (this.dataPLETH.length <= 500 && this.fdPLETH == false) {
                       for (let i = 0; i < currentChannel["data"].length; i += 1) {
                           this.dataPLETH.push(currentChannel["data"][i]);
                       }
@@ -566,18 +779,18 @@ export class AlzEegC3Component implements OnInit {
                           this.dataPLETH.push(currentChannel["data"][i]);
                       }
                       this.fdPLETH = true;
-                  } //end esle
+                  } //end else
                   this.chartPLETH.flow({
                       columns: [
                           this.dataPLETH
                       ],
-                      duration: 250,
+                      duration: 750,
                       length: currentChannel["data"].length
                   });
               } //end fi PLETH
               else if (currentChannel["label"] == 'ENT_100') {
                   // console.log('EC3-nocENT100',currentChannel);
-                  if (this.dataENT100.length <= 500 && this.fdPLETH == false) {
+                  if (this.dataENT100.length <= 500 && this.fdENT100 == false) {
                       for (let i = 0; i < 100; i += 1) {
                           this.dataENT100.push(currentChannel["data"][i]);
                       }
@@ -593,7 +806,7 @@ export class AlzEegC3Component implements OnInit {
                       columns: [
                           this.dataENT100
                       ],
-                      duration: 250,
+                      duration: 750,
                       length: 100
                   });
               } //end fi ENT100
@@ -624,7 +837,7 @@ export class AlzEegC3Component implements OnInit {
                       columns: [
                           this.dataENTROPYRE
                       ],
-                      duration: 250,
+                      duration: 750,
                       length: currentChannel["data"].length
                   });
               } //end fi ENTROPY RE
@@ -647,13 +860,13 @@ export class AlzEegC3Component implements OnInit {
                       columns: [
                           this.dataENTROPYSE
                       ],
-                      duration: 250,
+                      duration: 750,
                       length: currentChannel["data"].length
                   });
               } //end fi ENTROPY SE
               // ENTROPY BSR
               else if (currentChannel["label"] == 'ENTROPY BSR') {
-                  console.log('EC3- BSR', currentChannel);
+                 // console.log('EC3- BSR', currentChannel);
                   if (this.dataENTROPYBSR.length <= 5 && this.fdENTROPYBSR == false) {
                       for (let i = 0; i < currentChannel["data"].length; i += 1) {
                           this.dataENTROPYBSR.push(currentChannel["data"][i]);
@@ -670,10 +883,56 @@ export class AlzEegC3Component implements OnInit {
                       columns: [
                           this.dataENTROPYBSR
                       ],
-                      duration: 250,
+                      duration: 750,
                       length: currentChannel["data"].length
                   });
               } //end fi ENTROPY BSR
+              // CO2ET
+              else if (currentChannel["label"] == 'CO2 ET') {
+                  //console.log('EC3-CO2 ET ',currentChannel);
+                if (this.dataCO2ET.length <= 5 && this.fdCO2ET == false) {
+                    for (let i = 0; i < currentChannel["data"].length; i += 1) {
+                        this.dataCO2ET.push(currentChannel["data"][i]);
+                    }
+                } else {
+                    this.dataCO2ET = [];
+                    this.dataCO2ET.push('CO2ET');
+                    for (let i = 0; i < currentChannel["data"].length; i += 1) {
+                        this.dataCO2ET.push(currentChannel["data"][i]);
+                    }
+                    this.fdCO2ET = true;
+                } //end esle
+                this.chartCO2ET.flow({
+                    columns: [
+                        this.dataCO2ET
+                    ],
+                    duration: 750,
+                    length: currentChannel["data"].length
+                });
+              } //end fi CO2ET
+              // CO2FI
+              else if (currentChannel["label"] == 'CO2 FI') {
+                //console.log('EC3-CO2 FI ',currentChannel);
+              if (this.dataCO2FI.length <= 5 && this.fdCO2FI == false) {
+                  for (let i = 0; i < currentChannel["data"].length; i += 1) {
+                      this.dataCO2FI.push(currentChannel["data"][i]);
+                  }
+              } else {
+                  this.dataCO2FI = [];
+                  this.dataCO2FI.push('CO2FI');
+                  for (let i = 0; i < currentChannel["data"].length; i += 1) {
+                      this.dataCO2FI.push(currentChannel["data"][i]);
+                  }
+                  this.fdCO2FI = true;
+              } //end esle
+              this.chartCO2FI.flow({
+                  columns: [
+                      this.dataCO2FI
+                  ],
+                  duration: 750,
+                  length: currentChannel["data"].length
+              });
+              } //end fi CO2FI
               // ECGHR
               else if (currentChannel["label"] == 'ECG HR') {
                   //  console.log('EC3-nocENTRE',currentChannel);
@@ -693,7 +952,7 @@ export class AlzEegC3Component implements OnInit {
                       columns: [
                           this.dataECGHR
                       ],
-                      duration: 250,
+                      duration: 750,
                       length: currentChannel["data"].length
                   });
               } //end fi ECGHR
@@ -716,7 +975,7 @@ export class AlzEegC3Component implements OnInit {
                       columns: [
                           this.dataECGIMP
                       ],
-                      duration: 250,
+                      duration: 750,
                       length: currentChannel["data"].length
                   });
               } //end fi ECGIMP
@@ -739,7 +998,7 @@ export class AlzEegC3Component implements OnInit {
                       columns: [
                           this.dataNIBPMEAN
                       ],
-                      duration: 250,
+                      duration: 750,
                       length: currentChannel["data"].length
                   });
               } //end fi NIBPMEAN
@@ -762,10 +1021,60 @@ export class AlzEegC3Component implements OnInit {
                       columns: [
                           this.dataNIBPDIA
                       ],
-                      duration: 250,
+                      duration: 750,
                       length: currentChannel["data"].length
                   });
               } //end fi NIBPDIA
+              // NIBP SYS
+              else if (currentChannel["label"] == 'NIBP SYS') {
+                //  console.log('EC3-nocENTRE',currentChannel);
+                if (this.dataNIBPSYS.length <= 5 && this.fdNIBPSYS == false) {
+                    for (let i = 0; i < currentChannel["data"].length; i += 1) {
+                        this.dataNIBPSYS.push(currentChannel["data"][i]);
+                    }
+                } else {
+                    this.dataNIBPSYS = [];
+                    this.dataNIBPSYS.push('NIBP_SYS');
+                    for (let i = 0; i < currentChannel["data"].length; i += 1) {
+                        this.dataNIBPSYS.push(currentChannel["data"][i]);
+                    }
+                    this.fdNIBPSYS = true;
+                } //end esle
+                this.chartNIBPSYS.flow({
+                    columns: [
+                        this.dataNIBPSYS
+                    ],
+                    duration: 750,
+                    length: currentChannel["data"].length
+                });
+            } //end fi NIBPSYS
+            // NIBP SYS
+            else if (currentChannel["label"] == 'TEMP (t1)') {
+                // console.log('EC3- T1',currentChannel);
+                if (this.dataTEMPT1.length <= 5 && this.fdTEMPT1 == false) {
+                    
+                    for (let i = 0; i < currentChannel["data"].length; i += 1) {
+                        this.dataTEMPT1.push(currentChannel["data"][i]);
+                    }
+                } else {
+                    this.dataTEMPT1 = [];
+                    this.dataTEMPT1.push('TEMPT1');
+                    for (let i = 0; i < currentChannel["data"].length; i += 1) {
+                        this.dataTEMPT1.push(currentChannel["data"][i]);
+                    }
+                    this.fdTEMPT1 = true;
+                    
+                } //end esle
+                this.chartTEMPT1.flow({
+                    columns: [
+                        this.dataTEMPT1
+                    ],
+                    duration: 750,
+                    length: currentChannel["data"].length
+                });
+            } //end fi TEMPT1
+
+            console.log("sizes: ",this.dataPLETH.length,this.dataECGHR.length,this.dataCO2FI.length, this.dataTEMPT1.length);
           });
 
       }
