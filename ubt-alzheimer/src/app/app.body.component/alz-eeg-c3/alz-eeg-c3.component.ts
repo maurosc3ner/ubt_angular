@@ -307,7 +307,7 @@ export class AlzEegC3Component implements OnInit {
           bindto: '#chartECGHR',
           size: {
               height: 200,
-              width: 1080
+            //   width: 1080
           },
           data: {
               columns: [
@@ -356,7 +356,7 @@ export class AlzEegC3Component implements OnInit {
           bindto: '#chartECGIMP',
           size: {
               height: 200,
-              width: 1080
+            //   width: 1080
           },
           data: {
               columns: [
@@ -406,7 +406,7 @@ export class AlzEegC3Component implements OnInit {
           bindto: '#chartENTROPYRE',
           size: {
               height: 200,
-              width: 1080
+            //   width: 1080
           },
           data: {
               columns: [
@@ -465,7 +465,7 @@ export class AlzEegC3Component implements OnInit {
           bindto: '#chartENTROPYSE',
           size: {
               height: 200,
-              width: 1080
+            //   width: 1080
           },
           data: {
               columns: [
@@ -514,7 +514,7 @@ export class AlzEegC3Component implements OnInit {
           bindto: '#chartENTROPYBSR',
           size: {
               height: 200,
-              width: 1080
+            //   width: 1080
           },
           data: {
               columns: [
@@ -564,7 +564,7 @@ export class AlzEegC3Component implements OnInit {
           bindto: '#chartNIBPMEAN',
           size: {
               height: 200,
-              width: 1080
+            //   width: 1080
           },
           data: {
               columns: [
@@ -613,7 +613,7 @@ export class AlzEegC3Component implements OnInit {
           bindto: '#chartNIBPDIA',
           size: {
               height: 200,
-              width: 1080
+            //   width: 1080
           },
           data: {
               columns: [
@@ -662,7 +662,7 @@ export class AlzEegC3Component implements OnInit {
           bindto: '#chartNIBPSYS',
           size: {
               height: 200,
-              width: 1080
+            //   width: 1080
           },
           data: {
               columns: [
@@ -711,7 +711,7 @@ export class AlzEegC3Component implements OnInit {
           bindto: '#chartTEMPT1',
           size: {
               height: 200,
-              width: 1080
+            //   width: 1080
           },
           data: {
               columns: [
@@ -767,8 +767,8 @@ export class AlzEegC3Component implements OnInit {
                * Pleth, ENT100
                */
               if (currentChannel["label"] == 'PLETH') {
-                  console.log('EC3-ngOnChanges PLETH',currentChannel["data"].length);
-                  if (this.dataPLETH.length <= 500 && this.fdPLETH == false) {
+                //   console.log('EC3-ngOnChanges PLETH',currentChannel["data"].length);
+                  if (this.dataPLETH.length <= 400 && this.fdPLETH == false) {
                       for (let i = 0; i < currentChannel["data"].length; i += 1) {
                           this.dataPLETH.push(currentChannel["data"][i]);
                       }
@@ -780,13 +780,31 @@ export class AlzEegC3Component implements OnInit {
                       }
                       this.fdPLETH = true;
                   } //end else
-                  this.chartPLETH.flow({
-                      columns: [
-                          this.dataPLETH
-                      ],
-                      duration: 750,
-                      length: currentChannel["data"].length
-                  });
+                  // este flow tradicional funciona
+                //   this.chartPLETH.flow({
+                //       columns: [
+                //           this.dataPLETH
+                //       ],
+                //       duration: 750,
+                //       length: currentChannel["data"].length
+                //   });
+                    let currentLength = currentChannel["data"].length;
+                    const promise = new Promise((resolve, reject) => {
+                        this.chartPLETH.flow({
+                            columns: [
+                                this.dataPLETH
+                            ],
+                            duration: 750,
+                            length: currentLength
+                        });
+                    });
+                    promise.then((res) => {
+                        console.log("Promise:",res);
+                    });
+                    promise.catch((err) => {
+                        console.log("Promise:",err);
+                    });
+                         
               } //end fi PLETH
               else if (currentChannel["label"] == 'ENT_100') {
                   // console.log('EC3-nocENT100',currentChannel);
@@ -802,13 +820,28 @@ export class AlzEegC3Component implements OnInit {
                       }
                       this.fdENT100 = true;
                   } //end esle
-                  this.chartENT100.flow({
-                      columns: [
-                          this.dataENT100
-                      ],
-                      duration: 750,
-                      length: 100
-                  });
+                //   this.chartENT100.flow({
+                //       columns: [
+                //           this.dataENT100
+                //       ],
+                //       duration: 750,
+                //       length: 100
+                //   });
+                let currentLength = 100;
+                const promise = new Promise((resolve, reject) => {
+                    this.chartENT100.flow({
+                        columns: [
+                            this.dataENT100
+                        ],
+                        duration: 750,
+                        length: currentLength
+                    });
+                });
+                promise.then((res) => { console.log("Promise:",res); });
+                promise.catch((err) => { console.log("Promise:",err); });
+
+
+
               } //end fi ENT100
 
               /* Tendencias
@@ -833,13 +866,26 @@ export class AlzEegC3Component implements OnInit {
                       }
                       this.fdENTROPYRE = true;
                   } //end esle
-                  this.chartENTROPYRE.flow({
-                      columns: [
-                          this.dataENTROPYRE
-                      ],
-                      duration: 750,
-                      length: currentChannel["data"].length
-                  });
+                //   this.chartENTROPYRE.flow({
+                //       columns: [
+                //           this.dataENTROPYRE
+                //       ],
+                //       duration: 750,
+                //       length: currentChannel["data"].length
+                //   });
+
+                let currentLength = currentChannel["data"].length;
+                const promise = new Promise((resolve, reject) => {
+                    this.chartENTROPYRE.flow({
+                        columns: [
+                            this.dataENTROPYRE
+                        ],
+                        duration: 750,
+                        length: currentLength
+                    });
+                });
+                promise.then((res) => { console.log("Promise:",res); });
+                promise.catch((err) => { console.log("Promise:",err); });
               } //end fi ENTROPY RE
               // ENTROPY SE
               else if (currentChannel["label"] == 'ENTROPY SE') {
@@ -856,13 +902,25 @@ export class AlzEegC3Component implements OnInit {
                       }
                       this.fdENTROPYSE = true;
                   } //end esle
-                  this.chartENTROPYSE.flow({
-                      columns: [
-                          this.dataENTROPYSE
-                      ],
-                      duration: 750,
-                      length: currentChannel["data"].length
-                  });
+                //   this.chartENTROPYSE.flow({
+                //       columns: [
+                //           this.dataENTROPYSE
+                //       ],
+                //       duration: 750,
+                //       length: currentChannel["data"].length
+                //   });
+                let currentLength = currentChannel["data"].length;
+                const promise = new Promise((resolve, reject) => {
+                    this.chartENTROPYSE.flow({
+                        columns: [
+                            this.dataENTROPYSE
+                        ],
+                        duration: 750,
+                        length: currentLength
+                    });
+                });
+                promise.then((res) => { console.log("Promise:",res); });
+                promise.catch((err) => { console.log("Promise:",err); });
               } //end fi ENTROPY SE
               // ENTROPY BSR
               else if (currentChannel["label"] == 'ENTROPY BSR') {
@@ -879,13 +937,25 @@ export class AlzEegC3Component implements OnInit {
                       }
                       this.fdENTROPYBSR = true;
                   } //end esle
-                  this.chartENTROPYBSR.flow({
-                      columns: [
-                          this.dataENTROPYBSR
-                      ],
-                      duration: 750,
-                      length: currentChannel["data"].length
-                  });
+                //   this.chartENTROPYBSR.flow({
+                //       columns: [
+                //           this.dataENTROPYBSR
+                //       ],
+                //       duration: 750,
+                //       length: currentChannel["data"].length
+                //   });
+                let currentLength = currentChannel["data"].length;
+                const promise = new Promise((resolve, reject) => {
+                    this.chartENTROPYBSR.flow({
+                        columns: [
+                            this.dataENTROPYBSR
+                        ],
+                        duration: 750,
+                        length: currentLength
+                    });
+                });
+                promise.then((res) => { console.log("Promise:",res); });
+                promise.catch((err) => { console.log("Promise:",err); });
               } //end fi ENTROPY BSR
               // CO2ET
               else if (currentChannel["label"] == 'CO2 ET') {
@@ -902,13 +972,25 @@ export class AlzEegC3Component implements OnInit {
                     }
                     this.fdCO2ET = true;
                 } //end esle
-                this.chartCO2ET.flow({
-                    columns: [
-                        this.dataCO2ET
-                    ],
-                    duration: 750,
-                    length: currentChannel["data"].length
+                // this.chartCO2ET.flow({
+                //     columns: [
+                //         this.dataCO2ET
+                //     ],
+                //     duration: 750,
+                //     length: currentChannel["data"].length
+                // });
+                let currentLength = currentChannel["data"].length;
+                const promise = new Promise((resolve, reject) => {
+                    this.chartCO2ET.flow({
+                        columns: [
+                            this.dataCO2ET
+                        ],
+                        duration: 750,
+                        length: currentLength
+                    });
                 });
+                promise.then((res) => { console.log("Promise:",res); });
+                promise.catch((err) => { console.log("Promise:",err); });
               } //end fi CO2ET
               // CO2FI
               else if (currentChannel["label"] == 'CO2 FI') {
@@ -925,13 +1007,25 @@ export class AlzEegC3Component implements OnInit {
                   }
                   this.fdCO2FI = true;
               } //end esle
-              this.chartCO2FI.flow({
-                  columns: [
-                      this.dataCO2FI
-                  ],
-                  duration: 750,
-                  length: currentChannel["data"].length
-              });
+            //   this.chartCO2FI.flow({
+            //       columns: [
+            //           this.dataCO2FI
+            //       ],
+            //       duration: 750,
+            //       length: currentChannel["data"].length
+            //   });
+              let currentLength = currentChannel["data"].length;
+                const promise = new Promise((resolve, reject) => {
+                    this.chartCO2FI.flow({
+                        columns: [
+                            this.dataCO2FI
+                        ],
+                        duration: 750,
+                        length: currentLength
+                    });
+                });
+                promise.then((res) => { console.log("Promise:",res); });
+                promise.catch((err) => { console.log("Promise:",err); });
               } //end fi CO2FI
               // ECGHR
               else if (currentChannel["label"] == 'ECG HR') {
@@ -948,13 +1042,25 @@ export class AlzEegC3Component implements OnInit {
                       }
                       this.fdECGHR = true;
                   } //end esle
-                  this.chartECGHR.flow({
-                      columns: [
-                          this.dataECGHR
-                      ],
-                      duration: 750,
-                      length: currentChannel["data"].length
-                  });
+                //   this.chartECGHR.flow({
+                //       columns: [
+                //           this.dataECGHR
+                //       ],
+                //       duration: 750,
+                //       length: currentChannel["data"].length
+                //   });
+                let currentLength = currentChannel["data"].length;
+                const promise = new Promise((resolve, reject) => {
+                    this.chartECGHR.flow({
+                        columns: [
+                            this.dataECGHR
+                        ],
+                        duration: 750,
+                        length: currentLength
+                    });
+                });
+                promise.then((res) => { console.log("Promise:",res); });
+                promise.catch((err) => { console.log("Promise:",err); });
               } //end fi ECGHR
               // ECGIMP
               else if (currentChannel["label"] == 'ECG IMP-RR') {
@@ -971,13 +1077,25 @@ export class AlzEegC3Component implements OnInit {
                       }
                       this.fdECGIMP = true;
                   } //end esle
-                  this.chartECGIMP.flow({
-                      columns: [
-                          this.dataECGIMP
-                      ],
-                      duration: 750,
-                      length: currentChannel["data"].length
-                  });
+                //   this.chartECGIMP.flow({
+                //       columns: [
+                //           this.dataECGIMP
+                //       ],
+                //       duration: 750,
+                //       length: currentChannel["data"].length
+                //   });
+                let currentLength = currentChannel["data"].length;
+                const promise = new Promise((resolve, reject) => {
+                    this.chartECGIMP.flow({
+                        columns: [
+                            this.dataECGIMP
+                        ],
+                        duration: 750,
+                        length: currentLength
+                    });
+                });
+                promise.then((res) => { console.log("Promise:",res); });
+                promise.catch((err) => { console.log("Promise:",err); });
               } //end fi ECGIMP
               // NIBP MEAN
               else if (currentChannel["label"] == 'NIBP MEAN') {
@@ -994,13 +1112,25 @@ export class AlzEegC3Component implements OnInit {
                       }
                       this.fdNIBPMEAN = true;
                   } //end esle
-                  this.chartNIBPMEAN.flow({
-                      columns: [
-                          this.dataNIBPMEAN
-                      ],
-                      duration: 750,
-                      length: currentChannel["data"].length
+                //   this.chartNIBPMEAN.flow({
+                //       columns: [
+                //           this.dataNIBPMEAN
+                //       ],
+                //       duration: 750,
+                //       length: currentChannel["data"].length
+                //   });
+                  let currentLength = currentChannel["data"].length;
+                  const promise = new Promise((resolve, reject) => {
+                        this.chartNIBPMEAN.flow({
+                        columns: [
+                            this.dataNIBPMEAN
+                        ],
+                        duration: 750,
+                        length: currentLength
+                      });
                   });
+                  promise.then((res) => { console.log("Promise:",res); });
+                  promise.catch((err) => { console.log("Promise:",err); });
               } //end fi NIBPMEAN
               // NIBP DIA
               else if (currentChannel["label"] == 'NIBP DIA') {
@@ -1017,13 +1147,25 @@ export class AlzEegC3Component implements OnInit {
                       }
                       this.fdNIBPDIA = true;
                   } //end esle
-                  this.chartNIBPDIA.flow({
-                      columns: [
-                          this.dataNIBPDIA
-                      ],
-                      duration: 750,
-                      length: currentChannel["data"].length
-                  });
+                // this.chartNIBPDIA.flow({
+                //     columns: [
+                //         this.dataNIBPDIA
+                //     ],
+                //     duration: 750,
+                //     length: currentChannel["data"].length
+                // });
+                let currentLength = currentChannel["data"].length;
+                const promise = new Promise((resolve, reject) => {
+                    this.chartNIBPDIA.flow({
+                        columns: [
+                            this.dataNIBPDIA
+                        ],
+                    duration: 750,
+                    length: currentLength
+                    });
+                });
+                promise.then((res) => { console.log("Promise:",res); });
+                promise.catch((err) => { console.log("Promise:",err); });
               } //end fi NIBPDIA
               // NIBP SYS
               else if (currentChannel["label"] == 'NIBP SYS') {
@@ -1040,13 +1182,25 @@ export class AlzEegC3Component implements OnInit {
                     }
                     this.fdNIBPSYS = true;
                 } //end esle
-                this.chartNIBPSYS.flow({
-                    columns: [
-                        this.dataNIBPSYS
-                    ],
-                    duration: 750,
-                    length: currentChannel["data"].length
+                // this.chartNIBPSYS.flow({
+                //     columns: [
+                //         this.dataNIBPSYS
+                //     ],
+                //     duration: 750,
+                //     length: currentChannel["data"].length
+                // });
+                let currentLength = currentChannel["data"].length;
+                const promise = new Promise((resolve, reject) => {
+                    this.chartNIBPSYS.flow({
+                        columns: [
+                            this.dataNIBPSYS
+                        ],
+                        duration: 750,
+                        length: currentLength
+                    });
                 });
+                promise.then((res) => { console.log("Promise:",res); });
+                promise.catch((err) => { console.log("Promise:",err); });
             } //end fi NIBPSYS
             // NIBP SYS
             else if (currentChannel["label"] == 'TEMP (t1)') {
@@ -1063,19 +1217,30 @@ export class AlzEegC3Component implements OnInit {
                         this.dataTEMPT1.push(currentChannel["data"][i]);
                     }
                     this.fdTEMPT1 = true;
-                    
                 } //end esle
-                this.chartTEMPT1.flow({
-                    columns: [
-                        this.dataTEMPT1
-                    ],
-                    duration: 750,
-                    length: currentChannel["data"].length
+                // this.chartTEMPT1.flow({
+                //     columns: [
+                //         this.dataTEMPT1
+                //     ],
+                //     duration: 750,
+                //     length: currentChannel["data"].length
+                // });
+                let currentLength = currentChannel["data"].length;
+                const promise = new Promise((resolve, reject) => {
+                    this.chartTEMPT1.flow({
+                        columns: [
+                            this.dataTEMPT1
+                        ],
+                        duration: 750,
+                        length: currentLength
+                    });
                 });
+                promise.then((res) => { console.log("Promise:",res); });
+                promise.catch((err) => { console.log("Promise:",err); });
             } //end fi TEMPT1
 
-            console.log("sizes: ",this.dataPLETH.length,this.dataECGHR.length,this.dataCO2FI.length, this.dataTEMPT1.length);
-          });
+            // console.log("sizes: ",this.dataPLETH.length,this.dataECGHR.length,this.dataCO2FI.length, this.dataTEMPT1.length);
+        });
 
       }
 

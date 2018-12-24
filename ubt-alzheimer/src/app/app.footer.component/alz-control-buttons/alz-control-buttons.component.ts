@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
-import {AnnotDialogComponent} from './annot-dialog/annot-dialog.component';
+// import {AnnotDialogComponent} from './annot-dialog/annot-dialog.component';
 import { MatDialog } from '../../../../node_modules/@angular/material/dialog';
 import {MatButtonModule} from '@angular/material/button';
 
@@ -22,9 +22,10 @@ export class AlzControlButtonsComponent implements OnInit {
   ngOnChanges() {
     
     // });
-    if (!this.isEmpty(this.current_data)){
-      console.log('annotacion-current',this.current_data['debug']["subrecords"]);
-      this.currentTimeStamp=new Date(this.current_data["debug"]["subrecords"]["enddatetime"]*1000);
+    if (!this.isEmpty(this.current_data) && typeof this.current_data['debug']["subrecords"] !== 'undefined'){
+      // console.log('annotacion-current',this.current_data['debug']["subrecords"]);
+      // this.currentTimeStamp=new Date(this.current_data["debug"]["subrecords"]["enddatetime"]*1000);
+      this.currentTimeStamp=this.current_data["debug"]["subrecords"]["enddatetime"]; // sin convertir
     }
   }
   onStartClick(event){
@@ -41,17 +42,18 @@ export class AlzControlButtonsComponent implements OnInit {
 
   onAddAnnoClick(event){
     let msg=  {'state':3};
-    console.log(this.current_data);
-    let dialogRef=this.annodialog.open(AnnotDialogComponent,{
-      width: '1024px',
-      height: '400px',
-      data: this.currentTimeStamp.toISOString()
-    });
+    // console.log(this.current_data);
+    // let dialogRef=this.annodialog.open(AnnotDialogComponent,{
+    //   width: '800px',
+    //   height: '400px',
+    //   // data: this.currentTimeStamp.toISOString()
+    //   data: this.convertTimestamp(this.currentTimeStamp)
+    // });
 
-    dialogRef.afterClosed().subscribe(result=>{
-      console.log(result);
-      this.annotDialogResult=result;
-    });
+    // dialogRef.afterClosed().subscribe(result=>{
+    //   console.log(result);
+    //   this.annotDialogResult=result;
+    // });
     //console.log('acb-onAddAnnoClick'); probado y OK
     this.annoControlBar.emit(msg);
   }
@@ -74,6 +76,7 @@ export class AlzControlButtonsComponent implements OnInit {
         hh = d.getHours(),
         h = hh,
         min = ('0' + d.getMinutes()).slice(-2),     // Add leading 0.
+        seg = ('0' + d.getSeconds()).slice(-2),     // Add leading 0. 
         ampm = 'AM',
         time;
     if (hh > 12) {
@@ -86,7 +89,7 @@ export class AlzControlButtonsComponent implements OnInit {
         h = 12;
     }
     // ie: 2014-03-24, 3:00 PM
-    time = yyyy + '-' + mm + '-' + dd + ', ' + h + ':' + min + ' ' + ampm;
+    time = yyyy + '-' + mm + '-' + dd + ', ' + h + ':' + min +':'+seg+' ' + ampm;
     return time;
   }
 

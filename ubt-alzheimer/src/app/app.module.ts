@@ -28,9 +28,9 @@ import { AlzConnectBarComponent } from './app.footer.component/alz-connect-bar/a
 import { EegContentComponent } from './app.body.component/eeg-content/eeg-content.component';
 import { AnnotationContentComponent } from './app.body.component/annotation.content/annotation.content.component';
 import { AlzEegC3Component } from './app.body.component/alz-eeg-c3/alz-eeg-c3.component';
-import { AnnotDialogComponent } from './app.footer.component/alz-control-buttons/annot-dialog/annot-dialog.component';
+import { AnnotDialogComponent } from './app.dialogs/annot-dialog/annot-dialog.component';
 import { PatientDialogComponent } from './app.dialogs/patient-dialog/patient-dialog.component';
-
+import {MatTabsModule} from '@angular/material/tabs';
 
 
 @NgModule({
@@ -66,7 +66,8 @@ import { PatientDialogComponent } from './app.dialogs/patient-dialog/patient-dia
     MatDividerModule,
     MatFormFieldModule,
     MatSelectModule,
-    MatInputModule 
+    MatInputModule,
+    MatTabsModule
   ],
   entryComponents: [
     AnnotDialogComponent,
