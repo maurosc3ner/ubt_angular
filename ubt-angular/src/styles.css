@@ -209,6 +209,11 @@ h1, h2 {
  stroke-dasharray: 2;
 }
 
+.anno-line {
+  stroke: #FF0000;
+  stroke-dasharray: 5;
+ }
+
 .cursor-text {
   font: 10px sans-serif;
   color: white;
