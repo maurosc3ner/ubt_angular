@@ -11,6 +11,7 @@ import {
 } from '@angular/core';
 import { D3Service } from '../../app.services/d3/d3.service';
 import * as d3 from 'd3';
+import { sample } from 'rxjs/operators';
 declare let cubism: any;
 
 @Component({
@@ -18,6 +19,7 @@ declare let cubism: any;
   templateUrl: './eeg-content.component.html',
   styleUrls: ['./eeg-content.component.css']
 })
+
 export class EegContentComponent implements AfterContentInit, OnChanges {
     @Input() EEG_Status_eeg: number;
     @Input() Command_eeg: Array<number>;
@@ -125,26 +127,26 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
 
     create_channels( width = 980, height = 100, channel_array, updating = false ) {
     const data = this.current_data;
+    const annotation = data['annotations'];
     const duration = data['patientInfo']['duration'];
     let x_axis  = true;
     let y_axis  = true;
     let j = 0;
     d3.selectAll('#y-axis').remove();
     for (const sample of channel_array) {
-//        console.log('AMH_j', j, channel_array.length);
         if (j === 0 || j === channel_array.length - 1) {
             x_axis = true;
             y_axis = false;
             this.DrawChannel(   sample, 'line_eeg_1', data['channels'][0], 0,
             duration, x_axis, y_axis, 1, this.scale_multiplier[this.multiplier_pos],
-            '#000000', width, height, updating, this.cursordata, 0, j );
+            '#000000', width, height, updating, this.cursordata, 0, annotation);
         } else {
             x_axis = false;
             y_axis = true;
-            // console.log('AMH_j', data['channels'][j - 1]);
+            console.log('AMH_j', annotation);
             this.DrawChannel(   sample, 'line_eeg_1', data['channels'][j - 1], 0,
             duration, x_axis, y_axis, 1, this.scale_multiplier[this.multiplier_pos],
-            '#ffffff', width, height, updating, this.cursordata, 1, j );
+            '#ffffff', width, height, updating, this.cursordata, 1, annotation);
         }
         j++;
         }
@@ -165,7 +167,7 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
         updating = false,
         cursordata,
         channel_number_flag,
-        j = 0
+        annotation
     ) {
         if (data_eeg.length !== 0) {
             const channel_data: Array<JSON> = JSON.parse(JSON.stringify(data_eeg.data));
@@ -262,13 +264,29 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
             }
             if (channel_number_flag === 1 ) {
                 current_channel.append('text')
-                .text('Ch' + j)
+                .text(data_eeg.label)
                 .attr('x' , 0)
                 .attr('y', 35)
                 .attr('transform', 'translate(-25,50) rotate(-90)')
                 .attr('class', 'text_channel')
                 ;
             }
+            console.log('AMH-sample-end', new Date(channel_data[channel_data.length - 1]['time'].getTime()));
+            console.log('AMH-sample-debug', this.current_data['debug']['time']['startTime']);
+            const start_time_global = channel_data[0]['time'].getTime();
+            const anno_times = [];
+            for (const anno of annotation['items']) {
+                const anno_date = start_time_global + anno['onset'] * 1000;
+                anno_times.push(anno_date);
+            }
+            const date_values_anno = anno_times.map(
+                d => {
+                    const date = new Date( d );
+                    return date;
+                }
+            );
+            const current_anno_dates = [];
+
             current_channel.on('click', (d, d3index, nodes) =>  {
                 const cursor_width = (data_eeg.samplefrequency * 10);
                 console.log('cursor_width ' + cursor_width);
@@ -461,11 +479,8 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
             d => d['data'].length
             )
         );
-
-        const startCurrentTime =  (startTime['startTime'] + startTime['index'] * time_sample); // Error mixing time with samples
-
+        const startCurrentTime = (startTime['startTime'] + startTime['index'] * time_sample); // Error mixing time with samples
         const time_values = [];
-
         for (let i = 0; i < max_samples; i++) {
             time_values.push( startCurrentTime + i * time_sample);
         }
