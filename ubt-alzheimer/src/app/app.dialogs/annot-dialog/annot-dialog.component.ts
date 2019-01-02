@@ -23,7 +23,7 @@ export class AnnotDialogComponent implements OnInit {
   }
 
   onCloseCancel(){
-    this.thisDialogRef.close('Confirm');
+    this.thisDialogRef.close('null');
   }
 
   

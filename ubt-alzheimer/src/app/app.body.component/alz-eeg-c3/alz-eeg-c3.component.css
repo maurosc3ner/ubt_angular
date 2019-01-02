@@ -3,7 +3,6 @@
     border-color: aqua;
 }
 
-
 .test .c3-legend-item {
     fill: #009fee;
  }
@@ -16,14 +15,13 @@
 
 /* eje y */
 .test .c3-axis-x path,
-/* .test .c3-axis-y path, */
 .test .c3-axis-y line {
     stroke: white;
 }
 /* eje x */
 /* .test .c3-axis-x line, */
 .test .c3-axis-x .tick {
-    fill: black;
+    fill: white;
   }
 
 .test .c3-axis-x g,
@@ -38,6 +36,46 @@
 .test .c3-tooltip-container {
     color:black;
 }
+
+/*
+CO2ET styles
+*/
+.co2et .c3-legend-item {
+    fill: #009fee;
+ }
+
+.co2et {
+    background-color: rgb(0, 0, 0);
+    width: 100%;
+    min-width: 480;
+}
+
+/* eje y */
+.co2et .c3-axis-x path,
+.co2et .c3-axis-y line {
+    stroke: white;
+}
+/* eje x */
+/* .co2et .c3-axis-x line, */
+.co2et .c3-axis-x .tick {
+    fill: white;
+  }
+
+.co2et .c3-axis-x g,
+.co2et .c3-axis-y g,
+.co2et .c3-legend-item-data text,
+.co2et .c3-axis-y-label,
+.co2et .c3-axis-x-label,
+.co2et .c3-legend-item {
+    fill: whitesmoke;
+}
+/* for the tooltip text color */
+.co2et .c3-tooltip-container {
+    color:black;
+}
+
+
+
 
 
 .entre .c3-legend-item {

@@ -42,13 +42,15 @@ export class AppComponent{
 
   onChangeState(event){
     console.log('root-onChangeState',event);
+
     if ( event['state'] == 1){
       this.connectDriver(event);
     }else if ( event['state'] == 2){
       this.startStream(event);
     } else if ( event['state'] == 3){ // annotation but still running 
-      this.CurrentState = 3;
-      console.log(this.current_channels);
+      
+      //console.log(this.current_channels);
+      
       let dialogRef=this.annodialog.open(AnnotDialogComponent,{
         width: '800px',
         height: '400px',
@@ -59,16 +61,21 @@ export class AppComponent{
 
       dialogRef.afterClosed().subscribe(result=>{
         
-        // agregar logica para detectar si es null el result para no crear anotacion
-        this.annotDialogResult={};
-        this.annotDialogResult["description"]=result["annotType"]+' - '+result["annotDesc"];
-        // onset se debe grabar como segundos relativos
-        this.annotDialogResult['onset']=(this.current_channels["debug"]["subrecords"]["enddatetime"]-this.current_channels["debug"]["subrecords"]["startdatetime"]).toFixed(1);
-        this.annotDialogResult['duration']=0.04;
-        console.log('acb-onAddAnnoClick',this.annotDialogResult);
-        this.currentSession["annotations"]["items"].push(this.annotDialogResult);
-        this.currentSession["annotations"]["size"]+=1;
-        console.log('acb-onAddAnnoClick',this.currentSession["annotations"]);
+        if(result != 'null'){
+          this.CurrentState = 3;
+          this.annotDialogResult={};
+          this.annotDialogResult["description"]=result["annotType"]+' - '+result["annotDesc"];
+          // onset se debe grabar como segundos relativos
+          this.annotDialogResult['onset']=(this.current_channels["debug"]["subrecords"]["enddatetime"]-this.current_channels["debug"]["subrecords"]["startdatetime"]);
+          this.annotDialogResult['duration']=0.04;
+          console.log('acb-onAddAnnoClick',this.annotDialogResult);
+          this.currentSession["annotations"]["items"].push(this.annotDialogResult);
+          this.currentSession["annotations"]["size"]+=1;
+          console.log('acb-onAddAnnoClick',this.currentSession["annotations"]);
+          this.CurrentState = 2;
+        }
+        
+        
       });
 
     } else if ( event['state'] == 4){
@@ -122,7 +129,11 @@ export class AppComponent{
     this.mySocket.send(msg); 
     this.CurrentState=2;
     this.mySocket.onmessage = event=>{
-      this.current_channels=JSON.parse(event.data);
+      this.current_channels
+      let msgFromUBT=JSON.parse(event.data);
+      msgFromUBT["annotations"]=this.currentSession["annotations"]
+      this.current_channels=msgFromUBT;
+      
       //console.log(myObj);
     };
   }

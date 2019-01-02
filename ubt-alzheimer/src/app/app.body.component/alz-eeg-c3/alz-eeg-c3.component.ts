@@ -21,8 +21,10 @@ export class AlzEegC3Component implements OnInit {
   @Input() EEG_Status_eeg;
   @Input() current_data = null;
   chartPLETH;
+  currentPLETH = 0;
   dataPLETH = [];
   fdPLETH: boolean;
+  annotIdx=0;
 
   chartENT100;
   dataENT100 = [];
@@ -30,6 +32,7 @@ export class AlzEegC3Component implements OnInit {
 
 //   "CO2 ET", "CO2 FI",
   chartCO2ET;
+  currentCO2ET = 0; 
   dataCO2ET = [];
   fdCO2ET: boolean;
 
@@ -79,65 +82,77 @@ export class AlzEegC3Component implements OnInit {
       //PLETH
       this.fdPLETH = false;
       this.dataPLETH = ['PLETH', 0, 0, 0, 0, 0];
+      this.currentPLETH=this.dataPLETH.length-1;
       this.chartPLETH = c3.generate({
-          bindto: '#chartPLETH',
-          size: {
-              height: 200,
-              // width: 1080
-          },
+        bindto: '#chartPLETH',
+        size: {
+            height: 200
+        },
 
-          data: {
-              columns: [
-                  this.dataPLETH
-              ],
-              type: 'spline'
-          },
-          point: {
-              show: false
-          },
-          legend: {
-              show: false
-          },
-          tooltip: {
-              show: true,
+        data: {
+            columns: [
+                this.dataPLETH
+            ],
+            type: 'spline'
+        },
+        point: {
+            show: false
+        },
+        legend: {
+            show: false
+        },
+        tooltip: {
+            show: true,
 
-              format: {
-                  title: function(d) {
-                      return 'Value ';
-                  },
-                  // value: function (value, ratio, id) {
+            format: {
+                title: function(d) {
+                    return 'Value ';
+                },
+                // value: function (value, ratio, id) {
 
-                  //     return format(value);
-                  // }
-                  //            value: d3.format(',') // apply this format to both y and y2
-              }
+                //     return format(value);
+                // }
+                //            value: d3.format(',') // apply this format to both y and y2
+            }
 
-          },
-          color: {
-              pattern: ['#00ff00']
-          },
-          axis: {
-              y: {
-                  label: {
-                      text: 'Voltage (mV)',
-                      position: 'outer-middle'
-                      // inner-top : default
-                      // inner-middle
-                      // inner-bottom
-                      // outer-top
-                      // outer-middle
-                      // outer-bottom
-                  },
-                  max: 5,
-                  min: -5
-              },
-              x: {
-                  label: {
-                      text: 'PLETH',
-                      position: 'inner-top'
-                  }
-              }
-          }
+        },
+        color: {
+            pattern: ['#00ff00']
+        },
+        axis: {
+            y: {
+                label: {
+                    text: 'Voltage (mV)',
+                    position: 'outer-middle'
+                    // inner-top : default
+                    // inner-middle
+                    // inner-bottom
+                    // outer-top
+                    // outer-middle
+                    // outer-bottom
+                },
+                max: 5,
+                min: -5
+            },
+            x: {
+                label: {
+                    text: 'PLETH',
+                    position: 'inner-top'
+                }
+            }
+        },
+        // onrendered: function () {
+        //     var xg = d3.selectAll(".c3-xgrid-lines text");
+        //     xg.each (function (d,i) {
+        //             var title = d3.select(this).select("title");
+        //         if (title.empty()) {
+        //             title = xg.append("title");
+        //         }
+        //         title.text (function (d) {
+        //             return "Gridline: "+d.value+", "+d.text;
+        //         })
+        //     })
+        // },
       });
       //ENT_100
       this.fdENT100 = false;
@@ -758,75 +773,59 @@ export class AlzEegC3Component implements OnInit {
   }
 
   ngOnChanges() {
-
-      if (!this.isEmpty(this.current_data) && this.current_data["debug"]["command"] == "request_channels") {
-          //console.log('EC3-ngOnChanges', this.current_data);
-          this.current_data["channels"].forEach((currentChannel, index, array) => {
-              /*
-               * Waves 
-               * Pleth, ENT100
-               */
-              if (currentChannel["label"] == 'PLETH') {
-                //   console.log('EC3-ngOnChanges PLETH',currentChannel["data"].length);
-                  if (this.dataPLETH.length <= 400 && this.fdPLETH == false) {
-                      for (let i = 0; i < currentChannel["data"].length; i += 1) {
-                          this.dataPLETH.push(currentChannel["data"][i]);
-                      }
-                  } else {
-                      this.dataPLETH = [];
-                      this.dataPLETH.push('PLETH');
-                      for (let i = 0; i < currentChannel["data"].length; i += 1) {
-                          this.dataPLETH.push(currentChannel["data"][i]);
-                      }
-                      this.fdPLETH = true;
-                  } //end else
-                  // este flow tradicional funciona
-                //   this.chartPLETH.flow({
-                //       columns: [
-                //           this.dataPLETH
-                //       ],
-                //       duration: 750,
-                //       length: currentChannel["data"].length
-                //   });
-                    let currentLength = currentChannel["data"].length;
-                    const promise = new Promise((resolve, reject) => {
-                        this.chartPLETH.flow({
-                            columns: [
-                                this.dataPLETH
-                            ],
-                            duration: 750,
-                            length: currentLength
-                        });
+    
+    if (!this.isEmpty(this.current_data) && this.current_data["debug"]["command"] == "request_channels") {
+        //console.log('EC3-ngOnChanges', this.current_data);
+        
+        this.current_data["channels"].forEach((currentChannel, index, array) => {
+            /*
+            * Waves 
+            * Pleth, ENT100
+            */
+            if (currentChannel["label"] == 'PLETH') {
+            //   console.log('EC3-ngOnChanges PLETH',currentChannel["data"].length);
+            this.currentPLETH += this.dataPLETH.length-1;
+                if (this.dataPLETH.length <= 400 && this.fdPLETH == false) {
+                    for (let i = 0; i < currentChannel["data"].length; i += 1) {
+                        this.dataPLETH.push(currentChannel["data"][i]);
+                    }
+                } else {
+                    this.dataPLETH = [];
+                    this.dataPLETH.push('PLETH');
+                    for (let i = 0; i < currentChannel["data"].length; i += 1) {
+                        this.dataPLETH.push(currentChannel["data"][i]);
+                    }
+                    this.fdPLETH = true;
+                } //end else
+                
+                let currentLength = currentChannel["data"].length;
+                const promise = new Promise((resolve, reject) => {
+                    this.chartPLETH.flow({
+                        columns: [
+                            this.dataPLETH
+                        ],
+                        duration: 750,
+                        length: currentLength
                     });
-                    promise.then((res) => {
-                        console.log("Promise:",res);
-                    });
-                    promise.catch((err) => {
-                        console.log("Promise:",err);
-                    });
-                         
-              } //end fi PLETH
-              else if (currentChannel["label"] == 'ENT_100') {
-                  // console.log('EC3-nocENT100',currentChannel);
-                  if (this.dataENT100.length <= 500 && this.fdENT100 == false) {
-                      for (let i = 0; i < 100; i += 1) {
-                          this.dataENT100.push(currentChannel["data"][i]);
-                      }
-                  } else {
-                      this.dataENT100 = [];
-                      this.dataENT100.push('ENT100');
-                      for (let i = 0; i < 100; i += 1) {
-                          this.dataENT100.push(currentChannel["data"][i]);
-                      }
-                      this.fdENT100 = true;
-                  } //end esle
-                //   this.chartENT100.flow({
-                //       columns: [
-                //           this.dataENT100
-                //       ],
-                //       duration: 750,
-                //       length: 100
-                //   });
+                });
+                promise.catch((err) => {
+                    console.log("Promise:",err);
+                });   
+            } //end fi PLETH
+            else if (currentChannel["label"] == 'ENT_100') {
+                // console.log('EC3-nocENT100',currentChannel);
+                if (this.dataENT100.length <= 500 && this.fdENT100 == false) {
+                    for (let i = 0; i < 100; i += 1) {
+                        this.dataENT100.push(currentChannel["data"][i]);
+                    }
+                } else {
+                    this.dataENT100 = [];
+                    this.dataENT100.push('ENT100');
+                    for (let i = 0; i < 100; i += 1) {
+                        this.dataENT100.push(currentChannel["data"][i]);
+                    }
+                    this.fdENT100 = true;
+                } //end esle
                 let currentLength = 100;
                 const promise = new Promise((resolve, reject) => {
                     this.chartENT100.flow({
@@ -837,129 +836,112 @@ export class AlzEegC3Component implements OnInit {
                         length: currentLength
                     });
                 });
-                promise.then((res) => { console.log("Promise:",res); });
                 promise.catch((err) => { console.log("Promise:",err); });
+            } //end fi ENT100
 
+            /* Tendencias
+            * "CO2 ET", "CO2 FI", 
+            * "ECG HR", "ECG IMP-RR", 
+            * "ENTROPY BSR", "ENTROPY RE", "ENTROPY SE", 
+            * "NIBP DIA", "NIBP MEAN", "NIBP SYS", 
+            * "TEMP (t1)"
 
-
-              } //end fi ENT100
-
-              /* Tendencias
-              * "CO2 ET", "CO2 FI", 
-              * "ECG HR", "ECG IMP-RR", 
-              * "ENTROPY BSR", "ENTROPY RE", "ENTROPY SE", 
-              * "NIBP DIA", "NIBP MEAN", "NIBP SYS", 
-              * "TEMP (t1)"
-
-              */
-              else if (currentChannel["label"] == 'ENTROPY RE') {
-                  // console.log('EC3-nocENTRE',currentChannel);
-                  if (this.dataENTROPYRE.length <= 5 && this.fdPLETH == false) {
-                      for (let i = 0; i < currentChannel["data"].length; i += 1) {
-                          this.dataENTROPYRE.push(currentChannel["data"][i]);
-                      }
-                  } else {
-                      this.dataENTROPYRE = [];
-                      this.dataENTROPYRE.push('ENTROPY_RE');
-                      for (let i = 0; i < currentChannel["data"].length; i += 1) {
-                          this.dataENTROPYRE.push(currentChannel["data"][i]);
-                      }
-                      this.fdENTROPYRE = true;
-                  } //end esle
-                //   this.chartENTROPYRE.flow({
-                //       columns: [
-                //           this.dataENTROPYRE
-                //       ],
-                //       duration: 750,
-                //       length: currentChannel["data"].length
-                //   });
-
-                let currentLength = currentChannel["data"].length;
-                const promise = new Promise((resolve, reject) => {
-                    this.chartENTROPYRE.flow({
-                        columns: [
-                            this.dataENTROPYRE
-                        ],
-                        duration: 750,
-                        length: currentLength
-                    });
+            */
+            else if (currentChannel["label"] == 'ENTROPY RE') {
+                // console.log('EC3-nocENTRE',currentChannel);
+                if (this.dataENTROPYRE.length <= 5 && this.fdPLETH == false) {
+                    for (let i = 0; i < currentChannel["data"].length; i += 1) {
+                        this.dataENTROPYRE.push(currentChannel["data"][i]);
+                    }
+                } else {
+                    this.dataENTROPYRE = [];
+                    this.dataENTROPYRE.push('ENTROPY_RE');
+                    for (let i = 0; i < currentChannel["data"].length; i += 1) {
+                        this.dataENTROPYRE.push(currentChannel["data"][i]);
+                    }
+                    this.fdENTROPYRE = true;
+                } 
+            let currentLength = currentChannel["data"].length;
+            const promise = new Promise((resolve, reject) => {
+                this.chartENTROPYRE.flow({
+                    columns: [
+                        this.dataENTROPYRE
+                    ],
+                    duration: 750,
+                    length: currentLength
                 });
-                promise.then((res) => { console.log("Promise:",res); });
-                promise.catch((err) => { console.log("Promise:",err); });
-              } //end fi ENTROPY RE
-              // ENTROPY SE
-              else if (currentChannel["label"] == 'ENTROPY SE') {
-                  // console.log('EC3-nocENTRE',currentChannel);
-                  if (this.dataENTROPYSE.length <= 5 && this.fdENTROPYSE == false) {
-                      for (let i = 0; i < currentChannel["data"].length; i += 1) {
-                          this.dataENTROPYSE.push(currentChannel["data"][i]);
-                      }
-                  } else {
-                      this.dataENTROPYSE = [];
-                      this.dataENTROPYSE.push('ENTROPY_SE');
-                      for (let i = 0; i < currentChannel["data"].length; i += 1) {
-                          this.dataENTROPYSE.push(currentChannel["data"][i]);
-                      }
-                      this.fdENTROPYSE = true;
-                  } //end esle
-                //   this.chartENTROPYSE.flow({
-                //       columns: [
-                //           this.dataENTROPYSE
-                //       ],
-                //       duration: 750,
-                //       length: currentChannel["data"].length
-                //   });
-                let currentLength = currentChannel["data"].length;
-                const promise = new Promise((resolve, reject) => {
-                    this.chartENTROPYSE.flow({
-                        columns: [
-                            this.dataENTROPYSE
-                        ],
-                        duration: 750,
-                        length: currentLength
-                    });
+            });
+            promise.then((res) => { console.log("Promise:",res); });
+            promise.catch((err) => { console.log("Promise:",err); });
+            } //end fi ENTROPY RE
+            // ENTROPY SE
+            else if (currentChannel["label"] == 'ENTROPY SE') {
+                // console.log('EC3-nocENTRE',currentChannel);
+                if (this.dataENTROPYSE.length <= 5 && this.fdENTROPYSE == false) {
+                    for (let i = 0; i < currentChannel["data"].length; i += 1) {
+                        this.dataENTROPYSE.push(currentChannel["data"][i]);
+                    }
+                } else {
+                    this.dataENTROPYSE = [];
+                    this.dataENTROPYSE.push('ENTROPY_SE');
+                    for (let i = 0; i < currentChannel["data"].length; i += 1) {
+                        this.dataENTROPYSE.push(currentChannel["data"][i]);
+                    }
+                    this.fdENTROPYSE = true;
+                } //end esle
+            //   this.chartENTROPYSE.flow({
+            //       columns: [
+            //           this.dataENTROPYSE
+            //       ],
+            //       duration: 750,
+            //       length: currentChannel["data"].length
+            //   });
+            let currentLength = currentChannel["data"].length;
+            const promise = new Promise((resolve, reject) => {
+                this.chartENTROPYSE.flow({
+                    columns: [
+                        this.dataENTROPYSE
+                    ],
+                    duration: 750,
+                    length: currentLength
                 });
-                promise.then((res) => { console.log("Promise:",res); });
-                promise.catch((err) => { console.log("Promise:",err); });
-              } //end fi ENTROPY SE
-              // ENTROPY BSR
-              else if (currentChannel["label"] == 'ENTROPY BSR') {
-                 // console.log('EC3- BSR', currentChannel);
-                  if (this.dataENTROPYBSR.length <= 5 && this.fdENTROPYBSR == false) {
-                      for (let i = 0; i < currentChannel["data"].length; i += 1) {
-                          this.dataENTROPYBSR.push(currentChannel["data"][i]);
-                      }
-                  } else {
-                      this.dataENTROPYBSR = [];
-                      this.dataENTROPYBSR.push('ENTROPY_BSR');
-                      for (let i = 0; i < currentChannel["data"].length; i += 1) {
-                          this.dataENTROPYBSR.push(currentChannel["data"][i]);
-                      }
-                      this.fdENTROPYBSR = true;
-                  } //end esle
-                //   this.chartENTROPYBSR.flow({
-                //       columns: [
-                //           this.dataENTROPYBSR
-                //       ],
-                //       duration: 750,
-                //       length: currentChannel["data"].length
-                //   });
-                let currentLength = currentChannel["data"].length;
-                const promise = new Promise((resolve, reject) => {
-                    this.chartENTROPYBSR.flow({
-                        columns: [
-                            this.dataENTROPYBSR
-                        ],
-                        duration: 750,
-                        length: currentLength
-                    });
+            });
+            promise.then((res) => { console.log("Promise:",res); });
+            promise.catch((err) => { console.log("Promise:",err); });
+            } //end fi ENTROPY SE
+            // ENTROPY BSR
+            else if (currentChannel["label"] == 'ENTROPY BSR') {
+                // console.log('EC3- BSR', currentChannel);
+                if (this.dataENTROPYBSR.length <= 5 && this.fdENTROPYBSR == false) {
+                    for (let i = 0; i < currentChannel["data"].length; i += 1) {
+                        this.dataENTROPYBSR.push(currentChannel["data"][i]);
+                    }
+                } else {
+                    this.dataENTROPYBSR = [];
+                    this.dataENTROPYBSR.push('ENTROPY_BSR');
+                    for (let i = 0; i < currentChannel["data"].length; i += 1) {
+                        this.dataENTROPYBSR.push(currentChannel["data"][i]);
+                    }
+                    this.fdENTROPYBSR = true;
+                } //end esle
+            let currentLength = currentChannel["data"].length;
+            const promise = new Promise((resolve, reject) => {
+                this.chartENTROPYBSR.flow({
+                    columns: [
+                        this.dataENTROPYBSR
+                    ],
+                    duration: 750,
+                    length: currentLength
                 });
-                promise.then((res) => { console.log("Promise:",res); });
-                promise.catch((err) => { console.log("Promise:",err); });
-              } //end fi ENTROPY BSR
-              // CO2ET
-              else if (currentChannel["label"] == 'CO2 ET') {
-                  //console.log('EC3-CO2 ET ',currentChannel);
+                resolve("ok");
+            });
+            promise.catch((err) => { console.log("Promise:",err); });
+            } //end fi ENTROPY BSR
+            // CO2ET
+            else if (currentChannel["label"] == 'CO2 ET') {
+                //console.log('EC3-CO2 ET1:',this.dataCO2ET.length,this.currentCO2ET, currentChannel["data"]);
+                this.currentCO2ET+=this.dataCO2ET.length-1; // no tener en cuenta la etiqueta del comienzo del vector
+               
                 if (this.dataCO2ET.length <= 5 && this.fdCO2ET == false) {
                     for (let i = 0; i < currentChannel["data"].length; i += 1) {
                         this.dataCO2ET.push(currentChannel["data"][i]);
@@ -971,15 +953,9 @@ export class AlzEegC3Component implements OnInit {
                         this.dataCO2ET.push(currentChannel["data"][i]);
                     }
                     this.fdCO2ET = true;
-                } //end esle
-                // this.chartCO2ET.flow({
-                //     columns: [
-                //         this.dataCO2ET
-                //     ],
-                //     duration: 750,
-                //     length: currentChannel["data"].length
-                // });
-                let currentLength = currentChannel["data"].length;
+                } 
+                //console.log('EC3-CO2 ET2:',this.dataCO2ET.length,this.currentCO2ET, currentChannel["data"]);
+                let  currentLength = currentChannel["data"].length;  
                 const promise = new Promise((resolve, reject) => {
                     this.chartCO2ET.flow({
                         columns: [
@@ -988,172 +964,137 @@ export class AlzEegC3Component implements OnInit {
                         duration: 750,
                         length: currentLength
                     });
+                    resolve("ok");
                 });
-                promise.then((res) => { console.log("Promise:",res); });
                 promise.catch((err) => { console.log("Promise:",err); });
-              } //end fi CO2ET
-              // CO2FI
-              else if (currentChannel["label"] == 'CO2 FI') {
-                //console.log('EC3-CO2 FI ',currentChannel);
-              if (this.dataCO2FI.length <= 5 && this.fdCO2FI == false) {
-                  for (let i = 0; i < currentChannel["data"].length; i += 1) {
-                      this.dataCO2FI.push(currentChannel["data"][i]);
-                  }
-              } else {
-                  this.dataCO2FI = [];
-                  this.dataCO2FI.push('CO2FI');
-                  for (let i = 0; i < currentChannel["data"].length; i += 1) {
-                      this.dataCO2FI.push(currentChannel["data"][i]);
-                  }
-                  this.fdCO2FI = true;
-              } //end esle
-            //   this.chartCO2FI.flow({
-            //       columns: [
-            //           this.dataCO2FI
-            //       ],
-            //       duration: 750,
-            //       length: currentChannel["data"].length
-            //   });
-              let currentLength = currentChannel["data"].length;
-                const promise = new Promise((resolve, reject) => {
-                    this.chartCO2FI.flow({
-                        columns: [
-                            this.dataCO2FI
-                        ],
-                        duration: 750,
-                        length: currentLength
-                    });
+            } //end fi CO2ET
+            // CO2FI
+            else if (currentChannel["label"] == 'CO2 FI') {
+            //console.log('EC3-CO2 FI ',currentChannel);
+            if (this.dataCO2FI.length <= 5 && this.fdCO2FI == false) {
+                for (let i = 0; i < currentChannel["data"].length; i += 1) {
+                    this.dataCO2FI.push(currentChannel["data"][i]);
+                }
+            } else {
+                this.dataCO2FI = [];
+                this.dataCO2FI.push('CO2FI');
+                for (let i = 0; i < currentChannel["data"].length; i += 1) {
+                    this.dataCO2FI.push(currentChannel["data"][i]);
+                }
+                this.fdCO2FI = true;
+            } //end esle
+            let currentLength = currentChannel["data"].length;
+            const promise = new Promise((resolve, reject) => {
+                this.chartCO2FI.flow({
+                    columns: [
+                        this.dataCO2FI
+                    ],
+                    duration: 750,
+                    length: currentLength
                 });
-                promise.then((res) => { console.log("Promise:",res); });
-                promise.catch((err) => { console.log("Promise:",err); });
-              } //end fi CO2FI
-              // ECGHR
-              else if (currentChannel["label"] == 'ECG HR') {
-                  //  console.log('EC3-nocENTRE',currentChannel);
-                  if (this.dataECGHR.length <= 5 && this.fdECGHR == false) {
-                      for (let i = 0; i < currentChannel["data"].length; i += 1) {
-                          this.dataECGHR.push(currentChannel["data"][i]);
-                      }
-                  } else {
-                      this.dataECGHR = [];
-                      this.dataECGHR.push('ECGHR');
-                      for (let i = 0; i < currentChannel["data"].length; i += 1) {
-                          this.dataECGHR.push(currentChannel["data"][i]);
-                      }
-                      this.fdECGHR = true;
-                  } //end esle
-                //   this.chartECGHR.flow({
-                //       columns: [
-                //           this.dataECGHR
-                //       ],
-                //       duration: 750,
-                //       length: currentChannel["data"].length
-                //   });
+                resolve("ok");
+            });
+            promise.catch((err) => { console.log("Promise:",err); });
+            } //end fi CO2FI
+            // ECGHR
+            else if (currentChannel["label"] == 'ECG HR') {
+                //  console.log('EC3-nocENTRE',currentChannel);
+                if (this.dataECGHR.length <= 5 && this.fdECGHR == false) {
+                    for (let i = 0; i < currentChannel["data"].length; i += 1) {
+                        this.dataECGHR.push(currentChannel["data"][i]);
+                    }
+                } else {
+                    this.dataECGHR = [];
+                    this.dataECGHR.push('ECGHR');
+                    for (let i = 0; i < currentChannel["data"].length; i += 1) {
+                        this.dataECGHR.push(currentChannel["data"][i]);
+                    }
+                    this.fdECGHR = true;
+                } //end esle
+            let currentLength = currentChannel["data"].length;
+            const promise = new Promise((resolve, reject) => {
+                this.chartECGHR.flow({
+                    columns: [
+                        this.dataECGHR
+                    ],
+                    duration: 750,
+                    length: currentLength
+                });
+                resolve("ok");
+            });
+            promise.catch((err) => { console.log("Promise:",err); });
+            } //end fi ECGHR
+            // ECGIMP
+            else if (currentChannel["label"] == 'ECG IMP-RR') {
+                //  console.log('EC3-nocENTRE',currentChannel);
+                if (this.dataECGIMP.length <= 5 && this.fdECGIMP == false) {
+                    for (let i = 0; i < currentChannel["data"].length; i += 1) {
+                        this.dataECGIMP.push(currentChannel["data"][i]);
+                    }
+                } else {
+                    this.dataECGIMP = [];
+                    this.dataECGIMP.push('ECGIMP');
+                    for (let i = 0; i < currentChannel["data"].length; i += 1) {
+                        this.dataECGIMP.push(currentChannel["data"][i]);
+                    }
+                    this.fdECGIMP = true;
+                } //end esle
+            let currentLength = currentChannel["data"].length;
+            const promise = new Promise((resolve, reject) => {
+                this.chartECGIMP.flow({
+                    columns: [
+                        this.dataECGIMP
+                    ],
+                    duration: 750,
+                    length: currentLength
+                });
+                resolve("ok");
+            });
+            promise.catch((err) => { console.log("Promise:",err); });
+            } //end fi ECGIMP
+            // NIBP MEAN
+            else if (currentChannel["label"] == 'NIBP MEAN') {
+                //  console.log('EC3-nocENTRE',currentChannel);
+                if (this.dataNIBPMEAN.length <= 5 && this.fdNIBPMEAN == false) {
+                    for (let i = 0; i < currentChannel["data"].length; i += 1) {
+                        this.dataNIBPMEAN.push(currentChannel["data"][i]);
+                    }
+                } else {
+                    this.dataNIBPMEAN = [];
+                    this.dataNIBPMEAN.push('NIBP_MEAN');
+                    for (let i = 0; i < currentChannel["data"].length; i += 1) {
+                        this.dataNIBPMEAN.push(currentChannel["data"][i]);
+                    }
+                    this.fdNIBPMEAN = true;
+                } //end esle
                 let currentLength = currentChannel["data"].length;
                 const promise = new Promise((resolve, reject) => {
-                    this.chartECGHR.flow({
-                        columns: [
-                            this.dataECGHR
-                        ],
-                        duration: 750,
-                        length: currentLength
+                    this.chartNIBPMEAN.flow({
+                    columns: [
+                        this.dataNIBPMEAN
+                    ],
+                    duration: 750,
+                    length: currentLength
                     });
+                    resolve("ok");
                 });
-                promise.then((res) => { console.log("Promise:",res); });
                 promise.catch((err) => { console.log("Promise:",err); });
-              } //end fi ECGHR
-              // ECGIMP
-              else if (currentChannel["label"] == 'ECG IMP-RR') {
-                  //  console.log('EC3-nocENTRE',currentChannel);
-                  if (this.dataECGIMP.length <= 5 && this.fdECGIMP == false) {
-                      for (let i = 0; i < currentChannel["data"].length; i += 1) {
-                          this.dataECGIMP.push(currentChannel["data"][i]);
-                      }
-                  } else {
-                      this.dataECGIMP = [];
-                      this.dataECGIMP.push('ECGIMP');
-                      for (let i = 0; i < currentChannel["data"].length; i += 1) {
-                          this.dataECGIMP.push(currentChannel["data"][i]);
-                      }
-                      this.fdECGIMP = true;
-                  } //end esle
-                //   this.chartECGIMP.flow({
-                //       columns: [
-                //           this.dataECGIMP
-                //       ],
-                //       duration: 750,
-                //       length: currentChannel["data"].length
-                //   });
-                let currentLength = currentChannel["data"].length;
-                const promise = new Promise((resolve, reject) => {
-                    this.chartECGIMP.flow({
-                        columns: [
-                            this.dataECGIMP
-                        ],
-                        duration: 750,
-                        length: currentLength
-                    });
-                });
-                promise.then((res) => { console.log("Promise:",res); });
-                promise.catch((err) => { console.log("Promise:",err); });
-              } //end fi ECGIMP
-              // NIBP MEAN
-              else if (currentChannel["label"] == 'NIBP MEAN') {
-                  //  console.log('EC3-nocENTRE',currentChannel);
-                  if (this.dataNIBPMEAN.length <= 5 && this.fdNIBPMEAN == false) {
-                      for (let i = 0; i < currentChannel["data"].length; i += 1) {
-                          this.dataNIBPMEAN.push(currentChannel["data"][i]);
-                      }
-                  } else {
-                      this.dataNIBPMEAN = [];
-                      this.dataNIBPMEAN.push('NIBP_MEAN');
-                      for (let i = 0; i < currentChannel["data"].length; i += 1) {
-                          this.dataNIBPMEAN.push(currentChannel["data"][i]);
-                      }
-                      this.fdNIBPMEAN = true;
-                  } //end esle
-                //   this.chartNIBPMEAN.flow({
-                //       columns: [
-                //           this.dataNIBPMEAN
-                //       ],
-                //       duration: 750,
-                //       length: currentChannel["data"].length
-                //   });
-                  let currentLength = currentChannel["data"].length;
-                  const promise = new Promise((resolve, reject) => {
-                        this.chartNIBPMEAN.flow({
-                        columns: [
-                            this.dataNIBPMEAN
-                        ],
-                        duration: 750,
-                        length: currentLength
-                      });
-                  });
-                  promise.then((res) => { console.log("Promise:",res); });
-                  promise.catch((err) => { console.log("Promise:",err); });
-              } //end fi NIBPMEAN
-              // NIBP DIA
-              else if (currentChannel["label"] == 'NIBP DIA') {
-                  //  console.log('EC3-nocENTRE',currentChannel);
-                  if (this.dataNIBPDIA.length <= 5 && this.fdNIBPDIA == false) {
-                      for (let i = 0; i < currentChannel["data"].length; i += 1) {
-                          this.dataNIBPDIA.push(currentChannel["data"][i]);
-                      }
-                  } else {
-                      this.dataNIBPDIA = [];
-                      this.dataNIBPDIA.push('NIBP_DIA');
-                      for (let i = 0; i < currentChannel["data"].length; i += 1) {
-                          this.dataNIBPDIA.push(currentChannel["data"][i]);
-                      }
-                      this.fdNIBPDIA = true;
-                  } //end esle
-                // this.chartNIBPDIA.flow({
-                //     columns: [
-                //         this.dataNIBPDIA
-                //     ],
-                //     duration: 750,
-                //     length: currentChannel["data"].length
-                // });
+            } //end fi NIBPMEAN
+            // NIBP DIA
+            else if (currentChannel["label"] == 'NIBP DIA') {
+                //  console.log('EC3-nocENTRE',currentChannel);
+                if (this.dataNIBPDIA.length <= 5 && this.fdNIBPDIA == false) {
+                    for (let i = 0; i < currentChannel["data"].length; i += 1) {
+                        this.dataNIBPDIA.push(currentChannel["data"][i]);
+                    }
+                } else {
+                    this.dataNIBPDIA = [];
+                    this.dataNIBPDIA.push('NIBP_DIA');
+                    for (let i = 0; i < currentChannel["data"].length; i += 1) {
+                        this.dataNIBPDIA.push(currentChannel["data"][i]);
+                    }
+                    this.fdNIBPDIA = true;
+                } //end esle
                 let currentLength = currentChannel["data"].length;
                 const promise = new Promise((resolve, reject) => {
                     this.chartNIBPDIA.flow({
@@ -1163,88 +1104,83 @@ export class AlzEegC3Component implements OnInit {
                     duration: 750,
                     length: currentLength
                     });
+                    resolve("ok");
                 });
-                promise.then((res) => { console.log("Promise:",res); });
                 promise.catch((err) => { console.log("Promise:",err); });
-              } //end fi NIBPDIA
-              // NIBP SYS
-              else if (currentChannel["label"] == 'NIBP SYS') {
-                //  console.log('EC3-nocENTRE',currentChannel);
-                if (this.dataNIBPSYS.length <= 5 && this.fdNIBPSYS == false) {
-                    for (let i = 0; i < currentChannel["data"].length; i += 1) {
-                        this.dataNIBPSYS.push(currentChannel["data"][i]);
-                    }
-                } else {
-                    this.dataNIBPSYS = [];
-                    this.dataNIBPSYS.push('NIBP_SYS');
-                    for (let i = 0; i < currentChannel["data"].length; i += 1) {
-                        this.dataNIBPSYS.push(currentChannel["data"][i]);
-                    }
-                    this.fdNIBPSYS = true;
-                } //end esle
-                // this.chartNIBPSYS.flow({
-                //     columns: [
-                //         this.dataNIBPSYS
-                //     ],
-                //     duration: 750,
-                //     length: currentChannel["data"].length
-                // });
-                let currentLength = currentChannel["data"].length;
-                const promise = new Promise((resolve, reject) => {
-                    this.chartNIBPSYS.flow({
-                        columns: [
-                            this.dataNIBPSYS
-                        ],
-                        duration: 750,
-                        length: currentLength
-                    });
-                });
-                promise.then((res) => { console.log("Promise:",res); });
-                promise.catch((err) => { console.log("Promise:",err); });
-            } //end fi NIBPSYS
+            } //end fi NIBPDIA
             // NIBP SYS
-            else if (currentChannel["label"] == 'TEMP (t1)') {
-                // console.log('EC3- T1',currentChannel);
-                if (this.dataTEMPT1.length <= 5 && this.fdTEMPT1 == false) {
-                    
-                    for (let i = 0; i < currentChannel["data"].length; i += 1) {
-                        this.dataTEMPT1.push(currentChannel["data"][i]);
-                    }
-                } else {
-                    this.dataTEMPT1 = [];
-                    this.dataTEMPT1.push('TEMPT1');
-                    for (let i = 0; i < currentChannel["data"].length; i += 1) {
-                        this.dataTEMPT1.push(currentChannel["data"][i]);
-                    }
-                    this.fdTEMPT1 = true;
-                } //end esle
-                // this.chartTEMPT1.flow({
-                //     columns: [
-                //         this.dataTEMPT1
-                //     ],
-                //     duration: 750,
-                //     length: currentChannel["data"].length
-                // });
-                let currentLength = currentChannel["data"].length;
-                const promise = new Promise((resolve, reject) => {
-                    this.chartTEMPT1.flow({
-                        columns: [
-                            this.dataTEMPT1
-                        ],
-                        duration: 750,
-                        length: currentLength
-                    });
+            else if (currentChannel["label"] == 'NIBP SYS') {
+            //  console.log('EC3-nocENTRE',currentChannel);
+            if (this.dataNIBPSYS.length <= 5 && this.fdNIBPSYS == false) {
+                for (let i = 0; i < currentChannel["data"].length; i += 1) {
+                    this.dataNIBPSYS.push(currentChannel["data"][i]);
+                }
+            } else {
+                this.dataNIBPSYS = [];
+                this.dataNIBPSYS.push('NIBP_SYS');
+                for (let i = 0; i < currentChannel["data"].length; i += 1) {
+                    this.dataNIBPSYS.push(currentChannel["data"][i]);
+                }
+                this.fdNIBPSYS = true;
+            } //end esle
+            let currentLength = currentChannel["data"].length;
+            const promise = new Promise((resolve, reject) => {
+                this.chartNIBPSYS.flow({
+                    columns: [
+                        this.dataNIBPSYS
+                    ],
+                    duration: 750,
+                    length: currentLength
                 });
-                promise.then((res) => { console.log("Promise:",res); });
-                promise.catch((err) => { console.log("Promise:",err); });
-            } //end fi TEMPT1
+                resolve("ok");
+            });
+            promise.catch((err) => { console.log("chartNIBPSYS promise:",err); });
+            
+        } //end fi NIBPSYS
+        // NIBP SYS
+        else if (currentChannel["label"] == 'TEMP (t1)') {
+            // console.log('EC3- T1',currentChannel);
+            if (this.dataTEMPT1.length <= 5 && this.fdTEMPT1 == false) {
+                
+                for (let i = 0; i < currentChannel["data"].length; i += 1) {
+                    this.dataTEMPT1.push(currentChannel["data"][i]);
+                }
+            } else {
+                this.dataTEMPT1 = [];
+                this.dataTEMPT1.push('TEMPT1');
+                for (let i = 0; i < currentChannel["data"].length; i += 1) {
+                    this.dataTEMPT1.push(currentChannel["data"][i]);
+                }
+                this.fdTEMPT1 = true;
+            } //end esle
+            let currentLength = currentChannel["data"].length;
+            const promise = new Promise((resolve, reject) => {
+                this.chartTEMPT1.flow({
+                    columns: [
+                        this.dataTEMPT1
+                    ],
+                    duration: 750,
+                    length: currentLength
+                });
+                resolve('ok');
+            });
+            promise.catch((err) => { console.log("Promise:",err); });
+        } //end fi TEMPT1
+    });
 
-            // console.log("sizes: ",this.dataPLETH.length,this.dataECGHR.length,this.dataCO2FI.length, this.dataTEMPT1.length);
-        });
+        if (this.current_data["annotations"]["size"]!=this.annotIdx){
+            console.log('EC3-ngOnChanges new annotation detected',this.currentPLETH,this.currentCO2ET);
+            this.annotIdx+=1;
+            this.chartPLETH.xgrids.add([
+                {value: this.currentPLETH, text: this.annotIdx}
+            ]);
+            this.chartCO2ET.xgrids.add([
+                {value: this.currentCO2ET, text: this.annotIdx}
+            ]);
+        }
+    }
 
-      }
-
-
+    
   }
 
   ngAfterViewInit() {
@@ -1252,47 +1188,6 @@ export class AlzEegC3Component implements OnInit {
   }
 
   onAddClick(event) {
-
-
-      // console.log('EC3-onAddClick',this.dataPLETH,this.dataPLETH.length);
-      if (this.dataPLETH.length <= 12 && this.fdPLETH == false) {
-          this.dataPLETH.push(this.getRndInteger(1, 10));
-          this.dataPLETH.push(this.getRndInteger(1, 10));
-          this.dataENT100.push(this.getRndInteger(1, 10));
-          this.dataENT100.push(this.getRndInteger(1, 10));
-          this.dataENTROPYRE.push(this.getRndInteger(1, 10));
-          this.dataENTROPYRE.push(this.getRndInteger(1, 10));
-      } else {
-          this.dataPLETH = ['PLETH', this.getRndInteger(1, 10), this.getRndInteger(1, 10)];
-          this.fdPLETH = true;
-          this.dataENT100 = ['ENT100', this.getRndInteger(1, 10), this.getRndInteger(1, 10)];
-          this.fdENT100 = true;
-          this.dataENTROPYRE = ['ENTROPY_RE', this.getRndInteger(-100, 100), this.getRndInteger(-100, 100)];
-          this.fdENTROPYRE = true;
-      }
-      console.log('EC3-onAddClick', this.dataPLETH, this.dataPLETH.length);
-      this.chartPLETH.flow({
-          columns: [
-              this.dataPLETH
-          ],
-          duration: 0,
-          length: 2
-      });
-
-      this.chartENT100.flow({
-          columns: [
-              this.dataENT100
-          ],
-          duration: 0,
-          length: 2
-      });
-      this.chartENTROPYRE.flow({
-          columns: [
-              this.dataENTROPYRE
-          ],
-          duration: 0,
-          length: 2
-      });
   }
 
   getRndInteger(min, max) {
