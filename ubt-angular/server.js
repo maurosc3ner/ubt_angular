@@ -15,7 +15,7 @@ var interval;
  */ 
 function openEDFScript(pathFileName,currentData) { 
     var options = { 
-      mode: 'json',       
+      mode: 'json',
         args: [pathFileName,0] 
     };    
     var readerShell = new PythonShell('/backend/pythonscripts/edfReader.py',options);

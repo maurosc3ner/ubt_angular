@@ -11,6 +11,7 @@ import {
 } from '@angular/core';
 import { D3Service } from '../../app.services/d3/d3.service';
 import * as d3 from 'd3';
+//import { sample } from 'rxjs/operators';
 declare let cubism: any;
 
 @Component({
@@ -18,6 +19,7 @@ declare let cubism: any;
   templateUrl: './eeg-content.component.html',
   styleUrls: ['./eeg-content.component.css']
 })
+
 export class EegContentComponent implements AfterContentInit, OnChanges {
     @Input() EEG_Status_eeg: number;
     @Input() Command_eeg: Array<number>;
@@ -125,26 +127,26 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
 
     create_channels( width = 980, height = 100, channel_array, updating = false ) {
     const data = this.current_data;
+    const annotation = data['annotations'];
     const duration = data['patientInfo']['duration'];
     let x_axis  = true;
     let y_axis  = true;
     let j = 0;
     d3.selectAll('#y-axis').remove();
     for (const sample of channel_array) {
-//        console.log('AMH_j', j, channel_array.length);
         if (j === 0 || j === channel_array.length - 1) {
             x_axis = true;
             y_axis = false;
             this.DrawChannel(   sample, 'line_eeg_1', data['channels'][0], 0,
             duration, x_axis, y_axis, 1, this.scale_multiplier[this.multiplier_pos],
-            '#000000', width, height, updating, this.cursordata, 0, j );
+            '#000000', width, height, updating, this.cursordata, 0, annotation);
         } else {
             x_axis = false;
             y_axis = true;
-            // console.log('AMH_j', data['channels'][j - 1]);
-            this.DrawChannel(   sample, 'line_eeg_1', data['channels'][j - 1], 0,
+            console.log('AMH_j', annotation);
+            this.DrawChannel( sample, 'line_eeg_1', data['channels'][j - 1], 0,
             duration, x_axis, y_axis, 1, this.scale_multiplier[this.multiplier_pos],
-            '#ffffff', width, height, updating, this.cursordata, 1, j );
+            '#ffffff', width, height, updating, this.cursordata, 1, annotation);
         }
         j++;
         }
@@ -165,7 +167,7 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
         updating = false,
         cursordata,
         channel_number_flag,
-        j = 0
+        annotation
     ) {
         if (data_eeg.length !== 0) {
             const channel_data: Array<JSON> = JSON.parse(JSON.stringify(data_eeg.data));
@@ -176,21 +178,25 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
             const chart_height    =   height;
             const padding         =   40;
             const scale_values = [];
+            const date_formated = [];
+            let date_array = [];
             this.current_scale.forEach(
             function(date) {
             const year = date.getFullYear();
-            const month = date.getMonth();
-            const day = date.getDay();
+            const month = date.getMonth() + 1;
+            const day = date.getDate();
             const hour = date.getHours();
             const minute = date.getMinutes();
             const second = date.getSeconds();
             const milisecond = date.getMilliseconds();
-            const date_array = [year, month, day, hour, minute, second, milisecond];
+            date_array = [year, month, day, hour, minute, second, milisecond];
+            date_formated.push(date_array);
             scale_values.push(time_parse(
                 <string>year + '-' + <string>month + '-' + <string>day + '-' +
                 <string>hour + ':' + <string>minute + ':' + <string>second + ':' +
             <string>milisecond));
             });
+            console.log(date_array);
             for (const sample of channel_data) {
                 sample['time'] = scale_values[i];
                 i++;
@@ -262,13 +268,59 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
             }
             if (channel_number_flag === 1 ) {
                 current_channel.append('text')
-                .text('Ch' + j)
+                .text(data_eeg.label)
                 .attr('x' , 0)
                 .attr('y', 35)
                 .attr('transform', 'translate(-25,50) rotate(-90)')
                 .attr('class', 'text_channel')
                 ;
             }
+            const start_current_time = channel_data[0]['time'].getTime();
+            const end_current_time = channel_data[channel_data.length - 1]['time'].getTime();
+//            console.log('AMH-sample-start', channel_data[0]['time'].getTime());
+//            console.log('AMH-sample-end', channel_data[channel_data.length - 1]['time'].getTime());
+            const startDateGlobal = this.current_data['patientInfo']['startDate'].split('-');
+            const startTimeGlobal = this.current_data['patientInfo']['startTime'].split(':');
+            const date_array_start = new Date(startDateGlobal[2] - 0, startDateGlobal[1] - 1, startDateGlobal[0] - 0,
+            startTimeGlobal[0] - 0, startTimeGlobal[1] - 0, startTimeGlobal[2] - 0);
+//            console.log('AMH-sample-start-global', date_array_start.getTime());
+            const start_time_global = date_array_start.getTime();
+            const anno_times = [];
+            for (const anno of annotation['items']) {
+                const anno_date = start_time_global + anno['onset'] * 1000;
+                if (anno_date >= start_current_time && anno_date <= end_current_time ) {
+                    anno_times.push(anno_date);
+                } else {
+//                    console.log('AMH-Anno-times', anno_date, start_current_time, end_current_time);
+//                    console.log('AMH-Anno-dates', new Date(anno_date), new Date(start_current_time), new Date(end_current_time));
+                }
+            }
+            const date_values_anno = anno_times.map(
+                d => {
+                    const date = new Date( d );
+                    return date;
+                }
+            );
+            console.log('AMH-sample-anno-times', anno_times);
+            console.log('AMH-sample-anno-dates', date_values_anno);
+
+            anno_times.forEach((annotation_in_range) => {
+                let i_anno = 0;
+                for (const sample of this.channel_num) {
+                    if (i_anno >= 1 && i_anno < this.channel_num.length - 1) {
+                    const cursor_line = sample.append('line')
+                    .attr('id', 'anno_line' + i_anno)
+                    .attr('x1', x_scale(annotation_in_range))     // x position of the first end of the line
+                    .attr('y1', 0)      // y position of the first end of the line
+                    .attr('x2', x_scale(annotation_in_range))
+                    .attr('y2', chart_height)
+                    .attr('class', 'anno-line')
+                    ;
+                    }
+                    i_anno++;
+                }
+            });
+
             current_channel.on('click', (d, d3index, nodes) =>  {
                 const cursor_width = (data_eeg.samplefrequency * 10);
                 console.log('cursor_width ' + cursor_width);
@@ -461,11 +513,8 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
             d => d['data'].length
             )
         );
-
-        const startCurrentTime =  (startTime['startTime'] + startTime['index'] * time_sample); // Error mixing time with samples
-
+        const startCurrentTime = (startTime['startTime'] + startTime['index'] * time_sample); // Error mixing time with samples
         const time_values = [];
-
         for (let i = 0; i < max_samples; i++) {
             time_values.push( startCurrentTime + i * time_sample);
         }
@@ -475,6 +524,7 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
                 return date;
             }
         );
+        console.log('AMH_times', date_values);
         return date_values;
     }
 
