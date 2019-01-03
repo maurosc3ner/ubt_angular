@@ -10,7 +10,6 @@ var actSockets = 0;
 var interval;
 
 
-
 /**  
  * 
  * @param {pathFileName,currentData}   
@@ -25,8 +24,7 @@ function openEDFScript(pathFileName,currentData) {
     readerShell.on('message', function (message) {
         console.log(message);    
         asyncMessage = message      
-      });    
-        
+      });
     // end the input stream and allow the process to exit
     readerShell.end(function (err,code,signal) {
         if (err) throw err;  
@@ -220,9 +218,9 @@ function myTopoExecuter(currentData) {
         };   
         var topoPlotShell = new PythonShell('/backend/pythonscripts/topoplot/topoFilter.py');
         topoPlotShell.send(JSON.stringify(currentData.channels));
-        topoPlotShell.on('message', function (message) {
+        topoPlotShell.on('message',(message) => {
         });  
-        topoPlotShell.end(function (err,code,signal) {
+        topoPlotShell.end((err,code,signal) => {
             if (err) reject(err);
             console.log(code,signal);
             resolve ({c: code, s: signal});
@@ -244,41 +242,74 @@ async function topoPlotScript(currentData) {
     });
 };
   
+
 /**  
- * 
+ * async loreta executer generalization 
+ * @param {currentData}   
+ */ 
+function myLoretaExecuter(currentData) {
+    return new Promise(function (resolve, reject) {
+        let options = { 
+            mode: 'text',
+            args: ['-l nyL.mat', '-v nyvert.mat', '-f nyface.mat', '-c nyCh.mat', '-d nyEEG_R.txt'] 
+        };
+        let loretaShell = new PythonShell('/backend/pythonscripts/loreta-new/loretaFilter.py',options);
+        let results={};
+        // channels are sent through stdin as text for avoid string limits
+        loretaShell.send(JSON.stringify(currentData.channels));  
+        loretaShell.on('message',(message) => { 
+            results = message      
+        });
+        loretaShell.end((err,code,signal) =>{
+            if (err) reject(err);
+            resolve ({r: results, c: code, s: signal});
+        });
+    });
+}
+
+/**  
+ * Loreta V2 full error handling and async await
  * @param {*} currentData  
  */ 
-function loretaScript(currentData) { 
-    var options = { 
-      mode: 'text',      
-    //   pythonOptions: ['','','','',''], //own python env flags   
-    //   scriptPath : './backend/pythonscripts/loreta-new', 
-	  args: ['-l nyL.mat', '-v nyvert.mat', '-f nyface.mat', '-c nyCh.mat', '-d nyEEG_R.txt'] 
-    };    
-    // python loretaFilter.py -l nyL.mat -v nyvert.mat -f nyface.mat -c nyCh.mat -d nyEEG_R.txt -b ..\..\server_data\sujeto_base.edf
-    var loretaShell = new PythonShell('/backend/pythonscripts/loreta-new/loretaFilter.py',options);
-    // /backend/pythonscripts/loreta-new/loretaFilter.py
-    loretaShell.send(JSON.stringify(currentData.channels));  
-    //console.log(currentData.channels);
-    var asyncMessage;
-    loretaShell.on('message', function (message) {
-        // received a message sent from the Python script (a simple "print" statement)
-        // console.log(message);    
-        asyncMessage = message      
-      });    
-        
-    // end the input stream and allow the process to exit
-    loretaShell.end(function (err,code,signal) {
-        if (err) throw err;  
-        io.emit("loreta_filter", JSON.parse(asyncMessage)); 
-        //console.log(typeof JSON.parse(asyncMessage));
-        console.log('-EC-loretaFilter-The exit code was: ' + code);
-        console.log('-EC-loretaFilter-The exit signal was: ' + signal);
-        console.log('-EC-loretaFilter-finished');  
+async function loretaScript(currentData) { 
+    let execution= await myLoretaExecuter(currentData);
+    return ({
+        c: execution.c,
+        s: execution.s,
+        r: execution.r
     });
 }; 
 
-
+// loreta V1 que funciona 03-01-2019
+// function loretaScript(currentData) { 
+//     var options = { 
+//       mode: 'text',      
+//     //   pythonOptions: ['','','','',''], //own python env flags   
+//     //   scriptPath : './backend/pythonscripts/loreta-new', 
+// 	  args: ['-l nyL.mat', '-v nyvert.mat', '-f nyface.mat', '-c nyCh.mat', '-d nyEEG_R.txt'] 
+//     };    
+//     // python loretaFilter.py -l nyL.mat -v nyvert.mat -f nyface.mat -c nyCh.mat -d nyEEG_R.txt -b ..\..\server_data\sujeto_base.edf
+//     var loretaShell = new PythonShell('/backend/pythonscripts/loreta-new/loretaFilter.py',options);
+//     // /backend/pythonscripts/loreta-new/loretaFilter.py
+//     loretaShell.send(JSON.stringify(currentData.channels));  
+//     //console.log(currentData.channels);
+//     var asyncMessage;
+//     loretaShell.on('message', function (message) {
+//         // received a message sent from the Python script (a simple "print" statement)
+//         // console.log(message);    
+//         asyncMessage = message      
+//       });    
+        
+//     // end the input stream and allow the process to exit
+//     loretaShell.end(function (err,code,signal) {
+//         if (err) throw err;  
+//         io.emit("loreta_filter", JSON.parse(asyncMessage)); 
+//         //console.log(typeof JSON.parse(asyncMessage));
+//         console.log('-EC-loretaFilter-The exit code was: ' + code);
+//         console.log('-EC-loretaFilter-The exit signal was: ' + signal);
+//         console.log('-EC-loretaFilter-finished');  
+//     });
+// }; 
 
 function edfFromFile(startPath, msg) {
     var results = [];
@@ -378,7 +409,14 @@ io.on('connection', function(socket) {
 
     socket.on('loreta_filter', function(msg) {
         console.log("-EC-loreta_filter-Start");
-        loretaScript(msg);
+        loretaScript(msg)
+        .then((results)=>{
+            console.log('-EC-loretaFilter-The exit code was: ',results.c);
+            console.log('-EC-loretaFilter-The exit signal was: ',results.s);
+            io.emit("loreta_filter", JSON.parse(results.r)); 
+            console.log('-EC-loretaFilter-finished');  
+        })
+        .catch(err=>{console.log("loreta err ",err)});;
         
     });
 
@@ -446,6 +484,3 @@ app.get('*', function(req, res, next) {
 http.listen(port, function() {
     console.log('listening on *:' + port);
 });
-
-
-  
