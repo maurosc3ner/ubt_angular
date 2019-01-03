@@ -62,67 +62,135 @@ function jumpEDFScript(filename,currentData) {
 	}); 
 }; 
 
-//funciona 8-19-2018
-function notchScript(currentData) {
-    var options = {
-	  mode: 'binary',
-	  args: [] 
-    };  
-    // console.log('-EC-notch_filter-',JSON.stringify(currentData.channels[0]));
-    var notchShell = new PythonShell('/backend/pythonscripts/notch.py');
+/**  
+ * notch executer 
+ * @param {currentData}   
+ */ 
+function myNotchExecuter(currentData) {
+    return new Promise(function (resolve, reject) {
+        let options = {
+            mode: 'binary',
+            args: [] 
+          };  
+        let results={};
+        let notchShell = new PythonShell('/backend/pythonscripts/notch.py');
+        // como es mucha informacion no se puede enviar por parametros sino por estandar input, en este caso options no es necesario
+        // notchShell.send(JSON.stringify(currentData.channels[0]));
+        // ahora enviemos los 20 canales
+        notchShell.send(JSON.stringify(currentData.channels));
+    
+        notchShell.on('message', function (message) {
+            // received a message sent from the Python script (a simple "print" statement)
+            console.log(message);
+            results['channels'] = JSON.parse(message)['channels']
+            results['debug'] = currentData.debug;
+            results['annotations']=currentData.annotations;
+            results['patientInfo']=currentData.patientInfo;
 
-    // esto funciona
-    // notchShell.send(JSON.stringify(currentData.channels[0]));
-    // ahora enviemos los 20 canales
-    notchShell.send(JSON.stringify(currentData.channels));
- 
-    notchShell.on('message', function (message) {
-        // received a message sent from the Python script (a simple "print" statement)
-        console.log(message);
-        results={}
-        results['channels'] = JSON.parse(message)['channels']
-        results['debug'] = currentData.debug;
-        results['annotations']=currentData.annotations;
-        results['patientInfo']=currentData.patientInfo;
-        io.emit("notch_filter", results);  
-      }); 
-       
-    // end the input stream and allow the process to exit
-    notchShell.end(function (err,code,signal) {
-        //if (err) throw err;
-        console.log('-EC-notch_filter-The exit code was: ' + code);
-        console.log('-EC-notch_filter-The exit signal was: ' + signal);
-        console.log('-EC-notch_filter-finished');
+        }); 
+        // end the input stream and allow the process to exit
+        notchShell.end(function (err,code,signal) {
+        // if (err) reject(err); se comenta porque es un warning que esta como error david debe revisar
+        // Error: C:\Anaconda3\lib\site-packages\scipy\signal\_arraytools.py:45: FutureWarning: Using a non-tuple sequence for multidimensional indexing is
+        // deprecated; use `arr[tuple(seq)]` instead of `arr[seq]`. In the future this will be interpreted as an array index, `arr[np.array(seq)]`, which will result either in an error or a different result.
+        //   b = a[a_slice]
+            resolve ({r: results, c: code, s: signal});
+        });
     });
-};     
+}
 
-async function ocularScript(currentData) {
-    var options = {
-	  mode: 'binary',
-	  args: [] 
-    };  
-    var ocularShell = new PythonShell('/backend/pythonscripts/ocularArtifact/ocularFilter.py');
-    ocularShell.send(JSON.stringify(currentData.channels));
+/**  
+ * Notch Script V2 full error handling and async await
+ * @param {currentData}   
+ */ 
+async function notchScript(currentData) {
+    let execution= await myNotchExecuter(currentData);
+    return ({
+        c: execution.c,
+        s: execution.s,
+        r: execution.r
+    });
+};  
 
-    ocularShell.on('message', function (message) {
-        // received a message sent from the Python script (a simple "print" statement)
-        //console.log(message);
-        results={}
-        results['channels'] = JSON.parse(message)['channels']  
-        results['debug'] = currentData.debug;
-        results['annotations']=currentData.annotations;
-        results['patientInfo']=currentData.patientInfo;
-        io.emit("ocular_filter", results);   
-      });    
+
+// //funciona 8-19-2018
+/**  
+ * V1 notch executer 
+ * @param {currentData}   
+ */ 
+// function notchScript(currentData) {
+//     var options = {
+// 	  mode: 'binary',
+// 	  args: [] 
+//     };  
+//     // console.log('-EC-notch_filter-',JSON.stringify(currentData.channels[0]));
+//     var notchShell = new PythonShell('/backend/pythonscripts/notch.py');
+
+//     // esto funciona
+//     // notchShell.send(JSON.stringify(currentData.channels[0]));
+//     // ahora enviemos los 20 canales
+//     notchShell.send(JSON.stringify(currentData.channels));
+ 
+//     notchShell.on('message', function (message) {
+//         // received a message sent from the Python script (a simple "print" statement)
+//         console.log(message);
+//         results={}
+//         results['channels'] = JSON.parse(message)['channels']
+//         results['debug'] = currentData.debug;
+//         results['annotations']=currentData.annotations;
+//         results['patientInfo']=currentData.patientInfo;
+//         io.emit("notch_filter", results);  
+//       }); 
        
-    // end the input stream and allow the process to exit
-    ocularShell.end(function (err,code,signal) {
-        if (err) return Promise.reject(err);
-        console.log('-EC-ocular_filter-The exit code was: ' + code);
-        console.log('-EC-ocular_filter-The exit signal was: ' + signal);
-        console.log('-EC-ocular_filter-finished'); 
-    }); 
+//     // end the input stream and allow the process to exit
+//     notchShell.end(function (err,code,signal) {
+//         //if (err) throw err;
+//         console.log('-EC-notch_filter-The exit code was: ' + code);
+//         console.log('-EC-notch_filter-The exit signal was: ' + signal);
+//         console.log('-EC-notch_filter-finished');
+//     });
+// };  
+
+/**  
+ * ocular executer 
+ * @param {currentData}   
+ */ 
+function myOcularExecuter(currentData) {
+    return new Promise(function (resolve, reject) {
+        var options = {
+            mode: 'binary',
+            args: [] 
+        };  
+        let results ={};
+        var ocularShell = new PythonShell('/backend/pythonscripts/ocularArtifact/ocularFilter.py');
+        ocularShell.send(JSON.stringify(currentData.channels));
+        ocularShell.on('message', function (message) {
+            results['channels'] = JSON.parse(message)['channels']  
+            results['debug'] = currentData.debug;
+            results['annotations']=currentData.annotations;
+            results['patientInfo']=currentData.patientInfo;
+        });  
+        // end the input stream and allow the process to exit
+        ocularShell.end(function (err,code,signal) {
+            if (err) reject(err);
+            resolve ({r: results, c: code, s: signal});
+        });
+    });
+}
+
+/**  
+ * Ocular Script V2 full error handling and async await
+ * @param {currentData}   
+ */ 
+async function ocularScript(currentData) {
+    let execution= await myOcularExecuter(currentData);
+    return ({
+        c: execution.c,
+        s: execution.s,
+        r: execution.r
+    });
 };
+
 /**  
  * async file reader 
  * @param {path}   
@@ -144,7 +212,7 @@ function readFileAsync(path) {
  * async executer generalization 
  * @param {currentData}   
  */ 
-function myExecuter(currentData) {
+function myTopoExecuter(currentData) {
     return new Promise(function (resolve, reject) {
         var options = {
             mode: 'binary',
@@ -167,7 +235,7 @@ function myExecuter(currentData) {
  * @param {currentData}   
  */ 
 async function topoPlotScript(currentData) {
-    let execution= await myExecuter(currentData);
+    let execution= await myTopoExecuter(currentData);
     let topoFileBuffer = await readFileAsync(path.join(__dirname, 'temptopo.png'));
     return ({
         c: execution.c,
@@ -274,14 +342,26 @@ io.on('connection', function(socket) {
 
     socket.on('notch_filter', function(msg) {
         console.log("-EC-notch_filter-Start");
-        notchScript(msg);
-        
+        notchScript(msg)
+        .then(results=>{
+            console.log('-EC-notch_filter-The exit code was: ' + results.c);
+            console.log('-EC-notch_filter-The exit signal was: ' + results.s);
+            io.emit("notch_filter", results.r);  
+            console.log('-EC-notch_filter-finished');
+        })
+        .catch(err=>{console.log("notch err ",err)});
     }); 
 
     socket.on('ocular_filter', function(msg) {
         console.log("-EC-ocular_filter-Start");
-        ocularScript(msg);
-        
+        ocularScript(msg)
+        .then((results)=>{
+            console.log('-EC-ocular_filter-The exit code was: ' + results.c);
+            console.log('-EC-ocular_filter-The exit signal was: ' + results.s);
+            io.emit("ocular_filter", results.r);   
+            console.log('-EC-ocular_filter-finished'); 
+        })
+        .catch(err=>{console.log("topoplot err ",err)});
     });
 
     socket.on('topo_plot', function(msg) {

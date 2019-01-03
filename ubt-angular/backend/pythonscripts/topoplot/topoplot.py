@@ -108,7 +108,8 @@ class edf_topoplot(object):
 
 		minn = min(pot_signal)
 		maxx = max(pot_signal)
-		title_obj = plt.title('Topomap for '+samplesStr+' samples') #get the title property handler
+		# title_obj = plt.title('Topomap for '+samplesStr+' samples') #get the title property handler
+		title_obj = plt.title('Current topomap') # simplified title
 		
 		fig=plt.Figure()
 		canvas=FigureCanvas(fig)
