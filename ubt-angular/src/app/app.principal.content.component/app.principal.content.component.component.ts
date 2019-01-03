@@ -103,6 +103,7 @@ ngOnInit() {
     this.d3service.getPatientInfo(this.patientfile, this.patient_current_data).subscribe(
         (response: Response) => {
           this.patient_current_data = JSON.parse(JSON.stringify(response));
+          console.log("EMC-assignData:",this.patient_current_data);
         },
     (err) => {
         console.log(err);

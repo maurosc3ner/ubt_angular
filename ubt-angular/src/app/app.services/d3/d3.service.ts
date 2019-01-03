@@ -51,7 +51,7 @@ export class D3Service {
         };
         this.socket.emit('load_edf', payload);
         const response = this.socket.fromEvent('load_edf');
-        // console.log(response);
+        console.log("EMC-Patient",response);
         return response;
     }
 
