@@ -88,7 +88,6 @@ function myNotchExecuter(currentData) {
             results['debug'] = currentData.debug;
             results['annotations']=currentData.annotations;
             results['patientInfo']=currentData.patientInfo;
-
         }); 
         // end the input stream and allow the process to exit
         notchShell.end(function (err,code,signal) {
@@ -362,7 +361,15 @@ io.on('connection', function(socket) {
         }
     });
 
-    //old version
+    // //old version working 04-01-2019
+    // socket.on('load_edf', function(msg) {
+    //     console.log(msg.debug);
+    //     //since it is an async call, io.emit should go into the python-shell callback
+    //     if (!edfFromFile('/backend/server_data',msg))
+    //         console.log('-EC-lf- ooops something happen');
+    // });
+
+    //async version
     socket.on('load_edf', function(msg) {
         console.log(msg.debug);
         //since it is an async call, io.emit should go into the python-shell callback

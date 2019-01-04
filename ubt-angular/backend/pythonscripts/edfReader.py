@@ -5,7 +5,8 @@ import numpy as np
 import pyedflib
 import sys
 import json
-import datetime
+# import datetime
+from datetime import datetime
 
 from pathlib import Path
 
@@ -88,10 +89,11 @@ if __name__ == '__main__':
         current['onset']=annotations[0][n]
         current['duration']=annotations[1][n]
         current['description']='{0!s}'.format(annotations[2][n])
-        current['currentAnnotTime']=f.getStartdatetime().timestamp()+annotations[0][n] # campo agregaco para ubicar las anotaciones facilmente
+        AnnGMT=(f.getStartdatetime().timestamp()+annotations[0][n]) # campo agregado para ubicar las anotaciones facilmente
+        current['currentAnnotTime']=datetime.fromtimestamp(AnnGMT).strftime('%H:%M:%S')
         data['annotations']['items'].append(current)
-        # print("Unix Timestamp+onset: ",current['currentAnnotTime'])
-    
+        # print(current['currentAnnotTime'])
+       
     data['channels']=[]
     for channel in range(int(data['patientInfo']['edfSignals'])):
         
@@ -131,7 +133,6 @@ if __name__ == '__main__':
         currentFreq =int(f.getSampleFrequency(channel))
         channelObj['data']=[]
 
-
         nSamples = channelObj['samplefrequency']*visWindow
 
         if (currentIndex+nSamples) > channelObj['samples'] :
@@ -147,8 +148,6 @@ if __name__ == '__main__':
         data['debug']['time']={}
         data['debug']['time']['startTime']=f.getStartdatetime().timestamp()
         data['debug']['time']['samplefrequency']=channelObj['samplefrequency'] #Assuming there is only one frequency for all channels
-
-
     f._close()
     del f
     

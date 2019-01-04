@@ -13,6 +13,7 @@ export interface AnnotTableItem {
   onset: number;
   duration : number;
   description: string;
+  currentAnnotTime : string;
 }
 
 // TODO: replace this with real data from your application
