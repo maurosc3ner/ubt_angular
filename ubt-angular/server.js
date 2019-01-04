@@ -11,13 +11,16 @@ var interval;
 
 
 /**  
- * 
- * @param {pathFileName,currentData}   
+ * Read EDF file - load_edf
+ * @param {string} pathFileName - edf file location
+ * @param {Object} currentData - edf object structure *optional  
+ * @param {number} index - Where to start in the file
+ * @param {number} visWindow - timeframe to retrieve in seconds
  */ 
-function openEDFScript(pathFileName,currentData) { 
+function openEDFScript(pathFileName,currentData, index, visWindow) { 
     var options = { 
       mode: 'json',
-        args: [pathFileName,0] 
+        args: [pathFileName,index,visWindow] 
     };    
     var readerShell = new PythonShell('/backend/pythonscripts/edfReader.py',options);
     var asyncMessage;
@@ -31,7 +34,7 @@ function openEDFScript(pathFileName,currentData) {
         console.log(asyncMessage);
         asyncMessage['debug'].command = currentData.debug.command;
         asyncMessage['debug'].fileName = currentData.debug.fileName;
-        asyncMessage.debug.time.index=232000;
+        asyncMessage.debug.time.index=asyncMessage.debug.time.samplefrequency*visWindow;
         asyncMessage.debug.time.currentTime=asyncMessage.debug.time.startTime;
         io.emit("load_edf", asyncMessage);
         console.log('-EC-edfReader-The exit code was: ' + code);
@@ -61,8 +64,9 @@ function jumpEDFScript(filename,currentData) {
 }; 
 
 /**  
- * notch executer 
- * @param {currentData}   
+ * notch executer, eturns a promise
+ * @param {Object} currentData edf object structure 
+ * @returns {Promise} PythonShell execution of notch filter
  */ 
 function myNotchExecuter(currentData) {
     return new Promise(function (resolve, reject) {
@@ -150,8 +154,9 @@ async function notchScript(currentData) {
 // };  
 
 /**  
- * ocular executer 
- * @param {currentData}   
+ * ocular artifact executer, eturns a promise
+ * @param {Object} currentData edf object structure 
+ * @returns {Promise} PythonShell execution of ocular filter
  */ 
 function myOcularExecuter(currentData) {
     return new Promise(function (resolve, reject) {
@@ -190,9 +195,9 @@ async function ocularScript(currentData) {
 };
 
 /**  
- * async file reader 
- * @param {path}   
- * @returns {result}
+ * async png file reader 
+ * @param {string} path - file location
+ * @returns {Promise} result - Promise with the buffer file
  */ 
 function readFileAsync(path) {
     return new Promise(function (resolve, reject) {
@@ -207,8 +212,9 @@ function readFileAsync(path) {
 }
 
 /**  
- * async executer generalization 
- * @param {currentData}   
+ * topoplot executer, returns a promise
+ * @param {Object} currentData - edf object structure 
+ * @returns {Promise} PythonShell execution of topoplot filter
  */ 
 function myTopoExecuter(currentData) {
     return new Promise(function (resolve, reject) {
@@ -321,7 +327,7 @@ function edfFromFile(startPath, msg) {
         var builtFilename = path.join(__dirname+startPath, msg.debug.fileName);
         console.log('-EC-edfFromFile- file found: ', builtFilename);
         if (msg.debug.command == "load_edf")
-            return openEDFScript(builtFilename,msg);
+            return openEDFScript(builtFilename,msg,0,10);
         else if (msg.debug.command == "jump_edf")
             return jumpEDFScript(builtFilename,msg);
     }
@@ -417,7 +423,6 @@ io.on('connection', function(socket) {
             console.log('-EC-loretaFilter-finished');  
         })
         .catch(err=>{console.log("loreta err ",err)});;
-        
     });
 
     socket.on('disconnect', function() {
@@ -431,33 +436,6 @@ io.on('connection', function(socket) {
         console.log(msg);
         clearInterval(interval);
         io.emit("stop_transferBack", response);
-    });
-
-    socket.on('request_subrecords', function(msg) {
-        console.log(msg);
-        interval = setInterval(function() {
-            response = { 
-                "type": "DISP",
-                "origin": "PYCOLLECT",
-                "command": "request_subrecords",
-                "datetime": 1530894200,
-                "channels": [], //A dictionary with the subrecords label and their respective measure.
-            }
-            response.channels.push({
-                'label': 'F1',
-                'data': [{
-                    'value': Math.random() * 10
-                }]
-            });
-            response.channels.push({
-                'label': 'C1',
-                'data': [{
-                    'value': Math.random() * 6
-                }]
-            });
-            console.log("emitiendo");
-            io.emit("subrecordsBack", response);
-        }, 1000);
     });
 
 });  

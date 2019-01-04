@@ -16,7 +16,6 @@ if __name__ == '__main__':
     data['patientInfo']={}
     data['annotations']={}
     data['debug']={}
-    nSamples=0
     path = './'
 
     from pathlib import Path
@@ -28,7 +27,7 @@ if __name__ == '__main__':
     else:
         print ("Either the file is missing or not readable")
     currentIndex = int(sys.argv[2])
-    
+    visWindow = int(sys.argv[3])
   
     # print("file duration: %i seconds" % f.file_duration)
     data['patientInfo']['fileDuration']= f.file_duration
@@ -133,7 +132,7 @@ if __name__ == '__main__':
         channelObj['data']=[]
 
 
-        nSamples = channelObj['samplefrequency']*10
+        nSamples = channelObj['samplefrequency']*visWindow
 
         if (currentIndex+nSamples) > channelObj['samples'] :
             nSamples=channelObj['samples']-currentIndex
@@ -147,7 +146,7 @@ if __name__ == '__main__':
         ### debug info
         data['debug']['time']={}
         data['debug']['time']['startTime']=f.getStartdatetime().timestamp()
-        # data['debug']['time']['fileFreq']=
+        data['debug']['time']['samplefrequency']=channelObj['samplefrequency'] #Assuming there is only one frequency for all channels
 
 
     f._close()
