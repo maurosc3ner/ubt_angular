@@ -16,10 +16,8 @@ if __name__ == '__main__':
     data['patientInfo']={}
     data['annotations']={}
     data['debug']={}
-
-
+    nSamples=0
     path = './'
-    # f = pyedflib.EdfReader('sujeto_base.edf')
 
     from pathlib import Path
 
@@ -38,7 +36,8 @@ if __name__ == '__main__':
     # print("startdate: %i-%i-%i" % (f.getStartdatetime().day,f.getStartdatetime().month,f.getStartdatetime().year))
     data['patientInfo']['startDate']= '{:02d}'.format(f.getStartdatetime().day)+'-'+'{:02d}'.format(f.getStartdatetime().month) +'-'+'{:02d}'.format(f.getStartdatetime().year)
     
-    # print("starttime: %i:%02i:%02i" % (f.getStartdatetime().hour,f.getStartdatetime().minute,f.getStartdatetime().second))
+    # print("starttime: ", f.getStartdatetime())
+    # print("Unix Timestamp: ",(time.mktime(f.getStartdatetime().timetuple())))
     data['patientInfo']['startTime']= '{:02d}'.format(f.getStartdatetime().hour)+':'+'{:02d}'.format(f.getStartdatetime().minute) +':'+'{:02d}'.format(f.getStartdatetime().second)
 
     # print("patientcode: %s" % f.getPatientCode())
@@ -84,12 +83,16 @@ if __name__ == '__main__':
     annotations = f.readAnnotations()
     for n in np.arange(f.annotations_in_file):
         # print("annotation: onset is %f    duration is %s    description is %s" % (annotations[0][n],annotations[1][n],annotations[2][n]))
+        # print("Unix Timestamp: ",(time.mktime(f.getStartdatetime().timetuple())))
+        # print("Unix Timestamp+onset: ",(time.mktime(f.getStartdatetime().timetuple()))+annotations[0][n])
         current = {}
         current['onset']=annotations[0][n]
         current['duration']=annotations[1][n]
         current['description']='{0!s}'.format(annotations[2][n])
+        current['currentAnnotTime']=f.getStartdatetime().timestamp()+annotations[0][n] # campo agregaco para ubicar las anotaciones facilmente
         data['annotations']['items'].append(current)
-
+        # print("Unix Timestamp+onset: ",current['currentAnnotTime'])
+    
     data['channels']=[]
     for channel in range(int(data['patientInfo']['edfSignals'])):
         
@@ -144,6 +147,7 @@ if __name__ == '__main__':
         ### debug info
         data['debug']['time']={}
         data['debug']['time']['startTime']=f.getStartdatetime().timestamp()
+        # data['debug']['time']['fileFreq']=
 
 
     f._close()
