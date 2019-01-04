@@ -1,0 +1,23 @@
+.annot-table{
+    width: 100%;
+    height: 100%;
+    margin: 10px auto;
+    border-radius: 25px 5px 5px 25px;
+}
+
+.example-header-image {
+    background-image: url('../../../assets/control-bar/if_Menu_2001884.png');
+    background-size: cover;
+}
+
+.annot-card {
+    /* max-width: 400px; */
+        width: 100%;
+        border-radius: 3px;
+        padding: 0px;
+    }
+    
+.annot-title{
+    color: black;
+    margin: 10px;
+}
