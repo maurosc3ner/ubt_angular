@@ -9,14 +9,66 @@ var PythonShell = require('python-shell');
 var actSockets = 0;
 var interval;
 
+/**  
+ * read Script V2 full error handling and async await
+ * @param {currentData}   
+ */ 
+function myReadExecuter(pathFileName,currentData, index, visWindow) { 
+    return new Promise(function (resolve, reject) {
+        let options = { 
+            mode: 'json',
+            args: [pathFileName,index,visWindow] 
+        };    
+        let readerShell = new PythonShell('/backend/pythonscripts/edfReader.py',options);
+        let results={};
+        readerShell.on('message', function (message) { 
+            results = message      
+        });
+        readerShell.end(function (err,code,signal) {
+            if (err) reject(err);
+            results['debug'].command = currentData.debug.command;
+            results['debug'].fileName = currentData.debug.fileName;
+            results.debug.time.index=results.debug.time.samplefrequency*visWindow;
+            results.debug.time.currentTime=results.debug.time.startTime+results.debug.time.index;
+            console.log("readerShell",results.debug.time);
+            resolve ({r: results, c: code, s: signal});
+        });
+    });
+};  
+
+function myRewinderExecuter(filename,currentData,visWindow) {
+    return new Promise(function (resolve, reject) {
+        var options = {
+            mode: 'json', 
+            args: [filename,currentData.debug.time.index,visWindow] 
+        };
+        let results={};
+        let rewinderShell = new PythonShell('/backend/pythonscripts/edfNavigator.py',options);
+        rewinderShell.on('message',message=>{ 
+            results = message      
+        });
+        rewinderShell.end(function (err,code,signal) {
+            if (err) reject(err);
+            //attach old information such as patient info, annotations, debug
+            results['debug'] = currentData.debug;
+            results.debug.time.currentTime=currentData.debug.time.startTime+currentData.debug.time.index;
+            results['annotations']=currentData.annotations;
+            results['patientInfo']=currentData.patientInfo;
+            console.log('-EC-jumpEDFScript- end of exec edfNavigator',results['debug']);
+            resolve ({r: results, c: code, s: signal});
+        }); 
+    });
+}; 
+
 
 /**  
  * Read EDF file - load_edf
- * @param {string} pathFileName - edf file location
+ * @param {string} startDirPath - edf start directory path location
  * @param {Object} currentData - edf object structure *optional  
  * @param {number} index - Where to start in the file
  * @param {number} visWindow - timeframe to retrieve in seconds
  */ 
+<<<<<<< HEAD
 function openEDFScript(pathFileName,currentData, index, visWindow) { 
     var options = { 
       mode: 'json',
@@ -41,27 +93,57 @@ function openEDFScript(pathFileName,currentData, index, visWindow) {
         console.log('-EC-edfReader-The exit signal was: ' + signal);
         console.log('-EC-edfReader-finished');  
     });
+=======
+async function openEDFScript(startDirPath,currentData, index, visWindow) { 
+    if (!fs.existsSync(__dirname + startDirPath)) {
+        console.log("-EC-eff- no dir ", startDirPath);
+        recject("-EC-eff- no dir ");
+    } else {
+        console.log("-EC-edfFromFile- exist ", startDirPath);
+        var builtFilename = path.join(__dirname+startDirPath, currentData.debug.fileName);
+        console.log('-EC-edfFromFile- file found: ', builtFilename);
+        if (currentData.debug.command == "load_edf"){
+            // return openEDFScript(builtFilename,msg,0,10);
+            let execution= await myReadExecuter(builtFilename,currentData, index, visWindow);
+            return ({
+                c: execution.c,
+                s: execution.s,
+                r: execution.r
+            });
+        }
+        else if (currentData.debug.command == "jump_edf"){
+            let execution= await myRewinderExecuter(builtFilename,currentData, visWindow);
+            return ({
+                c: execution.c,
+                s: execution.s,
+                r: execution.r
+            });
+        }
+    }
+>>>>>>> d653f8e0524e63c1dab19dc6ba2f49f7b7a13aae
 };   
     
-function jumpEDFScript(filename,currentData) {
-    //Aqui va llamado a rutina de python
-    //TODO 
-    //console.log('-EC-jumpEDFScript- calling python edfNavigator.py');
-    var options = {
-	  mode: 'json', 
-	  args: [filename,currentData.debug.time.index,10] 
-	};
-    PythonShell.run('/backend/pythonscripts/edfNavigator.py', options, function (err, results) {
-		if (err) console.log(err);
-        console.log('-EC-jumpEDFScript- end of exec edfNavigator',currentData.debug,results[0]['debug']);
-        results[0]['debug'] = currentData.debug;
-        results[0].debug.time.currentTime=currentData.debug.time.startTime+currentData.debug.time.index;
-        results[0]['annotations']=currentData.annotations;
-        results[0]['patientInfo']=currentData.patientInfo;
-        io.emit("jump_edf", results[0]);
-        return true;
-	}); 
-}; 
+// function jumpEDFScript(filename,currentData) {
+//     //Aqui va llamado a rutina de python
+//     //TODO 
+//     //console.log('-EC-jumpEDFScript- calling python edfNavigator.py');
+//     var options = {
+// 	  mode: 'json', 
+// 	  args: [filename,currentData.debug.time.index,10] 
+// 	};
+//     PythonShell.run('/backend/pythonscripts/edfNavigator.py', options, function (err, results) {
+// 		if (err) console.log(err);
+//         console.log('-EC-jumpEDFScript- end of exec edfNavigator',currentData.debug,results[0]['debug']);
+//         results[0]['debug'] = currentData.debug;
+//         results[0].debug.time.currentTime=currentData.debug.time.startTime+currentData.debug.time.index;
+//         results[0]['annotations']=currentData.annotations;
+//         results[0]['patientInfo']=currentData.patientInfo;
+//         io.emit("jump_edf", results[0]);
+//         return true;
+// 	}); 
+// }; 
+
+
 
 /**  
  * notch executer, eturns a promise
@@ -83,7 +165,7 @@ function myNotchExecuter(currentData) {
     
         notchShell.on('message', function (message) {
             // received a message sent from the Python script (a simple "print" statement)
-            console.log(message);
+            // console.log(message);
             results['channels'] = JSON.parse(message)['channels']
             results['debug'] = currentData.debug;
             results['annotations']=currentData.annotations;
@@ -112,7 +194,6 @@ async function notchScript(currentData) {
         r: execution.r
     });
 };  
-
 
 // //funciona 8-19-2018
 /**  
@@ -333,6 +414,7 @@ function edfFromFile(startPath, msg) {
 };
 
 io.on('connection', function(socket) {
+    let edfPath='/backend/server_data';
     actSockets++;
     console.log('a user connected');
 
@@ -342,7 +424,7 @@ io.on('connection', function(socket) {
         let message ={
             'files':[]
         }
-        let edfPath='/backend/server_data';
+        
         let joinedPath=path.join(__dirname+edfPath);
         if (!fs.existsSync(__dirname + edfPath)) {
             console.log("-EC-eff- no dir ", edfPath);
@@ -373,14 +455,33 @@ io.on('connection', function(socket) {
     socket.on('load_edf', function(msg) {
         console.log(msg.debug);
         //since it is an async call, io.emit should go into the python-shell callback
-        if (!edfFromFile('/backend/server_data',msg))
-            console.log('-EC-lf- ooops something happen');
+        openEDFScript(edfPath,msg,0,10)
+        .then(results=>{
+            console.log('-EC-edfReader-The exit code was: ' + results.c);
+            console.log('-EC-edfReader-The exit signal was: ' + results.s);
+            io.emit("load_edf", results.r);
+            console.log('-EC-edfReader-finished',results.r.debug);  
+        })
+        .catch(err=>{console.log("read err ",err)});
     });
 
+    // socket.on('jump_edf', function(msg) {
+    //     //este funciona
+    //     if (!edfFromFile('/backend/server_data', msg))
+    //         console.log('-EC-lf- ooops something happen');
+    
+    // });
+
     socket.on('jump_edf', function(msg) {
-        //este funciona
-        if (!edfFromFile('/backend/server_data', msg))
-            console.log('-EC-lf- ooops something happen');
+        console.log(msg.debug);
+        openEDFScript(edfPath,msg,0,10)
+        .then(results=>{
+            console.log('-EC-edfJumper-The exit code was: ' + results.c);
+            console.log('-EC-edfJumper-The exit signal was: ' + results.s);
+            io.emit("jump_edf", results.r);
+            console.log('-EC-edfJumper-finished',results.r.debug);  
+        })
+        .catch(err=>{console.log("jump err ",err)});
     
     });
 

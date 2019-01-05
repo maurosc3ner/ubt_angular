@@ -148,9 +148,10 @@ if __name__ == '__main__':
         data['debug']['time']={}
         data['debug']['time']['startTime']=f.getStartdatetime().timestamp()
         data['debug']['time']['samplefrequency']=channelObj['samplefrequency'] #Assuming there is only one frequency for all channels
+    # print (currentIndex, nSamples,data['debug']['time'],f.getStartdatetime())
     f._close()
     del f
-    
+  
     # use print with pythonshell
     print(json.dumps(data))
     #use stdout with spawn
