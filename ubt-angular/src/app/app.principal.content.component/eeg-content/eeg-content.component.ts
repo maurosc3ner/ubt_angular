@@ -11,7 +11,6 @@ import {
 } from '@angular/core';
 import { D3Service } from '../../app.services/d3/d3.service';
 import * as d3 from 'd3';
-//import { sample } from 'rxjs/operators';
 declare let cubism: any;
 
 @Component({

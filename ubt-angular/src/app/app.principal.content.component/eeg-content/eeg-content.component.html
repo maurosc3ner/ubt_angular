@@ -4,10 +4,12 @@
         <div class="col">
             <mat-form-field >
                 <label>Información del paciente:</label>
-                <mat-select (selectionChange)="visualControl($event)" [(value)]="visualization_type">
-                    <mat-option value="Lines">Lines</mat-option>
-                    <mat-option value="Horizon" disabled>Horizon</mat-option>
-                </mat-select>
+                <div style="display:none">
+                    <mat-select (selectionChange)="visualControl($event)" [(value)]="visualization_type">
+                        <mat-option value="Lines">Lines</mat-option>
+                        <mat-option value="Horizon" disabled>Horizon</mat-option>
+                    </mat-select>
+                </div>
             </mat-form-field>
         </div>
     </div>

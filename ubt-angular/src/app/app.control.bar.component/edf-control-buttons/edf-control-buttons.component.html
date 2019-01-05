@@ -1,48 +1,44 @@
 <div class="container-fluid">
   <div class="row main-container">
-    <div class="col-3 col-md-3">
-      <button mat-raised-button color="primary" 
-        matTooltip="Página anterior"
-        matTooltipClass="edf-menu-tooltip"
-        aria-label="Button that shows a red tooltip"
-        class="material-cust-small-button" 
-        (click)="Backward($event)" >
-        <mat-icon class="material-cust-small-button-icon">keyboard_arrow_left</mat-icon>
-      </button>
-    </div>
-    <div class="col-3 col-md-3">
-      <button mat-raised-button color="primary" 
-        matTooltip="Página siguiente"
-        matTooltipClass="edf-menu-tooltip"
-        aria-label="Button that shows a red tooltip"
-        class="material-cust-small-button" 
-        (click)="Forward($event)">
-        <mat-icon class="material-cust-small-button-icon">keyboard_arrow_right</mat-icon>
-      </button>
-    </div>
-    <div class="col-3 col-md-3">
-        <button mat-raised-button color="primary" 
-          matTooltip="Reducir salto"
-          matTooltipClass="edf-menu-tooltip"
-          aria-label="Button that shows a red tooltip"
-          class="material-cust-small-button" 
-          (click)="changeStep($event, false)">
-            <mat-icon class="material-cust-small-button-icon">keyboard_arrow_down</mat-icon>
+    <div class="col-12 col-md-12">
+        <div class="btn-group-horizontal" role="group" aria-label="Horizontal button group">
+          <button mat-raised-button color="primary" 
+            matTooltip="Página anterior"
+            matTooltipClass="edf-menu-tooltip"
+            aria-label="Button that shows a red tooltip"
+            class="material-cust-small-button" 
+            (click)="Backward($event)" >
+            <mat-icon class="material-cust-small-button-icon">keyboard_arrow_left</mat-icon>
           </button>
-    </div>
-    <div class="col-3 col-md-3">
-        <button mat-raised-button color="primary" 
-          matTooltip="Incrementar salto"
-          matTooltipClass="edf-menu-tooltip"
-          aria-label="Button that shows a red tooltip"
-          class="material-cust-small-button" 
-          (click)="changeStep($event, true)">
-          <mat-icon class="material-cust-small-button-icon">keyboard_arrow_up</mat-icon>
-        </button>
+          <button mat-raised-button color="primary" 
+            matTooltip="Página siguiente"
+            matTooltipClass="edf-menu-tooltip"
+            aria-label="Button that shows a red tooltip"
+            class="material-cust-small-button" 
+            (click)="Forward($event)">
+            <mat-icon class="material-cust-small-button-icon">keyboard_arrow_right</mat-icon>
+          </button>
+            <button mat-raised-button color="primary" 
+              matTooltip="Reducir salto"
+              matTooltipClass="edf-menu-tooltip"
+              aria-label="Button that shows a red tooltip"
+              class="material-cust-small-button" 
+              (click)="changeStep($event, false)">
+                <mat-icon class="material-cust-small-button-icon">keyboard_arrow_down</mat-icon>
+              </button>
+            <button mat-raised-button color="primary" 
+              matTooltip="Incrementar salto"
+              matTooltipClass="edf-menu-tooltip"
+              aria-label="Button that shows a red tooltip"
+              class="material-cust-small-button" 
+              (click)="changeStep($event, true)">
+              <mat-icon class="material-cust-small-button-icon">keyboard_arrow_up</mat-icon>
+            </button>
       </div>
+    </div>
   </div>
   <div class="row main-container">
-    <div class="col-6 col-md-6 text-center"><p class="speed"></p></div>
+    <div class="col-6 col-md-6 text-center"></div>
     <div class="col-6 col-md-6 text-center">
       <p class="speed" data-toggle="tooltip" data-placement="top" title="Tamaño actual del salto">
         {{this.step[this.stepPos]}}0 segundos</p>

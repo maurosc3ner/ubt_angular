@@ -34,7 +34,7 @@ function openEDFScript(pathFileName,currentData, index, visWindow) {
         console.log(asyncMessage);
         asyncMessage['debug'].command = currentData.debug.command;
         asyncMessage['debug'].fileName = currentData.debug.fileName;
-        asyncMessage.debug.time.index=asyncMessage.debug.time.samplefrequency*visWindow;
+        asyncMessage.debug.time.index+=asyncMessage.debug.time.samplefrequency*visWindow;
         asyncMessage.debug.time.currentTime=asyncMessage.debug.time.startTime;
         io.emit("load_edf", asyncMessage);
         console.log('-EC-edfReader-The exit code was: ' + code);

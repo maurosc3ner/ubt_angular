@@ -39,7 +39,6 @@
   .speed {
       font-size: 12px;
       text-align: center;
-      padding-left: 20%;
   }
 
 .material-cust-small-button {
@@ -52,4 +51,9 @@
   width: auto;
   min-width: 1%;
   vertical-align: middle;
+}
+
+.hsep {
+  padding-left: 10%;
+  padding-right: 10%;
 }
