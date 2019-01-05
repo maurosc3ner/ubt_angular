@@ -15,6 +15,7 @@ import { EdfMenuBarComponent } from './app.control.bar.component/edf-menu-bar/ed
 import { EdfControlButtonsComponent } from './app.control.bar.component/edf-control-buttons/edf-control-buttons.component';
 import { PlaneViewComponent } from './app.principal.content.component/plane-view/plane-view.component';
 import { AnnotationContentComponent } from './app.principal.content.component/annotation.content/annotation.content.component';
+import { FooterComponent } from './app.footer.component/app.footer.component';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -32,9 +33,9 @@ import {
   MatButtonModule,
   MatIconModule,
   MatFormFieldModule,
-  MatSelectModule, 
-  MatTableModule, 
-  MatPaginatorModule, 
+  MatSelectModule,
+  MatTableModule,
+  MatPaginatorModule,
   MatSortModule,
   MatPaginatorIntl,
   MatCardModule,
@@ -65,7 +66,8 @@ import { FormsModule } from '@angular/forms';
     PlaneViewComponent,
     AnnotationContentComponent,
     AnnotTableComponent,
-    EdfFileDialogComponent
+    EdfFileDialogComponent,
+    FooterComponent
   ],
   imports: [
     BrowserModule,

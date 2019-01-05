@@ -211,7 +211,7 @@ h1, h2 {
 
 .anno-line {
   stroke: #FF0000;
-  stroke-dasharray: 5;
+  stroke-width: 2;
  }
 
 .cursor-text {

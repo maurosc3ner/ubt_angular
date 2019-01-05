@@ -1,0 +1,16 @@
+.bg-custom {
+    background-color: black !important;
+}
+
+.logo {
+  /* background-color: transparent; */
+  width: 7%;
+  margin-left: 10px;
+  min-width: 50px;
+}
+.logo-small {
+  /* background-color: transparent; */
+  width: 15%;
+  margin-left: 10px;
+  min-width: 50px;
+}
