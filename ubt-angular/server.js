@@ -93,34 +93,6 @@ function openEDFScript(pathFileName,currentData, index, visWindow) {
         console.log('-EC-edfReader-The exit signal was: ' + signal);
         console.log('-EC-edfReader-finished');  
     });
-=======
-async function openEDFScript(startDirPath,currentData, index, visWindow) { 
-    if (!fs.existsSync(__dirname + startDirPath)) {
-        console.log("-EC-eff- no dir ", startDirPath);
-        recject("-EC-eff- no dir ");
-    } else {
-        console.log("-EC-edfFromFile- exist ", startDirPath);
-        var builtFilename = path.join(__dirname+startDirPath, currentData.debug.fileName);
-        console.log('-EC-edfFromFile- file found: ', builtFilename);
-        if (currentData.debug.command == "load_edf"){
-            // return openEDFScript(builtFilename,msg,0,10);
-            let execution= await myReadExecuter(builtFilename,currentData, index, visWindow);
-            return ({
-                c: execution.c,
-                s: execution.s,
-                r: execution.r
-            });
-        }
-        else if (currentData.debug.command == "jump_edf"){
-            let execution= await myRewinderExecuter(builtFilename,currentData, visWindow);
-            return ({
-                c: execution.c,
-                s: execution.s,
-                r: execution.r
-            });
-        }
-    }
->>>>>>> d653f8e0524e63c1dab19dc6ba2f49f7b7a13aae
 };   
     
 // function jumpEDFScript(filename,currentData) {
