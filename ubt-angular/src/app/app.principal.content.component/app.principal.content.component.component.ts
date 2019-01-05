@@ -2,6 +2,7 @@ import { Component, Input, OnInit, OnChanges, Output, EventEmitter, OnDestroy } 
 import { D3Service } from '../app.services/d3/d3.service';
 import {last, tap, take, finalize} from 'rxjs/operators';
 import {throwError} from 'rxjs';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-principal-content-component',
@@ -24,7 +25,7 @@ export class AppPrincipalContentComponent implements OnInit, OnChanges {
   srcImageCoronal: String = './assets/brain-dummy/MRICoronal_2.jpg';
   srcTopoPlot: any;
   brainColors:JSON;
-constructor(private d3service: D3Service) {
+constructor(private d3service: D3Service,public snackBar: MatSnackBar) {
 }
 ngOnInit() {
   this.Command_Control = null;
@@ -102,8 +103,14 @@ ngOnInit() {
   assignData() {
     this.d3service.getPatientInfo(this.patientfile, this.patient_current_data).subscribe(
         (response: Response) => {
-          this.patient_current_data = JSON.parse(JSON.stringify(response));
-          console.log("EMC-assignData:",this.patient_current_data);
+          let serverResponse=JSON.parse(JSON.stringify(response));
+          if(serverResponse.hasOwnProperty('dbgmsg'))
+          {
+            this.snackBar.open(serverResponse["dbgmsg"], "Aceptar", {
+              duration: 3000,
+            });
+          }
+          this.patient_current_data = JSON.parse(JSON.stringify(serverResponse.response));
         },
     (err) => {
         console.log(err);
@@ -134,7 +141,16 @@ ngOnInit() {
   notchFilter() {
     const notch = this.d3service.getNotchFilter(this.patient_current_data);
     notch.pipe(
-      tap((response) => this.patient_current_data = JSON.parse(JSON.stringify(response))),
+      tap((response) =>{
+        let serverResponse=JSON.parse(JSON.stringify(response));
+        if(serverResponse.hasOwnProperty('dbgmsg'))
+        {
+          this.snackBar.open(serverResponse["dbgmsg"], "Aceptar", {
+            duration: 3000,
+          });
+        }
+        this.patient_current_data = JSON.parse(JSON.stringify(serverResponse.response));
+      }),
       take(1),
       finalize(() => {
         console.log('finalized');
@@ -150,7 +166,16 @@ ngOnInit() {
   ocularFilter() {
     const ocular = this.d3service.getOcularFilter(this.patient_current_data)
     ocular.pipe(
-      tap((response) => this.patient_current_data = JSON.parse(JSON.stringify(response))),
+      tap((response) => {
+        let serverResponse=JSON.parse(JSON.stringify(response));
+        if(serverResponse.hasOwnProperty('dbgmsg'))
+        {
+          this.snackBar.open(serverResponse["dbgmsg"], "Aceptar", {
+            duration: 3000,
+          });
+        }
+        this.patient_current_data = JSON.parse(JSON.stringify(serverResponse.response));
+      }),
       take(1),
       finalize(() => {
         console.log('finalized');
@@ -168,8 +193,14 @@ ngOnInit() {
     const topoplot = this.d3service.getTopoPlot(payload);
     topoplot.pipe(
       tap((response) => {
-        const tempImg = JSON.parse(JSON.stringify(response));
-        this.srcTopoPlot = 'data:image/png;base64,' + tempImg['buffer'];
+        const serverResponse = JSON.parse(JSON.stringify(response));
+        if(serverResponse.hasOwnProperty('dbgmsg'))
+        {
+          this.snackBar.open(serverResponse["dbgmsg"], "Aceptar", {
+            duration: 3000,
+          });
+        }
+        this.srcTopoPlot = 'data:image/png;base64,' + serverResponse['buffer'];
       }),
       take(1),
       finalize(() => {
@@ -177,10 +208,18 @@ ngOnInit() {
     .subscribe((response: Response) => response);
   }
   loretaFilter(payload) {
-    // console.log('EC-loretaFilter before subscribe ');
     const brain = this.d3service.getLoretaFilter(payload);
     brain.pipe(
-      tap((response) => this.brainColors = JSON.parse(JSON.stringify(response))),
+      tap((response) => {
+        let serverResponse=JSON.parse(JSON.stringify(response));
+        if(serverResponse.hasOwnProperty('dbgmsg'))
+        {
+          this.snackBar.open(serverResponse["dbgmsg"], "Aceptar", {
+            duration: 3000,
+          });
+        }
+        this.brainColors =  JSON.parse(serverResponse.response);
+      }),
       take(1),
       finalize(() => {
       }))

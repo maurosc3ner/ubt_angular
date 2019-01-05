@@ -49,6 +49,8 @@ import {MatMenuModule} from '@angular/material/menu';
 import {MatRadioModule} from '@angular/material/radio';
 import { EdfFileDialogComponent } from './app.control.bar.component/edf-menu-bar/edf-file-dialog/edf-file-dialog.component';
 import { FormsModule } from '@angular/forms';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -90,7 +92,8 @@ import { FormsModule } from '@angular/forms';
     MatMenuModule,
     MatDialogModule,
     MatRadioModule,
-    FormsModule
+    FormsModule,
+    MatSnackBarModule
   ],
   entryComponents: [
     EdfFileDialogComponent

@@ -29,7 +29,7 @@ function myReadExecuter(pathFileName,currentData, index, visWindow) {
             results['debug'].command = currentData.debug.command;
             results['debug'].fileName = currentData.debug.fileName;
             results.debug.time.index=results.debug.time.samplefrequency*visWindow;
-            results.debug.time.currentTime=results.debug.time.startTime+results.debug.time.index;
+            results.debug.time.currentTime=results.debug.time.startTime+visWindow;
             console.log("readerShell",results.debug.time);
             resolve ({r: results, c: code, s: signal});
         });
@@ -51,7 +51,7 @@ function myRewinderExecuter(filename,currentData,visWindow) {
             if (err) reject(err);
             //attach old information such as patient info, annotations, debug
             results['debug'] = currentData.debug;
-            results.debug.time.currentTime=currentData.debug.time.startTime+currentData.debug.time.index;
+            results.debug.time.currentTime+=currentData.debug.time.startTime+(currentData.debug.time.index/currentData.debug.time.samplefrequency);
             results['annotations']=currentData.annotations;
             results['patientInfo']=currentData.patientInfo;
             console.log('-EC-jumpEDFScript- end of exec edfNavigator',results['debug']);
@@ -95,28 +95,6 @@ async function openEDFScript(startDirPath,currentData, index, visWindow) {
         }
     }
 };   
-    
-// function jumpEDFScript(filename,currentData) {
-//     //Aqui va llamado a rutina de python
-//     //TODO 
-//     //console.log('-EC-jumpEDFScript- calling python edfNavigator.py');
-//     var options = {
-// 	  mode: 'json', 
-// 	  args: [filename,currentData.debug.time.index,10] 
-// 	};
-//     PythonShell.run('/backend/pythonscripts/edfNavigator.py', options, function (err, results) {
-// 		if (err) console.log(err);
-//         console.log('-EC-jumpEDFScript- end of exec edfNavigator',currentData.debug,results[0]['debug']);
-//         results[0]['debug'] = currentData.debug;
-//         results[0].debug.time.currentTime=currentData.debug.time.startTime+currentData.debug.time.index;
-//         results[0]['annotations']=currentData.annotations;
-//         results[0]['patientInfo']=currentData.patientInfo;
-//         io.emit("jump_edf", results[0]);
-//         return true;
-// 	}); 
-// }; 
-
-
 
 /**  
  * notch executer, eturns a promise
@@ -166,45 +144,7 @@ async function notchScript(currentData) {
         s: execution.s,
         r: execution.r
     });
-};  
-
-// //funciona 8-19-2018
-/**  
- * V1 notch executer 
- * @param {currentData}   
- */ 
-// function notchScript(currentData) {
-//     var options = {
-// 	  mode: 'binary',
-// 	  args: [] 
-//     };  
-//     // console.log('-EC-notch_filter-',JSON.stringify(currentData.channels[0]));
-//     var notchShell = new PythonShell('/backend/pythonscripts/notch.py');
-
-//     // esto funciona
-//     // notchShell.send(JSON.stringify(currentData.channels[0]));
-//     // ahora enviemos los 20 canales
-//     notchShell.send(JSON.stringify(currentData.channels));
- 
-//     notchShell.on('message', function (message) {
-//         // received a message sent from the Python script (a simple "print" statement)
-//         console.log(message);
-//         results={}
-//         results['channels'] = JSON.parse(message)['channels']
-//         results['debug'] = currentData.debug;
-//         results['annotations']=currentData.annotations;
-//         results['patientInfo']=currentData.patientInfo;
-//         io.emit("notch_filter", results);  
-//       }); 
-       
-//     // end the input stream and allow the process to exit
-//     notchShell.end(function (err,code,signal) {
-//         //if (err) throw err;
-//         console.log('-EC-notch_filter-The exit code was: ' + code);
-//         console.log('-EC-notch_filter-The exit signal was: ' + signal);
-//         console.log('-EC-notch_filter-finished');
-//     });
-// };  
+}; 
 
 /**  
  * ocular artifact executer, eturns a promise
@@ -305,6 +245,7 @@ async function topoPlotScript(currentData) {
 /**  
  * async loreta executer generalization 
  * @param {currentData}   
+ * @returns {Promise} PythonShell execution of loreta filter
  */ 
 function myLoretaExecuter(currentData) {
     return new Promise(function (resolve, reject) {
@@ -328,7 +269,8 @@ function myLoretaExecuter(currentData) {
 
 /**  
  * Loreta V2 full error handling and async await
- * @param {*} currentData  
+ * @param {Object} currentData - EDF object of the time frame to process   
+ * @returns {Object} Execution output code, signal and results
  */ 
 async function loretaScript(currentData) { 
     let execution= await myLoretaExecuter(currentData);
@@ -338,53 +280,6 @@ async function loretaScript(currentData) {
         r: execution.r
     });
 }; 
-
-// loreta V1 que funciona 03-01-2019
-// function loretaScript(currentData) { 
-//     var options = { 
-//       mode: 'text',      
-//     //   pythonOptions: ['','','','',''], //own python env flags   
-//     //   scriptPath : './backend/pythonscripts/loreta-new', 
-// 	  args: ['-l nyL.mat', '-v nyvert.mat', '-f nyface.mat', '-c nyCh.mat', '-d nyEEG_R.txt'] 
-//     };    
-//     // python loretaFilter.py -l nyL.mat -v nyvert.mat -f nyface.mat -c nyCh.mat -d nyEEG_R.txt -b ..\..\server_data\sujeto_base.edf
-//     var loretaShell = new PythonShell('/backend/pythonscripts/loreta-new/loretaFilter.py',options);
-//     // /backend/pythonscripts/loreta-new/loretaFilter.py
-//     loretaShell.send(JSON.stringify(currentData.channels));  
-//     //console.log(currentData.channels);
-//     var asyncMessage;
-//     loretaShell.on('message', function (message) {
-//         // received a message sent from the Python script (a simple "print" statement)
-//         // console.log(message);    
-//         asyncMessage = message      
-//       });    
-        
-//     // end the input stream and allow the process to exit
-//     loretaShell.end(function (err,code,signal) {
-//         if (err) throw err;  
-//         io.emit("loreta_filter", JSON.parse(asyncMessage)); 
-//         //console.log(typeof JSON.parse(asyncMessage));
-//         console.log('-EC-loretaFilter-The exit code was: ' + code);
-//         console.log('-EC-loretaFilter-The exit signal was: ' + signal);
-//         console.log('-EC-loretaFilter-finished');  
-//     });
-// }; 
-
-function edfFromFile(startPath, msg) {
-    var results = [];
-    if (!fs.existsSync(__dirname + startPath)) {
-        console.log("-EC-eff- no dir ", startPath);
-        //return;
-    } else {
-        console.log("-EC-edfFromFile- exist ", startPath);
-        var builtFilename = path.join(__dirname+startPath, msg.debug.fileName);
-        console.log('-EC-edfFromFile- file found: ', builtFilename);
-        if (msg.debug.command == "load_edf")
-            return openEDFScript(builtFilename,msg,0,10);
-        else if (msg.debug.command == "jump_edf")
-            return jumpEDFScript(builtFilename,msg);
-    }
-};
 
 io.on('connection', function(socket) {
     let edfPath='/backend/server_data';
@@ -416,34 +311,23 @@ io.on('connection', function(socket) {
         }
     });
 
-    // //old version working 04-01-2019
-    // socket.on('load_edf', function(msg) {
-    //     console.log(msg.debug);
-    //     //since it is an async call, io.emit should go into the python-shell callback
-    //     if (!edfFromFile('/backend/server_data',msg))
-    //         console.log('-EC-lf- ooops something happen');
-    // });
-
     //async version
     socket.on('load_edf', function(msg) {
         console.log(msg.debug);
-        //since it is an async call, io.emit should go into the python-shell callback
+        
         openEDFScript(edfPath,msg,0,10)
         .then(results=>{
             console.log('-EC-edfReader-The exit code was: ' + results.c);
             console.log('-EC-edfReader-The exit signal was: ' + results.s);
-            io.emit("load_edf", results.r);
+            let dbgmsg = "El archivo EDF: "+msg.debug.fileName+", ha sido abierto satisfactoriamente";
+            io.emit("load_edf", {response: results.r,dbgmsg:dbgmsg});
             console.log('-EC-edfReader-finished',results.r.debug);  
         })
-        .catch(err=>{console.log("read err ",err)});
+        .catch(err=>{
+            console.log("read err ",err);
+            io.emit("load_edf", {response: null,dbgmsg:"Ha ocurrido un error abriendo el archivo: "+msg.debug.fileName});
+        });
     });
-
-    // socket.on('jump_edf', function(msg) {
-    //     //este funciona
-    //     if (!edfFromFile('/backend/server_data', msg))
-    //         console.log('-EC-lf- ooops something happen');
-    
-    // });
 
     socket.on('jump_edf', function(msg) {
         console.log(msg.debug);
@@ -455,7 +339,7 @@ io.on('connection', function(socket) {
             console.log('-EC-edfJumper-finished',results.r.debug);  
         })
         .catch(err=>{console.log("jump err ",err)});
-    
+
     });
 
     socket.on('notch_filter', function(msg) {
@@ -464,10 +348,13 @@ io.on('connection', function(socket) {
         .then(results=>{
             console.log('-EC-notch_filter-The exit code was: ' + results.c);
             console.log('-EC-notch_filter-The exit signal was: ' + results.s);
-            io.emit("notch_filter", results.r);  
+            io.emit("notch_filter",{response: results.r,dbgmsg:"Filtro notch ejecutado satisfactoriamente!" });  
             console.log('-EC-notch_filter-finished');
         })
-        .catch(err=>{console.log("notch err ",err)});
+        .catch(err=>{
+            console.log("topoplot err ",err);
+            io.emit("notch_filter", {response: null,dbgmsg:"Ha ocurrido un error ejecuntando el filtro notch!" });   
+        });
     }); 
 
     socket.on('ocular_filter', function(msg) {
@@ -476,10 +363,13 @@ io.on('connection', function(socket) {
         .then((results)=>{
             console.log('-EC-ocular_filter-The exit code was: ' + results.c);
             console.log('-EC-ocular_filter-The exit signal was: ' + results.s);
-            io.emit("ocular_filter", results.r);   
+            io.emit("ocular_filter", {response: results.r,dbgmsg:"Filtro ocular ejecutado satisfactoriamente!" });   
             console.log('-EC-ocular_filter-finished'); 
         })
-        .catch(err=>{console.log("topoplot err ",err)});
+        .catch(err=>{
+            console.log("topoplot err ",err);
+            io.emit("ocular_filter", {response: null,dbgmsg:"Ha ocurrido un error ejecuntando el filtro ocular!" });   
+        });
     });
 
     socket.on('topo_plot', function(msg) {
@@ -488,10 +378,13 @@ io.on('connection', function(socket) {
         .then((results)=>{
             console.log('-EC-topoplot-The exit code was: ',results.c);
             console.log('-EC-topoplot-The exit signal was: ',  results.s);
-            io.emit('topo_plot', { image: true, buffer: results.b.toString('base64') });
+            io.emit('topo_plot', { image: true, buffer: results.b.toString('base64') ,dbgmsg: "Topoplot ejecutado satisfactoriamente!"});
             console.log('-EC-topoplot-finished');
         })
-        .catch(err=>{console.log("topoplot err ",err)});
+        .catch(err=>{
+            console.log("topoplot err ",err);
+            io.emit('topo_plot', { image: false, buffer: null ,dbgmsg: "Ha ocurrido un error ejecuntando topoplot!"});
+        });
     });
 
     socket.on('loreta_filter', function(msg) {
@@ -500,10 +393,13 @@ io.on('connection', function(socket) {
         .then((results)=>{
             console.log('-EC-loretaFilter-The exit code was: ',results.c);
             console.log('-EC-loretaFilter-The exit signal was: ',results.s);
-            io.emit("loreta_filter", JSON.parse(results.r)); 
+            io.emit("loreta_filter", {response:results.r, dbgmsg:"Loreta ejecutado satisfactoriamente!"}); 
             console.log('-EC-loretaFilter-finished');  
         })
-        .catch(err=>{console.log("loreta err ",err)});;
+        .catch(err=>{
+            console.log("loreta err ",err);
+            io.emit("loreta_filter", {response:null, dbgmsg:"Ha ocurrido un error ejecuntando loreta!"}); 
+        });
     });
 
     socket.on('disconnect', function() {
@@ -521,7 +417,6 @@ io.on('connection', function(socket) {
 
 });  
     
-
 var express = require('express');
 
 app.use((req, res, next) => {
