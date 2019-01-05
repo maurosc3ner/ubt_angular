@@ -11,7 +11,7 @@
       <app-control-bar-component [newStatusEvent]='mainBridge' (StatusEvent)='onChangeStatus($event)'  (CoomandEvent)='onCommandReceived($event)'></app-control-bar-component>
     </div>
   </div>
-  <div class="row main-container">
+  <div class="row main-container bottom-space">
     <div class="col">
         <app-principal-content-component (componentsBridge)='onChangesToolbar($event)' [Status]='StatusControl' [Command_Control]='CommandControl'></app-principal-content-component>
     </div>

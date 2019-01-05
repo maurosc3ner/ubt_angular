@@ -1,3 +1,7 @@
 .main-container {
   color: white;
 }
+
+.bottom-space {
+  margin-bottom: 200px !important;
+}
