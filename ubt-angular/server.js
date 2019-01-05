@@ -68,31 +68,32 @@ function myRewinderExecuter(filename,currentData,visWindow) {
  * @param {number} index - Where to start in the file
  * @param {number} visWindow - timeframe to retrieve in seconds
  */ 
-<<<<<<< HEAD
-function openEDFScript(pathFileName,currentData, index, visWindow) { 
-    var options = { 
-      mode: 'json',
-        args: [pathFileName,index,visWindow] 
-    };    
-    var readerShell = new PythonShell('/backend/pythonscripts/edfReader.py',options);
-    var asyncMessage;
-    readerShell.on('message', function (message) {
-        console.log(message);    
-        asyncMessage = message      
-      });
-    // end the input stream and allow the process to exit
-    readerShell.end(function (err,code,signal) {
-        if (err) throw err;  
-        console.log(asyncMessage);
-        asyncMessage['debug'].command = currentData.debug.command;
-        asyncMessage['debug'].fileName = currentData.debug.fileName;
-        asyncMessage.debug.time.index+=asyncMessage.debug.time.samplefrequency*visWindow;
-        asyncMessage.debug.time.currentTime=asyncMessage.debug.time.startTime;
-        io.emit("load_edf", asyncMessage);
-        console.log('-EC-edfReader-The exit code was: ' + code);
-        console.log('-EC-edfReader-The exit signal was: ' + signal);
-        console.log('-EC-edfReader-finished');  
-    });
+async function openEDFScript(startDirPath,currentData, index, visWindow) { 
+    if (!fs.existsSync(__dirname + startDirPath)) {
+        console.log("-EC-eff- no dir ", startDirPath);
+        recject("-EC-eff- no dir ");
+    } else {
+        console.log("-EC-edfFromFile- exist ", startDirPath);
+        var builtFilename = path.join(__dirname+startDirPath, currentData.debug.fileName);
+        console.log('-EC-edfFromFile- file found: ', builtFilename);
+        if (currentData.debug.command == "load_edf"){
+            // return openEDFScript(builtFilename,msg,0,10);
+            let execution= await myReadExecuter(builtFilename,currentData, index, visWindow);
+            return ({
+                c: execution.c,
+                s: execution.s,
+                r: execution.r
+            });
+        }
+        else if (currentData.debug.command == "jump_edf"){
+            let execution= await myRewinderExecuter(builtFilename,currentData, visWindow);
+            return ({
+                c: execution.c,
+                s: execution.s,
+                r: execution.r
+            });
+        }
+    }
 };   
     
 // function jumpEDFScript(filename,currentData) {
