@@ -1,36 +1,32 @@
 <div class="container-fluid">
-  <div class="row main-container">
-    <div class="col-12 col-md-12">
-        <div class="btn-group-horizontal" role="group" aria-label="Horizontal button group">
+  <div class="row">
+    <div class="col-12">
+        <div class="btn-group">
           <button mat-raised-button color="primary" 
             matTooltip="Página anterior"
             matTooltipClass="edf-menu-tooltip"
-            aria-label="Button that shows a red tooltip"
-            class="material-cust-small-button" 
+            class="material-cust-small-button btn-space" 
             (click)="Backward($event)" >
             <mat-icon class="material-cust-small-button-icon">keyboard_arrow_left</mat-icon>
           </button>
           <button mat-raised-button color="primary" 
             matTooltip="Página siguiente"
             matTooltipClass="edf-menu-tooltip"
-            aria-label="Button that shows a red tooltip"
-            class="material-cust-small-button" 
+            class="material-cust-small-button btn-space" 
             (click)="Forward($event)">
             <mat-icon class="material-cust-small-button-icon">keyboard_arrow_right</mat-icon>
           </button>
-            <button mat-raised-button color="primary" 
-              matTooltip="Reducir salto"
-              matTooltipClass="edf-menu-tooltip"
-              aria-label="Button that shows a red tooltip"
-              class="material-cust-small-button" 
-              (click)="changeStep($event, false)">
-                <mat-icon class="material-cust-small-button-icon">keyboard_arrow_down</mat-icon>
-              </button>
+          <button mat-raised-button color="primary" 
+            matTooltip="Reducir salto"
+            matTooltipClass="edf-menu-tooltip"
+            class="material-cust-small-button btn-space" 
+            (click)="changeStep($event, false)">
+              <mat-icon class="material-cust-small-button-icon">keyboard_arrow_down</mat-icon>
+            </button>
             <button mat-raised-button color="primary" 
               matTooltip="Incrementar salto"
               matTooltipClass="edf-menu-tooltip"
-              aria-label="Button that shows a red tooltip"
-              class="material-cust-small-button" 
+              class="material-cust-small-button btn-space" 
               (click)="changeStep($event, true)">
               <mat-icon class="material-cust-small-button-icon">keyboard_arrow_up</mat-icon>
             </button>
@@ -45,9 +41,4 @@
     </div>
   </div>
 </div>
-
-
-
-
-
  

@@ -52,21 +52,18 @@ export class EdfMenuBarComponent {
   }
 
   OpenEDFDialog(event) {
-    console.log("EC-app-edf-menu-bar", event);
-
-    
     const service = this.myServices.loadPatients();
     service.pipe(
       tap((response) => this.srcFIles = JSON.parse(JSON.stringify(response))),
       take(1),
       finalize(() => {
-        console.log('finalized',this.srcFIles);
-        let dialogRef=this.edfFIleDialog.open(EdfFileDialogComponent,{
+        console.log('finalized', this.srcFIles);
+        let dialogRef = this.edfFIleDialog.open(EdfFileDialogComponent,{
           width: '640px',
           height: '480px',
           data: this.srcFIles
         });
-    
+
         dialogRef.afterClosed().subscribe(result=>{
           console.log(result);
           this.openclick.emit(result.name);
