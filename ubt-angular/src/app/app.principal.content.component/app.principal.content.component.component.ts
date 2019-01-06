@@ -24,8 +24,8 @@ export class AppPrincipalContentComponent implements OnInit, OnChanges {
   srcImageAxial: String = './assets/brain-dummy/MRIAxial.png';
   srcImageCoronal: String = './assets/brain-dummy/MRICoronal_2.jpg';
   srcTopoPlot: any;
-  brainColors:JSON;
-constructor(private d3service: D3Service,public snackBar: MatSnackBar) {
+  brainColors: JSON;
+constructor(private d3service: D3Service, public snackBar: MatSnackBar) {
 }
 ngOnInit() {
   this.Command_Control = null;
@@ -103,10 +103,9 @@ ngOnInit() {
   assignData() {
     this.d3service.getPatientInfo(this.patientfile, this.patient_current_data).subscribe(
         (response: Response) => {
-          let serverResponse=JSON.parse(JSON.stringify(response));
-          if(serverResponse.hasOwnProperty('dbgmsg'))
-          {
-            this.snackBar.open(serverResponse["dbgmsg"], "Aceptar", {
+          const serverResponse = JSON.parse(JSON.stringify(response));
+          if (serverResponse.hasOwnProperty('dbgmsg')) {
+            this.snackBar.open(serverResponse['dbgmsg'], 'Aceptar', {
               duration: 3000,
             });
           }
@@ -141,11 +140,10 @@ ngOnInit() {
   notchFilter() {
     const notch = this.d3service.getNotchFilter(this.patient_current_data);
     notch.pipe(
-      tap((response) =>{
-        let serverResponse=JSON.parse(JSON.stringify(response));
-        if(serverResponse.hasOwnProperty('dbgmsg'))
-        {
-          this.snackBar.open(serverResponse["dbgmsg"], "Aceptar", {
+      tap((response) => {
+        const serverResponse = JSON.parse(JSON.stringify(response));
+        if (serverResponse.hasOwnProperty('dbgmsg')) {
+          this.snackBar.open(serverResponse['dbgmsg'], 'Aceptar', {
             duration: 3000,
           });
         }
@@ -164,13 +162,12 @@ ngOnInit() {
     .subscribe((response: Response) => response);
   }
   ocularFilter() {
-    const ocular = this.d3service.getOcularFilter(this.patient_current_data)
+    const ocular = this.d3service.getOcularFilter(this.patient_current_data);
     ocular.pipe(
       tap((response) => {
-        let serverResponse=JSON.parse(JSON.stringify(response));
-        if(serverResponse.hasOwnProperty('dbgmsg'))
-        {
-          this.snackBar.open(serverResponse["dbgmsg"], "Aceptar", {
+        const serverResponse = JSON.parse(JSON.stringify(response));
+        if (serverResponse.hasOwnProperty('dbgmsg')) {
+          this.snackBar.open(serverResponse['dbgmsg'], 'Aceptar', {
             duration: 3000,
           });
         }
@@ -194,9 +191,8 @@ ngOnInit() {
     topoplot.pipe(
       tap((response) => {
         const serverResponse = JSON.parse(JSON.stringify(response));
-        if(serverResponse.hasOwnProperty('dbgmsg'))
-        {
-          this.snackBar.open(serverResponse["dbgmsg"], "Aceptar", {
+        if (serverResponse.hasOwnProperty('dbgmsg')) {
+          this.snackBar.open(serverResponse['dbgmsg'], 'Aceptar', {
             duration: 3000,
           });
         }
@@ -211,10 +207,9 @@ ngOnInit() {
     const brain = this.d3service.getLoretaFilter(payload);
     brain.pipe(
       tap((response) => {
-        let serverResponse=JSON.parse(JSON.stringify(response));
-        if(serverResponse.hasOwnProperty('dbgmsg'))
-        {
-          this.snackBar.open(serverResponse["dbgmsg"], "Aceptar", {
+        const serverResponse = JSON.parse(JSON.stringify(response));
+        if (serverResponse.hasOwnProperty('dbgmsg')) {
+          this.snackBar.open(serverResponse['dbgmsg'], 'Aceptar', {
             duration: 3000,
           });
         }

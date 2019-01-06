@@ -1,15 +1,18 @@
 <div #eegmain class="container-fluid">
 <div #git >
     <div class="row">
-        <div class="col">
-            <mat-form-field >
-                <div style="display:none">
+        <div class="col" style="display:none" >
+            <mat-form-field>
                     <mat-select (selectionChange)="visualControl($event)" [(value)]="visualization_type">
                         <mat-option value="Lines">Lines</mat-option>
                         <mat-option value="Horizon" disabled>Horizon</mat-option>
                     </mat-select>
-                </div>
             </mat-form-field>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <hr>
         </div>
     </div>
     <div class="row">

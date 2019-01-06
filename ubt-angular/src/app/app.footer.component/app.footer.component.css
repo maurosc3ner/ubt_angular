@@ -4,11 +4,16 @@
 
 .logo {
   /* background-color: transparent; */
-  width: 7%;
+  width: 5%;
   min-width: 50px;
 }
 .logo-small {
   /* background-color: transparent; */
-  width: 10%;
+  width: 20%;
   min-width: 50px;
+  margin-top: 1%;
+}
+
+.footer-text {
+  font-size: 8pt;
 }
