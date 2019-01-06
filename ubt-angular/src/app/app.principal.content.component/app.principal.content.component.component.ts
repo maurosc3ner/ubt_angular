@@ -13,6 +13,7 @@ export class AppPrincipalContentComponent implements OnInit, OnChanges {
   @Input() Status: number;
   @Input() Command_Control;
   @Output() componentsBridge = new EventEmitter();
+  @Output() titleEmmiter = new EventEmitter();
   visAnno: boolean;
   visEEG: boolean;
   visESI: boolean;
@@ -110,7 +111,7 @@ ngOnInit() {
             });
           }
           this.patient_current_data = JSON.parse(JSON.stringify(serverResponse.response));
-          this.componentsBridge.emit(this.patient_current_data);
+          this.titleEmmiter.emit(this.patient_current_data);
         },
     (err) => {
         console.log(err);

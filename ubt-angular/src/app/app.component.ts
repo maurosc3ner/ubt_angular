@@ -18,6 +18,9 @@ export class AppComponent {
     } else {
       this.mainBridge = 0;
     }
+  }
+
+  onChangesPatientInfo(event) {
     this.PatientInfo = event;
   }
 

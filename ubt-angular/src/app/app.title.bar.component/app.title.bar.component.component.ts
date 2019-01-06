@@ -11,6 +11,8 @@ export class AppTitleBarComponent implements OnChanges {
   PatientStatus: Boolean = false;
   PatientInfo: JSON;
   ngOnChanges() {
+    console.log('AMH-Title', this.PatientInfo);
+    console.log('AMH-Title-status', this.PatientStatus);
     if ( this.Patient_Info === undefined ) {
       this.PatientStatus = false;
     } else {
@@ -18,10 +20,8 @@ export class AppTitleBarComponent implements OnChanges {
           this.PatientStatus = false;
         } else {
           this.PatientStatus = true;
-          this.PatientInfo = this.Patient_Info['patientInfo'];
+            this.PatientInfo = this.Patient_Info['patientInfo'];
         }
-        console.log('AMH-Title', this.PatientInfo);
     }
-
   }
 }
