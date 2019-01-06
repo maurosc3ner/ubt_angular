@@ -228,8 +228,6 @@ ngOnInit() {
         d['data'] = d['data'].slice(cursor_index, cursor_index + d['samplefrequency']);
       }
     );
-    // console.log('AMH-principal-component-curso-before', this.patient_current_data);
-    // console.log('AMH-principal-component-cursor-after', patient_data_copy);
     if (this.Status === 4) { // EEG+topoplot
       this.topoPlot(patient_data_copy);
     }
