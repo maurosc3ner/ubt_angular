@@ -20,7 +20,7 @@ export class AppControlBarComponent implements OnChanges {
   TopoPlotToggle: Boolean = false;
 
   ngOnChanges() {
-    console.log('EC-onchanges', this.newStatusEvent);
+    // console.log('EC-onchanges', this.newStatusEvent);
     if ( this.TopoPlotToggle === true ) {this.TopoPlotToggle = false; }
     if ( this.AnnotToggle === true ) {this.AnnotToggle = false; }
     if ( this.ESIToggle === true ) {this.ESIToggle = false; }
@@ -30,7 +30,7 @@ export class AppControlBarComponent implements OnChanges {
   }
 
   checkStatus(ESIToggle, PlaneToggle, AnnotToggle, TopoPlotToggle) {
-    console.log('AMH-Checkstatus', this.status, ESIToggle, PlaneToggle, AnnotToggle, TopoPlotToggle);
+    // console.log('AMH-Checkstatus', this.status, ESIToggle, PlaneToggle, AnnotToggle, TopoPlotToggle);
     if ((ESIToggle || PlaneToggle || AnnotToggle || TopoPlotToggle) === false) {
       return 0;
     } else {
@@ -65,7 +65,7 @@ export class AppControlBarComponent implements OnChanges {
           TopoPlotToggle = false;
           this.status = 0;
         }
-        console.log('checkstatus');
+        // console.log('checkstatus');
         return this.checkStatus(ESIToggle, PlaneToggle, AnnotToggle, TopoPlotToggle);
       }
     }

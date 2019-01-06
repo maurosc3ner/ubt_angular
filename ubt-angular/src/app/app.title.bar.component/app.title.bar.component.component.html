@@ -12,7 +12,28 @@
               <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                   <span class="navbar-toggler-icon"></span>
               </button>
+              <div *ngIf="PatientStatus">
+                    <div class="container">
+                            <div class="row main-container data-patient">
+                                <div class="col-6">
+                                    <p>Codigo Paciente: {{PatientInfo.patientCode}}</p>
+                                </div>
+                                <div class="col-6">
+                                    <p>Genero Paciente: {{PatientInfo.gender}}</p>
+                                </div>
+                            </div>
+                            <div class="row main-container data-patient">
+                                <div class="col-6">
+                                    <p>Fecha EEG: {{PatientInfo.startDate}}</p>
+                                </div>
+                                <div class="col-6">
+                                    <p>Hora EEG: {{PatientInfo.startTime}}</p>
+                                </div>
+                            </div>
+                    </div>
+                </div>
           </nav>
+        </div>
       </div>
       <!-- ============================================================== -->
       <!-- end navbar -->

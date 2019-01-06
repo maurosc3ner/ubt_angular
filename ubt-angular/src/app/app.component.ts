@@ -10,6 +10,7 @@ export class AppComponent {
   public StatusControl = 0;
   public CommandControl;
   public mainBridge = 0;
+  public PatientInfo;
 
   onChangesToolbar(event) {
     if (this.mainBridge === 0) {
@@ -17,11 +18,12 @@ export class AppComponent {
     } else {
       this.mainBridge = 0;
     }
+    this.PatientInfo = event;
   }
 
   onChangeStatus(event) {
     this.StatusControl = event;
-    console.log('AMG', event);
+    // console.log('AMG', event);
   }
   onCommandReceived(event) {
     this.CommandControl = event;

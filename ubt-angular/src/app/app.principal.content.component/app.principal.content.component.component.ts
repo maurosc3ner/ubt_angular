@@ -110,6 +110,7 @@ ngOnInit() {
             });
           }
           this.patient_current_data = JSON.parse(JSON.stringify(serverResponse.response));
+          this.componentsBridge.emit(this.patient_current_data);
         },
     (err) => {
         console.log(err);
@@ -172,6 +173,7 @@ ngOnInit() {
           });
         }
         this.patient_current_data = JSON.parse(JSON.stringify(serverResponse.response));
+        this.componentsBridge.emit(event);
       }),
       take(1),
       finalize(() => {

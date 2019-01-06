@@ -47,7 +47,7 @@ export class EdfMenuBarComponent {
     this.topoclick.emit(event);
   }
   OpenEDF(event) {
-    console.log(event['target']['files'][0]['name']);
+    // console.log(event['target']['files'][0]['name']);
     this.openclick.emit(event['target']['files'][0]['name']);
   }
 
@@ -58,21 +58,19 @@ export class EdfMenuBarComponent {
       take(1),
       finalize(() => {
         console.log('finalized', this.srcFIles);
-        let dialogRef = this.edfFIleDialog.open(EdfFileDialogComponent,{
+        const dialogRef = this.edfFIleDialog.open(EdfFileDialogComponent,{
           width: '640px',
           height: '480px',
           data: this.srcFIles
         });
 
-        dialogRef.afterClosed().subscribe(result=>{
+        dialogRef.afterClosed().subscribe(result => {
           console.log(result);
           this.openclick.emit(result.name);
-  
         });
     }))
     .subscribe((response: Response) => response);
   }
-
   SelectFiles(event) {
     event.click();
   }

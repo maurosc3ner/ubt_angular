@@ -12,3 +12,9 @@
 .bg-custom {
   background-color: black !important;
 }
+
+.data-patient p {
+  color: #00FF00;
+  font-size: 8pt;
+  width: 200px;
+}

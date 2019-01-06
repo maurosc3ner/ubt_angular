@@ -58,7 +58,7 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
 
     click_multiplier(event, direction: boolean) {
         if (this.current_data == null) {
-            console.log('please load patient first');
+            // console.log('please load patient first');
             return 0;
         }
         if (direction) {
@@ -98,7 +98,7 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
         }
     }
     init_channels() {
-        console.log('init_channel');
+        // console.log('init_channel');
         const channel_array: Array<any> = [];
         const div_number = this.current_data['channels'].length + 1;
         for (let n = div_number; n > -1; n--) {
@@ -142,7 +142,7 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
         } else {
             x_axis = false;
             y_axis = true;
-            console.log('AMH_j', annotation);
+            // console.log('AMH_j', annotation);
             this.DrawChannel( sample, 'line_eeg_1', data['channels'][j - 1], 0,
             duration, x_axis, y_axis, 1, this.scale_multiplier[this.multiplier_pos],
             '#ffffff', width, height, updating, this.cursordata, 1, annotation);
@@ -195,7 +195,7 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
                 <string>hour + ':' + <string>minute + ':' + <string>second + ':' +
             <string>milisecond));
             });
-            console.log(date_array);
+            // console.log(date_array);
             for (const sample of channel_data) {
                 sample['time'] = scale_values[i];
                 i++;
@@ -300,8 +300,8 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
                     return date;
                 }
             );
-            console.log('AMH-sample-anno-times', anno_times);
-            console.log('AMH-sample-anno-dates', date_values_anno);
+            // console.log('AMH-sample-anno-times', anno_times);
+            // console.log('AMH-sample-anno-dates', date_values_anno);
 
             anno_times.forEach((annotation_in_range) => {
                 let i_anno = 0;
@@ -322,7 +322,7 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
 
             current_channel.on('click', (d, d3index, nodes) =>  {
                 const cursor_width = (data_eeg.samplefrequency * 10);
-                console.log('cursor_width ' + cursor_width);
+                // console.log('cursor_width ' + cursor_width);
                 const cursor_scale = d3.scaleLinear()
                 .domain([
                     padding,
@@ -342,7 +342,7 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
                     chart_width - padding
                 ]);
                 const current_mouse = d3.mouse(nodes[d3index])[0];
-                console.log(current_mouse, chart_width);
+                // console.log(current_mouse, chart_width);
                 if (current_mouse < padding) {
                     this.current_cursor = padding;
                 } else if (current_mouse > chart_width - cursor_scale_inverse(data_eeg.samplefrequency)) {
@@ -352,9 +352,8 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
                 }
                 const start_time_index = channel_data[0]['time'].getTime();
                 const current_cursor_index = start_time_index
-                + (cursor_scale(this.current_cursor) * (1 / data_eeg.samplefrequency)) * 1000
-                ;
-                console.log(this.current_cursor);
+                + (cursor_scale(this.current_cursor) * (1 / data_eeg.samplefrequency)) * 1000;
+                // console.log(this.current_cursor);
                 const abs_current_cursor_time = new Date(current_cursor_index);
                 const current_cursor_index_end = start_time_index
                 // tslint:disable-next-line:max-line-length
@@ -381,9 +380,19 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
                             let second = date.getSeconds();
                             let milisecond = date.getMilliseconds();
                             let milisecond_2;
-                            if (milisecond < 100) { milisecond_2 = '0' + milisecond; } else { milisecond_2 = milisecond; }
-                            const cursor_date_text =
-                            hour + ':' + minute + ':' + second + ':' + milisecond_2;
+                            if (milisecond < 100) {
+                                milisecond_2 = '0' + milisecond;
+                            } else if (milisecond < 10) {
+                                milisecond_2 = '0' + '0' + milisecond;
+                            } else {
+                                milisecond_2 = milisecond;
+                            }
+                            let cursor_date_text = '';
+                            if ( chart_width > 550) {
+                                cursor_date_text = hour + ':' + minute + ':' + second + ':' + milisecond_2;
+                            } else {
+                                cursor_date_text = hour + ':' + minute + ':' + second;
+                            }
                             cursor_label
                             .transition()
                             .duration(1000)
@@ -411,9 +420,19 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
                             minute = date.getMinutes();
                             second = date.getSeconds();
                             milisecond = date.getMilliseconds();
-                            if (milisecond < 100) { milisecond_2 = '0' + milisecond; } else { milisecond_2 = milisecond; }
-                            const cursor_date_text_end =
-                            hour + ':' + minute + ':' + second + ':' + milisecond_2;
+                            if (milisecond < 100) {
+                                milisecond_2 = '0' + milisecond;
+                            } else if (milisecond < 10) {
+                                milisecond_2 = '0' + '0' + milisecond;
+                            } else {
+                                milisecond_2 = milisecond;
+                            }
+                            let cursor_date_text_end = '';
+                            if ( chart_width > 550) {
+                                cursor_date_text_end = hour + ':' + minute + ':' + second + ':' + milisecond_2;
+                            } else {
+                                cursor_date_text_end = hour + ':' + minute + ':' + second;
+                            }
                             cursor_label_end
                             .transition()
                             .duration(1000)
@@ -523,7 +542,7 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
                 return date;
             }
         );
-        console.log('AMH_times', date_values);
+        // console.log('AMH_times', date_values);
         return date_values;
     }
 
