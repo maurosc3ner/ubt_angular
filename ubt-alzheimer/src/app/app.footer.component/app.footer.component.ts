@@ -29,7 +29,7 @@ export class AppFooterComponent implements OnChanges{
 
   onAnnoComponent(event){
     console.log('afc-onAnnoComponent',event);
-    //this.footerBridge.emit(event);
+    //this.footerBridge.emit(event); esto se necesita limpiar porque no va a ningun lado
   }
 
   ngOnChanges() {

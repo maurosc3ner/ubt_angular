@@ -1,0 +1,18 @@
+
+
+<div  md-dialog-content class="form-dialog">
+  <h2 md-dialog-title>Anotaciones actuales</h2>
+  
+  
+  <mat-divider></mat-divider>
+   
+  <annot-table [current_data]='myAnnot'></annot-table>
+  
+  <mat-divider></mat-divider>
+  <div md-dialog-actions>
+    <button id='saveBtnDialog' type="button" (click)="onCloseConfirm()">
+        <i class="material-icons">done</i>
+        Cerrar
+    </button>
+  </div>
+</div>

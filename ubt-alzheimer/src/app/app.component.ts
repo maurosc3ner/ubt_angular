@@ -2,7 +2,7 @@ import { Component, Input, Output } from '@angular/core';
 import { MatDialog } from '../../node_modules/@angular/material/dialog';
 import { PatientDialogComponent } from './app.dialogs/patient-dialog/patient-dialog.component';
 import {AnnotDialogComponent} from './app.dialogs/annot-dialog/annot-dialog.component';
-// import { AlzServices } from './app.services/alzservices';
+import {VisAnnotDialogComponent} from './app.dialogs/vis-annot-dialog/vis-annot-dialog.component';
 
 @Component({
   selector: 'app-root',
@@ -24,7 +24,7 @@ export class AppComponent{
 
 
 
-  constructor(public patientDialog: MatDialog, public annodialog: MatDialog) {
+  constructor(public patientDialog: MatDialog, public annodialog: MatDialog,public listannodialog: MatDialog) {
     this.currentSession["patientInfo"]={};
     this.currentSession["annotations"]={
       "size" : 0,
@@ -66,6 +66,11 @@ export class AppComponent{
           this.annotDialogResult={};
           this.annotDialogResult["description"]=result["annotType"]+' - '+result["annotDesc"];
           // onset se debe grabar como segundos relativos
+          //to do 
+          /*
+          ojo FALTA agregar campo currentAnnoTime usando la informacion debug 
+          y de una vez convertido a string para visualizacion
+          */
           this.annotDialogResult['onset']=(this.current_channels["debug"]["subrecords"]["enddatetime"]-this.current_channels["debug"]["subrecords"]["startdatetime"]);
           this.annotDialogResult['duration']=0.04;
           console.log('acb-onAddAnnoClick',this.annotDialogResult);
@@ -95,7 +100,19 @@ export class AppComponent{
         this.stopStream(event);
 
       });
+    } else if ( event['state'] == 6){
+      
+      let dialogRef=this.listannodialog.open(VisAnnotDialogComponent,{
+        width: '800px',
+        height: '600px',
+        data: this.currentSession["annotations"]["items"]
+      });
+  
+      dialogRef.afterClosed().subscribe(result=>{
+        console.log(result);
+      });
     }
+
   }
 
   /*

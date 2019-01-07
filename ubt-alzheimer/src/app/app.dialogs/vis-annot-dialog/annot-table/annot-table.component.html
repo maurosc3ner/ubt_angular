@@ -10,7 +10,7 @@
       <!-- Tiempo  -->
       <ng-container matColumnDef="onset">
         <mat-header-cell *matHeaderCellDef mat-sort-header>Tiempo</mat-header-cell>
-        <mat-cell *matCellDef="let row">{{row.currentAnnotTime}}</mat-cell>
+        <mat-cell *matCellDef="let row">{{row.onset}}</mat-cell>
       </ng-container>
   
       <!-- Evento  -->
@@ -30,8 +30,4 @@
       [pageSizeOptions]="[5]" aria-label=" Anotaciones:">
     </mat-paginator>
   </div>
-<mat-card-actions>
-  <button mat-button (click)="onClose()">Close</button>
-  <!-- <button mat-button>SHARE</button> -->
-</mat-card-actions>
 </mat-card>

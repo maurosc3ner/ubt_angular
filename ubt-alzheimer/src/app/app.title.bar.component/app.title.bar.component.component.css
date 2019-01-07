@@ -1,10 +1,20 @@
-.title-bar {
-  background-color: rgb(0, 0, 0);
+.logo {
+  /* background-color: transparent; */
+  width: 1.5%;
+  margin-left: 10px;
+  min-width: 50px;
 }
 
-.logo {
-  background-color: transparent;
-  width: 120px;
-  height: 70px;
-  padding: 0px 20px 0px 0px;
+.title {
+  color: white !important;
+}
+
+.bg-custom {
+  background-color: transparent !important;
+}
+
+.data-patient p {
+  color: #00FF00;
+  font-size: 8pt;
+  width: 200px;
 }

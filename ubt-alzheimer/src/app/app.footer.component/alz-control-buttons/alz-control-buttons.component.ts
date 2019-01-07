@@ -42,20 +42,11 @@ export class AlzControlButtonsComponent implements OnInit {
 
   onAddAnnoClick(event){
     let msg=  {'state':3};
-    // console.log(this.current_data);
-    // let dialogRef=this.annodialog.open(AnnotDialogComponent,{
-    //   width: '800px',
-    //   height: '400px',
-    //   // data: this.currentTimeStamp.toISOString()
-    //   data: this.convertTimestamp(this.currentTimeStamp)
-    // });
-
-    // dialogRef.afterClosed().subscribe(result=>{
-    //   console.log(result);
-    //   this.annotDialogResult=result;
-    // });
-    //console.log('acb-onAddAnnoClick'); probado y OK
     this.annoControlBar.emit(msg);
+  }
+  onListAnnoClick(event){
+    let msg=  {'state':6};
+    this.startControlBar.emit(msg);
   }
 
   onSaveClick(event){
