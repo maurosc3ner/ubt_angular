@@ -47,6 +47,7 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
             if (this.current_data === undefined || JSON.stringify(this.current_data) === '{}') {
                 this.delete_channel();
              } else {
+                this.delete_channel();
                 this.current_scale = this.computeTimeScale(this.current_data);
                 this.channel_num = this.init_channels();
                 this.update_channel();
@@ -80,6 +81,7 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
     }
     delete_channel() {
         const array_channels = this.eegmain.nativeElement.querySelectorAll('.row-eeg');
+        console.log('AMH-delete', array_channels);
         array_channels.forEach(
             (node) => {
                 node.parentNode.removeChild( node );
@@ -88,7 +90,7 @@ export class EegContentComponent implements AfterContentInit, OnChanges {
     }
     update_channel() {
         const div_number = this.current_data['channels'].length + 1;
-        for (let n = 1 ; n < div_number + 1; n++) {
+        for (let n = 0 ; n < div_number + 1; n++) {
             d3.select('#channel' + n).selectAll('path').remove();
             d3.select('#channel' + n).selectAll('rect').remove();
             d3.select('#channel' + n).selectAll('g').remove();
