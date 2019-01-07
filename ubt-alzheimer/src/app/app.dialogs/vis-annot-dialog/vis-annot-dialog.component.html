@@ -10,9 +10,10 @@
   
   <mat-divider></mat-divider>
   <div md-dialog-actions>
-    <button id='saveBtnDialog' type="button" (click)="onCloseConfirm()">
-        <i class="material-icons">done</i>
-        Cerrar
+    <button mat-raised-button color="warn" (click)="onCloseConfirm()"
+      class="material-cust-small-button btn-space">
+      <i class="material-icons">done</i>
+      Cerrar
     </button>
   </div>
 </div>

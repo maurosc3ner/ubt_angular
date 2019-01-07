@@ -1,6 +1,11 @@
 .main-container {
   color: white;
 }
+
+.header-main-container {
+  margin-top: 50px;
+}
+
 .bg-custom {
   background-color: transparent !important;
 }

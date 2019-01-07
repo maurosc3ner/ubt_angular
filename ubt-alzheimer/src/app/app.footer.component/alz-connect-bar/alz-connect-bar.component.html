@@ -1,15 +1,12 @@
 <!-- <input type="text" [(ngModel)]="port"> -->
-<mat-form-field class="example-small-width">
+<mat-form-field class="example-small-width" color="warn">
     <input matInput type="num" placeholder="Puerto" pattern="^[0-9]*$" [(ngModel)]="port" value=8890 maxlength="5" minlength="4" required>
 </mat-form-field>
 
-<!-- 
-<button id='cancelBtnDialog' type="button" (click)="onConnectClick($event)">
+<button mat-raised-button color="warn" (click)="onConnectClick($event)"
+    matTooltip="Conectar a UBT driver"
+    matTooltipClass="edf-menu-tooltip"
+    class="material-cust-small-button btn-space">
     <i class="material-icons">input</i>
     Conectar
-</button> -->
-
-<button mat-raised-button (click)="onConnectClick($event)">
-        <i class="material-icons">input</i>
-        Conectar
 </button>

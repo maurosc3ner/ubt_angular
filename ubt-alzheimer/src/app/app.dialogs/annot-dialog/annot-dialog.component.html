@@ -1,45 +1,28 @@
 
+<div  md-dialog-content class="form-dialog">
+  <h2 md-dialog-title color="warn">Crear anotación</h2>
+  
+    Tiempo de la maquina para la anotación: {{data}}
+    <mat-divider></mat-divider>
 
-<mat-tab-group dynamicHeight>
-  <mat-tab label="Nueva anotación">
-     
-          
-    <div  md-dialog-content class="form-dialog">
-      <h2 md-dialog-title>Crear anotación</h2>
-      
-        Tiempo de la maquina para la anotación: {{data}}
-        <mat-divider></mat-divider>
-        <!-- <mat-form-field appearance="outline" class="mySel">
-            <mat-select placeholder="Tipo">
-                <mat-option value="1">Ojos abiertos</mat-option>
-                <mat-option value="2">Otro</mat-option>
-            </mat-select>
-        </mat-form-field> -->
-    
-        <mat-form-field appearance="outline">
-            <mat-label>Descripción</mat-label>
-            <input matInput placeholder="" [(ngModel)]="annotDesc">
-            <mat-icon matSuffix>mode_edit</mat-icon>
-        </mat-form-field>
-    
-      
-      <mat-divider></mat-divider>
-      <div md-dialog-actions>
-        <button id='cancelBtnDialog' type="button" (click)="onCloseCancel()">
-            <i class="material-icons">highlight_off</i>
-            Cancelar
-        </button>
-        <button id='saveBtnDialog' type="button" (click)="onCloseConfirm()">
-            <i class="material-icons">done</i>
-            Aceptar
-        </button>
-      </div>
-      
-    </div>
-  </mat-tab>
-  <mat-tab label="Anotaciones">
-    <div class="example-large-box mat-elevation-z4">
-      Large content
-    </div>
-  </mat-tab>
-</mat-tab-group>
+    <mat-form-field appearance="fill" color="warn">
+        <mat-label>Descripción</mat-label>
+        <input matInput placeholder="" [(ngModel)]="annotDesc">
+        <mat-icon matSuffix>mode_edit</mat-icon>
+    </mat-form-field>
+
+  
+  <mat-divider></mat-divider>
+  <div md-dialog-actions>
+    <button mat-raised-button color="warn" (click)="onCloseCancel()"
+      class="material-cust-small-button btn-space">
+      <i class="material-icons">highlight_off</i>
+      Cancelar
+    </button>
+    <button mat-raised-button color="warn" (click)="onCloseConfirm()"
+      class="material-cust-small-button btn-space">
+      <i class="material-icons">done</i>
+      Aceptar
+    </button>
+  </div>
+</div>

@@ -48,15 +48,12 @@ export class AppComponent{
     }else if ( event['state'] == 2){
       this.startStream(event);
     } else if ( event['state'] == 3){ // annotation but still running 
-      
-      //console.log(this.current_channels);
-      
       let dialogRef=this.annodialog.open(AnnotDialogComponent,{
         width: '800px',
         height: '400px',
         // data: this.currentTimeStamp.toISOString()
         // ojo FALTA verificar si es el ultimo enddate porque difieren de tendencias y de waves
-        data: this.convertTimestamp(this.current_channels["debug"]["subrecords"]["enddatetime"])
+        data: this.convertDateTimestamp(this.current_channels["debug"]["subrecords"]["enddatetime"])
       });
 
       dialogRef.afterClosed().subscribe(result=>{
@@ -71,12 +68,13 @@ export class AppComponent{
           ojo FALTA agregar campo currentAnnoTime usando la informacion debug 
           y de una vez convertido a string para visualizacion
           */
+          this.annotDialogResult["currentAnnotTime"]=this.convertHourTimestamp(this.current_channels["debug"]["subrecords"]["enddatetime"]);
           this.annotDialogResult['onset']=(this.current_channels["debug"]["subrecords"]["enddatetime"]-this.current_channels["debug"]["subrecords"]["startdatetime"]);
           this.annotDialogResult['duration']=0.04;
           console.log('acb-onAddAnnoClick',this.annotDialogResult);
           this.currentSession["annotations"]["items"].push(this.annotDialogResult);
           this.currentSession["annotations"]["size"]+=1;
-          console.log('acb-onAddAnnoClick',this.currentSession["annotations"]);
+          //console.log('acb-onAddAnnoClick',this.currentSession["annotations"]);
           this.CurrentState = 2;
         }
         
@@ -182,8 +180,8 @@ export class AppComponent{
     };
   }
 
-  convertTimestamp(timestamp) {
-    let d = new Date(timestamp * 1000), // Convert the passed timestamp to milliseconds
+  convertDateTimestamp(timestamp) {
+    let d = new Date(timestamp * 1000), // Convert the passed timestamp to milliseconds since javascript works in mili
         yyyy = d.getFullYear(),
         mm = ('0' + (d.getMonth() + 1)).slice(-2),  // Months are zero based. Add leading 0.
         dd = ('0' + d.getDate()).slice(-2),         // Add leading 0.
@@ -204,6 +202,31 @@ export class AppComponent{
     }
     // ie: 2014-03-24, 3:00 PM
     time = yyyy + '-' + mm + '-' + dd + ', ' + h + ':' + min +':'+seg+' ' + ampm;
+    return time;
+  }
+
+  convertHourTimestamp(timestamp) {
+    let d = new Date(timestamp * 1000), // Convert the passed timestamp to milliseconds since javascript works in mili
+        yyyy = d.getFullYear(),
+        mm = ('0' + (d.getMonth() + 1)).slice(-2),  // Months are zero based. Add leading 0.
+        dd = ('0' + d.getDate()).slice(-2),         // Add leading 0.
+        hh = d.getHours(),
+        h = hh,
+        min = ('0' + d.getMinutes()).slice(-2),     // Add leading 0.
+        seg = ('0' + d.getSeconds()).slice(-2),     // Add leading 0. 
+        ampm = 'AM',
+        time;
+    if (hh > 12) {
+        h = hh - 12;
+        ampm = 'PM';
+    } else if (hh === 12) {
+        h = 12;
+        ampm = 'PM';
+    } else if (hh == 0) {
+        h = 12;
+    }
+    // ie: 2014-03-24, 3:00 PM
+    time = h + ':' + min +':'+seg+' ' + ampm;
     return time;
   }
 

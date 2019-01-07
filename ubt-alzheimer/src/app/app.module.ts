@@ -38,7 +38,7 @@ import { PatientDialogComponent } from './app.dialogs/patient-dialog/patient-dia
 import {VisAnnotDialogComponent} from './app.dialogs/vis-annot-dialog/vis-annot-dialog.component';
 import { AnnotTableComponent } from './app.dialogs/vis-annot-dialog/annot-table/annot-table.component';
 import {MyPaginator} from './app.dialogs/vis-annot-dialog/annot-table/myPaginatorClass';
-
+import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatTabsModule} from '@angular/material/tabs';
 
 
@@ -82,7 +82,8 @@ import {MatTabsModule} from '@angular/material/tabs';
     MatTabsModule,
     MatTableModule,
     MatPaginatorModule,
-    MatSortModule
+    MatSortModule,
+    MatTooltipModule
   ],
   entryComponents: [
     AnnotDialogComponent,

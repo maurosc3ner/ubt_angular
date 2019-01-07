@@ -1,34 +1,47 @@
 <div class="container control-bar">
     <div class="row main-container">
-        <div class="col-md-3 alz-control"> 
-            <button mat-raised-button (click)="onStartClick($event)">
-                <i class="material-icons">play_circle_filled</i>
-                Obtener
-            </button>
-        </div>
-        <div class="col-md-3 alz-control"> 
-            <button mat-raised-button (click)="onStopClick($event)">
-                <i class="material-icons">pause_circle_outline</i>
-                Parar
-            </button>
-        </div>
-        <div class="col-md-3 alz-control"> 
-            <button mat-raised-button  (click)="onAddAnnoClick($event)">
-                <i class="material-icons">add_circle_outline</i>
-                Anotar
-            </button>
-        </div>
-        <div class="col-md-3 alz-control"> 
-            <button mat-raised-button (click)="onListAnnoClick($event)">
-                <i class="material-icons">view_list</i>
-                Ver anotaciones
-            </button>
-        </div>
-        <div class="col-md-3 alz-control">
-            <button mat-raised-button (click)="onSaveClick($event)">
-                <i class="material-icons">save_alt</i>
-                Guardar
-            </button>
+        <div class="col-12">
+            <div class="btn-group">
+                <button mat-raised-button color="warn" (click)="onStartClick($event)"
+                    matTooltip="Obtener señales"
+                    matTooltipClass="edf-menu-tooltip"
+                    class="material-cust-small-button btn-space">
+                    <i class="material-icons">play_circle_outline</i>
+                    Obtener
+                </button>
+        
+                <button mat-raised-button color="warn" (click)="onStopClick($event)"
+                    matTooltip="Detener driver"
+                    matTooltipClass="edf-menu-tooltip"
+                    class="material-cust-small-button btn-space">
+                    <i class="material-icons">pause_circle_outline</i>
+                    Parar
+                </button>
+            
+                <button mat-raised-button  color="warn" (click)="onAddAnnoClick($event)"
+                    matTooltip="Agregar anotación"
+                    matTooltipClass="edf-menu-tooltip"
+                    class="material-cust-small-button btn-space">
+                    <i class="material-icons">add_circle_outline</i>
+                    Anotar
+                </button>
+            
+                <button mat-raised-button color="warn" (click)="onListAnnoClick($event)"
+                    matTooltip="Ver anotaciones realizadas"
+                    matTooltipClass="edf-menu-tooltip"
+                    class="material-cust-small-button btn-space">
+                    <i class="material-icons">view_list</i>
+                    Ver anotaciones
+                </button>
+
+                <button mat-raised-button color="warn" (click)="onSaveClick($event)"
+                    matTooltip="Terminar y guardar sesión"
+                    matTooltipClass="edf-menu-tooltip"
+                    class="material-cust-small-button btn-space">
+                    <i class="material-icons">save_alt</i>
+                    Guardar
+                </button>
+            </div> 
         </div>
     </div>
 </div>

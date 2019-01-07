@@ -49,13 +49,15 @@
     </mat-form-field>
    
     <div md-dialog-actions>
-        <button id='cancelBtnDialog' type="button" (click)="onCloseCancel()">
-        <i class="material-icons">highlight_off</i>
-        Cancelar
+        <button mat-raised-button color="warn" (click)="onCloseCancel()"
+            class="material-cust-small-button btn-space">
+            <i class="material-icons">highlight_off</i>
+            Cancelar
         </button>
-        <button id='saveBtnDialog' type="button" (click)="onCloseConfirm()">
-        <i class="material-icons">done</i>
-        Aceptar
+        <button mat-raised-button color="warn" (click)="onCloseConfirm()"
+            class="material-cust-small-button btn-space">
+            <i class="material-icons">done</i>
+            Aceptar
         </button>
     </div>
 </div>

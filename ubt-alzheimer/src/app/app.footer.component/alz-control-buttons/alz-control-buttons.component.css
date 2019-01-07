@@ -1,31 +1,8 @@
-.alz-control{
-    display: block;
-    width: 50%;
+.edf-menu-tooltip {
+    background: #505050;
 }
 
-.alz-control > button,
-.alz-control > a {
-  /* margin-right: 8px;
-  border-radius: 30px;
-  border: 2px solid whitesmoke;
-  padding-right: 20px;
-  padding-top: -25px;
-  background-color: #0097A7;
-  color: whitesmoke; */
-    margin: 10px;
-    /* margin-right: 10px; */
-    background-color: #0097A7;
-    color: white;
-    font-size: 1.2em;
-
+.btn-space {
+    margin-left: 2px !important;
+    margin-right: 2px !important;
 }
-
-/* .main-container > button,
-.main-container > a{ */
-    /* margin-right: 14px !important;
-    background-color: #0097A7;
-    color: white;
-    font-size: 1.2em; */
-/*     
-  } */
-  
