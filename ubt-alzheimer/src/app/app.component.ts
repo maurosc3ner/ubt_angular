@@ -3,6 +3,7 @@ import { MatDialog } from '../../node_modules/@angular/material/dialog';
 import { PatientDialogComponent } from './app.dialogs/patient-dialog/patient-dialog.component';
 import {AnnotDialogComponent} from './app.dialogs/annot-dialog/annot-dialog.component';
 import {VisAnnotDialogComponent} from './app.dialogs/vis-annot-dialog/vis-annot-dialog.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-root',
@@ -20,17 +21,18 @@ export class AppComponent{
   patientDialogResult={};
   annotDialogResult={};
   public currentSession={};
+  public isStreaming: boolean;
   
-
-
-
-  constructor(public patientDialog: MatDialog, public annodialog: MatDialog,public listannodialog: MatDialog) {
+  constructor(public snackBar: MatSnackBar, 
+      public patientDialog: MatDialog, 
+      public annodialog: MatDialog,
+      public listannodialog: MatDialog) {
     this.currentSession["patientInfo"]={};
     this.currentSession["annotations"]={
       "size" : 0,
       "items" :[]
     };
-
+    this.isStreaming=false;
   }
 
   onChangeStatus(event) {
@@ -41,69 +43,82 @@ export class AppComponent{
   }
 
   onChangeState(event){
-    console.log('root-onChangeState',event);
+    console.log('root-onChangeState',event,this.current_channels);
 
     if ( event['state'] == 1){
       this.connectDriver(event);
     }else if ( event['state'] == 2){
-      this.startStream(event);
+      if (!this.isStreaming)
+        this.startStream(event);
     } else if ( event['state'] == 3){ // annotation but still running 
       let dialogRef=this.annodialog.open(AnnotDialogComponent,{
         width: '800px',
         height: '400px',
-        // data: this.currentTimeStamp.toISOString()
-        // ojo FALTA verificar si es el ultimo enddate porque difieren de tendencias y de waves
+         // ojo FALTA verificar si es el ultimo enddate porque difieren de tendencias y de waves
         data: this.convertDateTimestamp(this.current_channels["debug"]["subrecords"]["enddatetime"])
       });
-
       dialogRef.afterClosed().subscribe(result=>{
-        
-        if(result != 'null'){
+        if(result){
           this.CurrentState = 3;
           this.annotDialogResult={};
-          this.annotDialogResult["description"]=result["annotType"]+' - '+result["annotDesc"];
-          // onset se debe grabar como segundos relativos
-          //to do 
-          /*
-          ojo FALTA agregar campo currentAnnoTime usando la informacion debug 
-          y de una vez convertido a string para visualizacion
-          */
-          this.annotDialogResult["currentAnnotTime"]=this.convertHourTimestamp(this.current_channels["debug"]["subrecords"]["enddatetime"]);
+          this.annotDialogResult["description"]=result["annotDesc"];
+          
           this.annotDialogResult['onset']=(this.current_channels["debug"]["subrecords"]["enddatetime"]-this.current_channels["debug"]["subrecords"]["startdatetime"]);
           this.annotDialogResult['duration']=0.04;
           console.log('acb-onAddAnnoClick',this.annotDialogResult);
           this.currentSession["annotations"]["items"].push(this.annotDialogResult);
           this.currentSession["annotations"]["size"]+=1;
-          //console.log('acb-onAddAnnoClick',this.currentSession["annotations"]);
           this.CurrentState = 2;
+          this.snackBar.open("Anotación agregada satisfactoriamente", 'Aceptar', {
+            duration: 3000,
+          });
         }
-        
-        
+
       });
 
     } else if ( event['state'] == 4){
-      this.stopStream(event);
-    } else if ( event['state'] == 5){
-     
-      let dialogRef=this.patientDialog.open(PatientDialogComponent,{
-        width: '800px',
-        height: '600px',
-        data: 'test'
-      });
-  
-      dialogRef.afterClosed().subscribe(result=>{
-        console.log(result);
-        this.patientDialogResult=result;
-        this.saveStream(result,event);
+      if(this.isStreaming){
         this.stopStream(event);
-
-      });
-    } else if ( event['state'] == 6){
+        this.snackBar.open("Driver detenido satisfactoriamente", 'Aceptar', {
+          duration: 3000,
+        });
+      }
+    } else if ( event['state'] == 5){
       
+      if (JSON.stringify(this.current_channels) != JSON.stringify({})){
+        let dialogRef=this.patientDialog.open(PatientDialogComponent,{
+          width: '800px',
+          height: '600px',
+          data: 'test'
+        });
+    
+        dialogRef.afterClosed().subscribe(result=>{
+          console.log(result);
+          if(result){
+            this.patientDialogResult=result;
+            this.saveStream(result,event);
+            // this.stopStream(event);
+          }
+        });
+
+      }else{
+        this.snackBar.open("Debe comenzar la sesión para poder grabarla!", 'Aceptar', {
+          duration: 3000,
+        });
+      }
+    } else if ( event['state'] == 6){ // ver anotaciones
+      let tempAnnot = [];
+      this.currentSession["annotations"]["items"].forEach(element => {
+        let tempElement={};
+        tempElement=JSON.parse(JSON.stringify(element));
+        tempElement["currentAnnotTime"]=this.convertHourTimestamp(this.current_channels["debug"]["subrecords"]["startdatetime"]+tempElement["onset"]);
+        tempAnnot.push(tempElement);
+      });
+        
       let dialogRef=this.listannodialog.open(VisAnnotDialogComponent,{
         width: '800px',
         height: '600px',
-        data: this.currentSession["annotations"]["items"]
+        data: tempAnnot
       });
   
       dialogRef.afterClosed().subscribe(result=>{
@@ -118,19 +133,38 @@ export class AppComponent{
   */
   connectDriver(event) {
     this.myPort = event['port'];
-    this.mySocket = new WebSocket("ws://localhost:"+this.myPort+"/ws");
+    try {
+      this.mySocket = new WebSocket("ws://localhost:"+this.myPort+"/ws");
+    } catch (error) {
+      
+    }
+    
+    
+    
+    this.mySocket.onerror = event=>{
+      console.log("WebSocket error observed",event);
+      this.CurrentState = 0; 
+      this.snackBar.open("Revise el driver y su puerto de conexión", 'Aceptar', {
+        duration: 3000,
+      });
+    };
+    
     this.mySocket.onopen = event=>{
       console.log("WebSocket is open now.",event,this.mySocket);
       this.CurrentState = 1; 
+      
     };
     this.mySocket.onclose = event=> {
       console.log("WebSocket is closed now.",event);
       this.CurrentState = 0; 
+      this.snackBar.open("Conexión cerrada satisfactoriamente", 'Aceptar', {
+        duration: 3000,
+      });
+      
     };
   }
 
   startStream(event) {
-    console.log("Starting streaming",event);
     let msg=JSON.stringify({
       "command": "available_channels"
     });
@@ -144,12 +178,10 @@ export class AppComponent{
     this.mySocket.send(msg); 
     this.CurrentState=2;
     this.mySocket.onmessage = event=>{
-      this.current_channels
       let msgFromUBT=JSON.parse(event.data);
       msgFromUBT["annotations"]=this.currentSession["annotations"]
       this.current_channels=msgFromUBT;
-      
-      //console.log(myObj);
+      this.isStreaming=true;
     };
   }
 
@@ -159,7 +191,7 @@ export class AppComponent{
     this.CurrentState=1;
     this.mySocket.onmessage = event=>{
       this.current_channels=JSON.parse(event.data);
-      //console.log(myObj);
+      this.isStreaming=false;
     };
   }
 
@@ -174,9 +206,13 @@ export class AppComponent{
     this.mySocket.send(JSON.stringify(this.currentSession));
     this.CurrentState=0;
     this.mySocket.onmessage = event=>{
+      console.log(JSON.parse(event.data));
       this.current_channels=JSON.parse(event.data);
       this.stopStream(event);
-      //console.log(myObj);
+      this.snackBar.open("Sesión guardada y terminada satisfactoriamente", 'Aceptar', {
+        duration: 3000,
+      });
+      
     };
   }
 
@@ -207,9 +243,6 @@ export class AppComponent{
 
   convertHourTimestamp(timestamp) {
     let d = new Date(timestamp * 1000), // Convert the passed timestamp to milliseconds since javascript works in mili
-        yyyy = d.getFullYear(),
-        mm = ('0' + (d.getMonth() + 1)).slice(-2),  // Months are zero based. Add leading 0.
-        dd = ('0' + d.getDate()).slice(-2),         // Add leading 0.
         hh = d.getHours(),
         h = hh,
         min = ('0' + d.getMinutes()).slice(-2),     // Add leading 0.
@@ -225,7 +258,7 @@ export class AppComponent{
     } else if (hh == 0) {
         h = 12;
     }
-    // ie: 2014-03-24, 3:00 PM
+    // 3:00:15s PM
     time = h + ':' + min +':'+seg+' ' + ampm;
     return time;
   }

@@ -1,21 +1,9 @@
 .btn-space {
     margin-left: 2px !important;
     margin-right: 2px !important;
+    margin-top: 4px !important;
 }
 
 .form-dialog > * {
     width: 100%;
-}
-
-.form-dialog > h2{
-    color: #0097A7 !important;
-  }
-
-/* Border */
-.mat-form-field-appearance-outline .mat-form-field-outline {
-    color: #0097A7 !important;
-}
-/* Border */
-.mySel {
-    color: #0097A7 !important;
 }
