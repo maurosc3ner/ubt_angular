@@ -7,7 +7,7 @@
             matTooltipClass="edf-menu-tooltip"
             class="material-cust-small-button btn-space">
           <mat-icon class="material-cust-small-button-icon">folder_open</mat-icon>
-          Cargar
+          Cargar EDF
           </button>
           <button mat-raised-button color="primary" (click)="Clear()" 
           matTooltip="Cerrar archivo actual"
@@ -21,14 +21,14 @@
           matTooltipClass="edf-menu-tooltip"
           class="material-cust-small-button btn-space">
           <mat-icon class="material-cust-small-button-icon">edit</mat-icon>
-          Anotacion
+          Anotaciones
         </button>
         <button mat-raised-button color="primary" [matMenuTriggerFor]="menu"
           matTooltip="Filtros"
           matTooltipClass="edf-menu-tooltip"
           class="material-cust-small-button btn-space">
-          <mat-icon class="material-cust-small-button-icon">filter</mat-icon>
-          Filtros
+          <mat-icon class="material-cust-small-button-icon">line_style</mat-icon>
+          Filtrar
         </button>
         <mat-menu #menu="matMenu">
           <button mat-menu-item (click)="notchFilter()">Notch</button>
@@ -38,21 +38,21 @@
           matTooltip="Estimar topoplot"
           matTooltipClass="edf-menu-tooltip"
           class="material-cust-small-button btn-space">
-          <mat-icon class="material-cust-small-button-icon">radio_button_checked</mat-icon>
+          <mat-icon class="material-cust-small-button-icon">blur_circular</mat-icon>
           Topoplot
         </button>
         <button  mat-raised-button color="primary" (click)="ESILoad()"
           matTooltip="Estimar Loreta"
           matTooltipClass="edf-menu-tooltip"
           class="material-cust-small-button btn-space">
-          <mat-icon class="material-cust-small-button-icon">image_search</mat-icon>
+          <mat-icon class="material-cust-small-button-icon">3d_rotation</mat-icon>
           Loreta
         </button>
         <button  mat-raised-button color="primary"
           matTooltip="Acerca de ?"
           matTooltipClass="edf-menu-tooltip"
-          class="material-cust-small-button btn-space">
-          <mat-icon class="material-cust-small-button-icon">live_help</mat-icon>
+          class="material-cust-small-button btn-space-short">
+          <mat-icon class="material-cust-small-button-icon">help_outline</mat-icon>
           
         </button>
       </div>

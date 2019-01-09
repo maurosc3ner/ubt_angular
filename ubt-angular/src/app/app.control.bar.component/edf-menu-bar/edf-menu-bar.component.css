@@ -13,3 +13,9 @@
   margin-left: 2px !important;
   margin-right: 2px !important;
 }
+
+.btn-space-short {
+  margin-left: 2px !important;
+  margin-right: 2px !important;
+  width: 80px;
+}

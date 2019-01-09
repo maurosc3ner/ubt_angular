@@ -1,21 +1,18 @@
   <mat-horizontal-stepper class="wizard" [linear]="isLinear" #stepper="matHorizontalStepper">
     <mat-step [stepControl]="firstFormGroup">
         <ng-template matStepLabel>
-        <h1 class="wizard-label">Step 1.</h1>      
+        <!-- <h1 class="wizard-label">1.</h1>       -->
       </ng-template>
       <div class="container-fluid">
         <div class="row">
             <div class="col-12">
-                    <img src="https://picsum.photos/200/300/?blur" alt="" class="wrapper_1"/>
+                    <img src="assets/unal-logos/app-color.png" alt="UBT" class="wrapper_1"/>
             </div>
         </div>
         <div class="row">
-            <div class="col-12">
+            <div class="col-12 myText">
                 <p>
-                "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
-                Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
-                Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
-                Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+                    Bienvenido a la plataforma Universal Brain Tooling - Alzheimer
                 </p>
             </div>
         </div>
@@ -23,8 +20,8 @@
           <div class="col-8"></div>
           <div class="col-4">
               <div class="btn-group float-right">
-                  <button mat-raised-button matStepperNext color="primary" type="button" class="btn-space">Next</button>
-                  <button mat-raised-button type="button" color="warn" class="btn-space" (click)="OmitWizard($event)">Omit</button>
+                  <button mat-raised-button matStepperNext color="primary" type="button" class="btn-space">Sig.</button>
+                  <button mat-raised-button type="button" color="warn" class="btn-space" (click)="OmitWizard($event)">Omitir</button>
               </div>
           </div>
         </div>
@@ -32,20 +29,18 @@
     </mat-step>
     <mat-step [stepControl]="secondFormGroup">
         <ng-template matStepLabel>
-          <h1 class="wizard-label">Step 2.</h1>      
+          <!-- <h1 class="wizard-label">2.</h1>       -->
         </ng-template>
         <div class="container-fluid">
             <div class="row">
                 <div class="col-12">
-                        <img src="https://picsum.photos/200/300/?blur" alt="" class="wrapper_1"/>                </div>
+                    <img src="../../assets/wizard/step1.gif" alt="" class="wrapper_2"/> 
+                </div>
             </div>
             <div class="row">
-                <div class="col-12">
+                <div class="col-12 myText">
                     <p>
-                            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
-                            Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
-                            Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
-                            Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+                        Cargar de forma rápida archivos EDF de múltiples canales
                     </p>
                 </div>
             </div>
@@ -53,30 +48,83 @@
               <div class="col-8"></div>
               <div class="col-4">
                   <div class="btn-group float-right">
-                      <button mat-raised-button matStepperPrevious type="button" color="primary" class="btn-space">Back</button>
-                      <button mat-raised-button matStepperNext color="primary" type="button" class="btn-space">Next</button>
-                      <button mat-raised-button type="button" color="warn" class="btn-space" (click)="OmitWizard()">Omit</button>
+                      <button mat-raised-button matStepperPrevious type="button" color="primary" class="btn-space">Atrás</button>
+                      <button mat-raised-button matStepperNext color="primary" type="button" class="btn-space">Sig.</button>
+                      <button mat-raised-button type="button" color="warn" class="btn-space" (click)="OmitWizard()">Omitir</button>
                   </div>
               </div>
             </div>
         </div>
     </mat-step>
     <mat-step>
+        <ng-template matStepLabel>
+            <!-- <h1 class="wizard-label">3.</h1>       -->
+          </ng-template>
+          <div class="container-fluid">
+              <div class="row">
+                  <div class="col-12">
+                          <img src="../../assets/wizard/step2.gif" alt="" class="wrapper_3"/></div>
+              </div>
+              <div class="row">
+                  <div class="col-12 myText">
+                      <p>
+                            Realizar tareas de filtrado y procesamiento de señales en ventanas de tiempo específicas
+                      </p>
+                  </div>
+              </div>
+              <div class="row">
+                <div class="col-8"></div>
+                <div class="col-4">
+                    <div class="btn-group float-right">
+                        <button mat-raised-button matStepperPrevious type="button" color="primary" class="btn-space">Atrás</button>
+                        <button mat-raised-button matStepperNext color="primary" type="button" class="btn-space">Sig.</button>
+                        <button mat-raised-button type="button" color="warn" class="btn-space" (click)="OmitWizard()">Omitir</button>
+                    </div>
+                </div>
+            </div>
+        </div>    
+    </mat-step>
+    <mat-step>
+        <ng-template matStepLabel>
+            <!-- <h1 class="wizard-label">3.</h1>       -->
+          </ng-template>
+          <div class="container-fluid">
+              <div class="row">
+                  <div class="col-12">
+                          <img src="../../assets/wizard/step3.gif" alt="" class="wrapper_4"/></div>
+              </div>
+              <div class="row">
+                  <div class="col-12 myText">
+                      <p>
+                            Topoplots
+                      </p>
+                  </div>
+              </div>
+              <div class="row">
+                <div class="col-8"></div>
+                <div class="col-4">
+                    <div class="btn-group float-right">
+                        <button mat-raised-button matStepperPrevious type="button" color="primary" class="btn-space">Atrás</button>
+                        <button mat-raised-button matStepperNext color="primary" type="button" class="btn-space">Sig.</button>
+                        <button mat-raised-button type="button" color="warn" class="btn-space" (click)="OmitWizard()">Omitir</button>
+                    </div>
+                </div>
+            </div>
+        </div>    
+    </mat-step>
+    <mat-step>
       <ng-template matStepLabel>
-          <h1 class="wizard-label">Step 3.</h1>      
+          <!-- <h1 class="wizard-label">4.</h1>       -->
         </ng-template>
         <div class="container-fluid">
             <div class="row">
                 <div class="col-12">
-                        <img src="https://picsum.photos/200/300/?blur" alt="" class="wrapper_1"/>                </div>
+                        <img src="../../assets/wizard/step4.gif" alt="" class="wrapper_5"/></div>
             </div>
             <div class="row">
-                <div class="col-12">
+                <div class="col-12 myText">
                     <p>
-                            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
-                            Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
-                            Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
-                            Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+                        Técnica de mapeo estándar Loreta
                     </p>
                 </div>
             </div>
@@ -84,11 +132,13 @@
               <div class="col-8"></div>
               <div class="col-4">
                   <div class="btn-group float-right">
-                      <button mat-raised-button matStepperPrevious type="button" color="primary" class="btn-space">Back</button>
-                      <button mat-raised-button type="button" color="warn" class="btn-space" (click)="OmitWizard()">Omit</button>
+                      <button mat-raised-button matStepperPrevious type="button" color="primary" class="btn-space">Atrás</button>
+                      <button mat-raised-button type="button" color="warn" class="btn-space" (click)="OmitWizard()">Omitir</button>
                   </div>
               </div>
             </div>
-        </div>    </mat-step>
+        </div>    
+    </mat-step>
+    
   </mat-horizontal-stepper>
   
