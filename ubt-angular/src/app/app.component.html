@@ -6,12 +6,17 @@
         <app-title-bar-component [Patient_Info]='PatientInfo' [Status_title]='CommandControl'></app-title-bar-component>
     </div>
   </div>
-  <div class="row main-container" style="padding: 10px 0px 0px 0px">
+  <div class="row main-container bottom-space" style="padding: 10px 0px 0px 0px" *ngIf="WizardStatus">
+      <div class="col">
+        <app-wizard (WizardEmitter)='onChangeWizardStatus($event)'></app-wizard>
+      </div>
+    </div>
+  <div class="row main-container" style="padding: 10px 0px 0px 0px"  *ngIf="!WizardStatus">
     <div class="col">
       <app-control-bar-component [newStatusEvent]='mainBridge' (StatusEvent)='onChangeStatus($event)'  (CoomandEvent)='onCommandReceived($event)'></app-control-bar-component>
     </div>
   </div>
-  <div class="row main-container bottom-space">
+  <div class="row main-container bottom-space" *ngIf="!WizardStatus">
     <div class="col">
         <app-principal-content-component (titleEmmiter)='onChangesPatientInfo($event)' (componentsBridge)='onChangesToolbar($event)' [Status]='StatusControl' [Command_Control]='CommandControl'></app-principal-content-component>
     </div>

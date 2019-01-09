@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import {CdkTableModule} from '@angular/cdk/table';
 
 import { AppComponent } from './app.component';
 import { AppTitleBarComponent } from './app.title.bar.component/app.title.bar.component.component';
@@ -39,17 +40,36 @@ import {
   MatSortModule,
   MatPaginatorIntl,
   MatCardModule,
-  MatDialogModule
+  MatDialogModule,
+  MatAutocompleteModule,
+  MatButtonToggleModule,
+  MatCheckboxModule,
+  MatChipsModule,
+  MatDatepickerModule,
+  MatDividerModule,
+  MatExpansionModule,
+  MatGridListModule,
+  MatInputModule,
+  MatListModule,
+  MatNativeDateModule,
+  MatProgressSpinnerModule,
+  MatRippleModule,
+  MatSidenavModule,
+  MatSlideToggleModule,
+  MatStepperModule,
+  MatTabsModule
+
 } from '@angular/material';
-import {MatTooltipModule} from '@angular/material/tooltip';
-import {MatSliderModule} from '@angular/material/slider';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatSliderModule } from '@angular/material/slider';
 import { AnnotTableComponent } from './app.principal.content.component/annot-table/annot-table.component';
-import {MyPaginator} from './app.principal.content.component/annot-table/myPaginatorClass';
-import {MatMenuModule} from '@angular/material/menu';
-import {MatRadioModule} from '@angular/material/radio';
+import { MyPaginator } from './app.principal.content.component/annot-table/myPaginatorClass';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatRadioModule } from '@angular/material/radio';
 import { EdfFileDialogComponent } from './app.control.bar.component/edf-menu-bar/edf-file-dialog/edf-file-dialog.component';
-import { FormsModule } from '@angular/forms';
-import {MatSnackBarModule} from '@angular/material/snack-bar';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { WizardComponent } from './app.wizard/app.wizard.component';
 
 @NgModule({
   declarations: [
@@ -69,11 +89,13 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
     AnnotationContentComponent,
     AnnotTableComponent,
     EdfFileDialogComponent,
-    FooterComponent
+    FooterComponent,
+    WizardComponent
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
+    CdkTableModule,
     MatProgressBarModule,
     MatToolbarModule,
     HttpClientModule,
@@ -93,7 +115,38 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
     MatDialogModule,
     MatRadioModule,
     FormsModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatAutocompleteModule,
+    MatButtonModule,
+    MatButtonToggleModule,
+    MatCardModule,
+    MatCheckboxModule,
+    MatChipsModule,
+    MatStepperModule,
+    MatDatepickerModule,
+    MatDialogModule,
+    MatDividerModule,
+    MatExpansionModule,
+    MatGridListModule,
+    MatIconModule,
+    MatInputModule,
+    MatListModule,
+    MatMenuModule,
+    MatNativeDateModule,
+    MatProgressSpinnerModule,
+    MatRadioModule,
+    MatRippleModule,
+    MatSelectModule,
+    MatSidenavModule,
+    MatSliderModule,
+    MatSlideToggleModule,
+    MatSnackBarModule,
+    MatSortModule,
+    MatTableModule,
+    MatTabsModule,
+    MatToolbarModule,
+    MatTooltipModule,
+    ReactiveFormsModule
   ],
   entryComponents: [
     EdfFileDialogComponent
