@@ -10,20 +10,19 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '../../../../node_modules/@angular
 export class AnnotDialogComponent implements OnInit {
 
   constructor(public thisDialogRef: MatDialogRef<AnnotDialogComponent>,@Inject(MAT_DIALOG_DATA) public data:string) { }
-  annotType='';
+  
   annotDesc='';
   ngOnInit() {
   }
 
   onCloseConfirm(){
     this.thisDialogRef.close({
-      'annotType': this.annotType,
       'annotDesc': this.annotDesc
     });
   }
 
   onCloseCancel(){
-    this.thisDialogRef.close('null');
+    this.thisDialogRef.close(false);
   }
 
   

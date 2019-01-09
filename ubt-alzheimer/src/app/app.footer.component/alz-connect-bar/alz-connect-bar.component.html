@@ -1,6 +1,7 @@
 <!-- <input type="text" [(ngModel)]="port"> -->
-<mat-form-field class="example-small-width" color="warn">
-    <input matInput type="num" placeholder="Puerto" pattern="^[0-9]*$" [(ngModel)]="port" value=8890 maxlength="5" minlength="4" required>
+<mat-form-field class="example-small-width" appearance="legacy" color="warn" hintLabel="Puerto UBT">
+    <input matInput type="num" #input placeholder="Puerto" pattern="^[0-9]*$" [(ngModel)]="port" maxlength="5" minlength="4" required>
+    <mat-hint class="hint" align="end">{{input.value?.length || 0}}/5</mat-hint>
 </mat-form-field>
 
 <button mat-raised-button color="warn" (click)="onConnectClick($event)"
@@ -8,5 +9,5 @@
     matTooltipClass="edf-menu-tooltip"
     class="material-cust-small-button btn-space">
     <i class="material-icons">input</i>
-    Conectar
+    Conectare
 </button>

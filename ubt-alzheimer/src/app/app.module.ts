@@ -9,7 +9,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 import { HttpModule } from '@angular/http';
 import { AlzServices } from './app.services/alzservices';
-// const config: NgIoConfig = { url: 'http://localhost:3300', options: {} };
+
 import {
   MatFormFieldModule,
   MatSelectModule, 
@@ -40,7 +40,7 @@ import { AnnotTableComponent } from './app.dialogs/vis-annot-dialog/annot-table/
 import {MyPaginator} from './app.dialogs/vis-annot-dialog/annot-table/myPaginatorClass';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatTabsModule} from '@angular/material/tabs';
-
+import {MatSnackBarModule} from '@angular/material/snack-bar';
 
 @NgModule({
   declarations: [
@@ -83,7 +83,8 @@ import {MatTabsModule} from '@angular/material/tabs';
     MatTableModule,
     MatPaginatorModule,
     MatSortModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatSnackBarModule
   ],
   entryComponents: [
     AnnotDialogComponent,

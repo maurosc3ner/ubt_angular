@@ -1,53 +1,52 @@
 <div md-dialog-content class="form-dialog">
     <h2 md-dialog-title>Información del Paciente</h2>
     <mat-divider></mat-divider>
-    <mat-form-field appearance="outline">
+    <mat-form-field appearance="fill" color="warn">
         <mat-label>Código de administrador</mat-label>
         <input matInput placeholder="" [(ngModel)]="adminCode">
         <mat-icon matSuffix>mode_edit</mat-icon>
     </mat-form-field>
-    <mat-form-field appearance="outline">
+    <mat-form-field appearance="fill" color="warn"> 
         <mat-label>Fecha de la sesión</mat-label>
         <input matInput [matDatepicker]="picker" placeholder="">
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker #picker></mat-datepicker>
     </mat-form-field>
-    <mat-form-field appearance="outline">
+    <mat-form-field appearance="outline" color="warn">
         <mat-label>Equipo</mat-label>
         <input matInput placeholder="Equipo" [(ngModel)]="equipment">
     </mat-form-field>
-    <mat-form-field appearance="outline">
+    <mat-form-field appearance="fill" color="warn">
         <mat-select placeholder="Sexo">
-            <mat-option value="f">Femenino</mat-option>
-            <mat-option value="m">Masculino</mat-option>
+            <mat-option value="Femenino">Femenino</mat-option>
+            <mat-option value="Masculino">Masculino</mat-option>
         </mat-select>
     </mat-form-field>
-    <mat-form-field appearance="outline">
+    <mat-form-field appearance="fill" color="warn">
         <mat-label>ID del paciente</mat-label>
         <input matInput [(ngModel)]="patientCode" placeholder="">
         <mat-icon matSuffix>mode_edit</mat-icon>
     </mat-form-field>
-    <mat-form-field appearance="outline">
+    <mat-form-field appearance="fill" color="warn">
         <mat-label>Nombre del paciente</mat-label>
         <input matInput [(ngModel)]="patientName" placeholder="">
         <mat-icon matSuffix>mode_edit</mat-icon>
     </mat-form-field>
-    <mat-form-field appearance="outline">
+    <mat-form-field appearance="fill" color="warn">
         <mat-label>Información adicional del paciente</mat-label>
         <input matInput [(ngModel)]="patientAdditional" placeholder="">
         <mat-icon matSuffix>mode_edit</mat-icon>
     </mat-form-field>
-    <mat-form-field appearance="outline">
+    <mat-form-field appearance="fill" color="warn">
         <mat-label>Información adicional de la grabación</mat-label>
         <input matInput placeholder="" [(ngModel)]="recordingAdditional">
         <mat-icon matSuffix>mode_edit</mat-icon>
     </mat-form-field>
-    <mat-form-field appearance="outline">
+    <mat-form-field appearance="fill" color="warn">
         <mat-label>Técnico encargado</mat-label>
         <input matInput placeholder="" [(ngModel)]="technician">
         <mat-icon matSuffix>mode_edit</mat-icon>
     </mat-form-field>
-   
     <div md-dialog-actions>
         <button mat-raised-button color="warn" (click)="onCloseCancel()"
             class="material-cust-small-button btn-space">

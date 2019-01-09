@@ -33,13 +33,12 @@ export class PatientDialogComponent implements OnInit {
       'patientAdditional' : this.patientAdditional,
       'recordingAdditional' : this.recordingAdditional,
       'technician': this.technician
-
     });
 
   }
 
   onCloseCancel(){
-    this.thisDialogRef.close('Canceled');
+    this.thisDialogRef.close(false);
   }
 
 }
