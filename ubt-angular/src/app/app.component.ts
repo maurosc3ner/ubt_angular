@@ -11,6 +11,7 @@ export class AppComponent {
   public CommandControl;
   public mainBridge = 0;
   public PatientInfo;
+  public WizardStatus: Boolean = true;
 
   onChangesToolbar(event) {
     if (this.mainBridge === 0) {
@@ -30,5 +31,10 @@ export class AppComponent {
   }
   onCommandReceived(event) {
     this.CommandControl = event;
+  }
+
+  onChangeWizardStatus(event) {
+    this.WizardStatus = !this.WizardStatus;
+    console.log(this.WizardStatus);
   }
 }
