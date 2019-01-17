@@ -70,6 +70,7 @@ import { EdfFileDialogComponent } from './app.control.bar.component/edf-menu-bar
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { WizardComponent } from './app.wizard/app.wizard.component';
+import { AboutUsDialogComponent } from './app.control.bar.component/edf-menu-bar/about-us/about-us-dialog.component';
 
 @NgModule({
   declarations: [
@@ -90,7 +91,8 @@ import { WizardComponent } from './app.wizard/app.wizard.component';
     AnnotTableComponent,
     EdfFileDialogComponent,
     FooterComponent,
-    WizardComponent
+    WizardComponent,
+    AboutUsDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -149,7 +151,9 @@ import { WizardComponent } from './app.wizard/app.wizard.component';
     ReactiveFormsModule
   ],
   entryComponents: [
-    EdfFileDialogComponent
+    EdfFileDialogComponent,
+    AboutUsDialogComponent
+
   ],
   providers: [ D3Service,
     { provide: MatPaginatorIntl, useClass: MyPaginator}

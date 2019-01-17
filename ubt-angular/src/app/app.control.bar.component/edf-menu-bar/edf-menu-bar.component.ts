@@ -3,6 +3,8 @@ import {EdfFileDialogComponent} from './edf-file-dialog/edf-file-dialog.componen
 import { MatDialog } from '@angular/material/dialog';
 import { D3Service } from '../../app.services/d3/d3.service';
 import {last, tap, take, finalize} from 'rxjs/operators';
+import { AboutUsDialogComponent } from './about-us/about-us-dialog.component';
+
 
 @Component({
   selector: 'app-edf-menu-bar',
@@ -23,7 +25,7 @@ export class EdfMenuBarComponent {
 
   srcFIles: any;
 
-  constructor(public edfFIleDialog: MatDialog, private myServices: D3Service) { }
+  constructor(public edfFIleDialog: MatDialog,public aboutDialog: MatDialog, private myServices: D3Service) { }
 
   ESILoad(event) {
     this.esiclick.emit(event);
@@ -71,6 +73,19 @@ export class EdfMenuBarComponent {
     }))
     .subscribe((response: Response) => response);
   }
+
+
+  aboutUs(event) {
+    const dialogRef = this.aboutDialog.open(AboutUsDialogComponent,{
+        width: '800px',
+        height: '600px',
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      
+    });
+  }
+
   SelectFiles(event) {
     event.click();
   }
