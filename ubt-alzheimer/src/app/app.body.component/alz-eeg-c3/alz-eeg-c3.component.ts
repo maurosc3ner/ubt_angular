@@ -771,7 +771,8 @@ export class AlzEegC3Component implements OnInit {
 
 
   }
-
+//   https://otexts.com/fpp2/
+// https://bl.ocks.org/pjsier/fbf9317b31f070fd540c5523fef167ac
   ngOnChanges() {
     
     if (!this.isEmpty(this.current_data) && this.current_data["debug"]["command"] == "request_channels") {

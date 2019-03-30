@@ -50,12 +50,14 @@ export class AppComponent{
     }else if ( event['state'] == 2){
       if (!this.isStreaming)
         this.startStream(event);
-    } else if ( event['state'] == 3){ // annotation but still running 
+    } else if ( event['state'] == 3){ // annotation but still running
+
       let dialogRef=this.annodialog.open(AnnotDialogComponent,{
         width: '800px',
         height: '400px',
          // ojo FALTA verificar si es el ultimo enddate porque difieren de tendencias y de waves
-        data: this.convertDateTimestamp(this.current_channels["debug"]["subrecords"]["enddatetime"])
+        // data: this.convertDateTimestamp(this.current_channels["debug"]["subrecords"]["enddatetime"])
+        data: this.ToLocalDate(new Date(this.current_channels["debug"]["subrecords"]["enddatetime"]*1000))
       });
       dialogRef.afterClosed().subscribe(result=>{
         if(result){
@@ -111,7 +113,7 @@ export class AppComponent{
       this.currentSession["annotations"]["items"].forEach(element => {
         let tempElement={};
         tempElement=JSON.parse(JSON.stringify(element));
-        tempElement["currentAnnotTime"]=this.convertHourTimestamp(this.current_channels["debug"]["subrecords"]["startdatetime"]+tempElement["onset"]);
+        tempElement["currentAnnotTime"]=this.convertHourTimestamp(this.ToLocalDate(new Date((this.current_channels["debug"]["subrecords"]["startdatetime"]+tempElement["onset"])*1000)));
         tempAnnot.push(tempElement);
       });
         
@@ -216,36 +218,11 @@ export class AppComponent{
     };
   }
 
-  convertDateTimestamp(timestamp) {
-    let d = new Date(timestamp * 1000), // Convert the passed timestamp to milliseconds since javascript works in mili
-        yyyy = d.getFullYear(),
-        mm = ('0' + (d.getMonth() + 1)).slice(-2),  // Months are zero based. Add leading 0.
-        dd = ('0' + d.getDate()).slice(-2),         // Add leading 0.
+  convertHourTimestamp(mydate) {
+    let d = mydate, // Convert the passed timestamp to milliseconds since javascript works in mili
         hh = d.getHours(),
         h = hh,
-        min = ('0' + d.getMinutes()).slice(-2),     // Add leading 0.
-        seg = ('0' + d.getSeconds()).slice(-2),     // Add leading 0. 
-        ampm = 'AM',
-        time;
-    if (hh > 12) {
-        h = hh - 12;
-        ampm = 'PM';
-    } else if (hh === 12) {
-        h = 12;
-        ampm = 'PM';
-    } else if (hh == 0) {
-        h = 12;
-    }
-    // ie: 2014-03-24, 3:00 PM
-    time = yyyy + '-' + mm + '-' + dd + ', ' + h + ':' + min +':'+seg+' ' + ampm;
-    return time;
-  }
-
-  convertHourTimestamp(timestamp) {
-    let d = new Date(timestamp * 1000), // Convert the passed timestamp to milliseconds since javascript works in mili
-        hh = d.getHours(),
-        h = hh,
-        min = ('0' + d.getMinutes()).slice(-2),     // Add leading 0.
+        min = ('0' + d.getMinutes()).slice(-2),    // Add leading 0.
         seg = ('0' + d.getSeconds()).slice(-2),     // Add leading 0. 
         ampm = 'AM',
         time;
@@ -263,5 +240,10 @@ export class AppComponent{
     return time;
   }
 
+  ToLocalDate (inDate) {
+    var date = new Date();
+    date.setTime(inDate.valueOf() + 60000 * inDate.getTimezoneOffset());
+    return date;
+  }
   
 }

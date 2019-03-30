@@ -2,7 +2,6 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 // import {AnnotDialogComponent} from './annot-dialog/annot-dialog.component';
 import { MatDialog } from '../../../../node_modules/@angular/material/dialog';
-import {MatButtonModule} from '@angular/material/button';
 
 @Component({
   selector: 'app-alz-control-buttons',
@@ -15,19 +14,11 @@ export class AlzControlButtonsComponent implements OnInit {
   @Output() annoControlBar=new EventEmitter();
   annotDialogResult={};
   constructor(public annodialog: MatDialog) { }
-  currentTimeStamp;
+
   ngOnInit() {
   }
 
-  ngOnChanges() {
-    
-    // });
-    if (!this.isEmpty(this.current_data) && typeof this.current_data['debug']["subrecords"] !== 'undefined'){
-      // console.log('annotacion-current',this.current_data['debug']["subrecords"]);
-      // this.currentTimeStamp=new Date(this.current_data["debug"]["subrecords"]["enddatetime"]*1000);
-      this.currentTimeStamp=this.current_data["debug"]["subrecords"]["enddatetime"]; // sin convertir
-    }
-  }
+
   onStartClick(event){
     let msg=  {'state':2};
     //console.log('acb-onStartClick',msg); probado y OK
@@ -57,31 +48,6 @@ export class AlzControlButtonsComponent implements OnInit {
 
   isEmpty(obj) {
     return Object.keys(obj).every(k => !Object.keys(obj[k]).length)
-  }
-
-  convertTimestamp(timestamp) {
-    let d = new Date(timestamp * 1000), // Convert the passed timestamp to milliseconds
-        yyyy = d.getFullYear(),
-        mm = ('0' + (d.getMonth() + 1)).slice(-2),  // Months are zero based. Add leading 0.
-        dd = ('0' + d.getDate()).slice(-2),         // Add leading 0.
-        hh = d.getHours(),
-        h = hh,
-        min = ('0' + d.getMinutes()).slice(-2),     // Add leading 0.
-        seg = ('0' + d.getSeconds()).slice(-2),     // Add leading 0. 
-        ampm = 'AM',
-        time;
-    if (hh > 12) {
-        h = hh - 12;
-        ampm = 'PM';
-    } else if (hh === 12) {
-        h = 12;
-        ampm = 'PM';
-    } else if (hh == 0) {
-        h = 12;
-    }
-    // ie: 2014-03-24, 3:00 PM
-    time = yyyy + '-' + mm + '-' + dd + ', ' + h + ':' + min +':'+seg+' ' + ampm;
-    return time;
   }
 
 }
