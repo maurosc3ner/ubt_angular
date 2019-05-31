@@ -136,7 +136,7 @@ export class AlzEegC3Component implements OnInit {
             },
             x: {
                 label: {
-                    text: 'PLETH',
+                    text: 'PLETH (5s)',
                     position: 'inner-top'
                 }
             }
@@ -206,12 +206,12 @@ export class AlzEegC3Component implements OnInit {
                       // outer-middle
                       // outer-bottom
                   },
-                  max: 100,
-                  min: -100
+                  max: 50,
+                  min: -50
               },
               x: {
                   label: {
-                      text: 'ENT_100',
+                      text: 'ENT_100 (5s)',
                       position: 'inner-top'
                   }
               }
@@ -784,9 +784,9 @@ export class AlzEegC3Component implements OnInit {
             * Pleth, ENT100
             */
             if (currentChannel["label"] == 'PLETH') {
-            //   console.log('EC3-ngOnChanges PLETH',currentChannel["data"].length);
+               //console.log('EC3-ngOnChanges PLETH',currentChannel["data"].length);
             this.currentPLETH += this.dataPLETH.length-1;
-                if (this.dataPLETH.length <= 400 && this.fdPLETH == false) {
+                if (this.dataPLETH.length <= 125 && this.fdPLETH == false) {
                     for (let i = 0; i < currentChannel["data"].length; i += 1) {
                         this.dataPLETH.push(currentChannel["data"][i]);
                     }
@@ -814,20 +814,20 @@ export class AlzEegC3Component implements OnInit {
                 });   
             } //end fi PLETH
             else if (currentChannel["label"] == 'ENT_100') {
-                // console.log('EC3-nocENT100',currentChannel);
-                if (this.dataENT100.length <= 500 && this.fdENT100 == false) {
-                    for (let i = 0; i < 100; i += 1) {
+                console.log('EC3-nocENT100',currentChannel);
+                if (this.dataENT100.length <= 125 && this.fdENT100 == false) {
+                    for (let i = 0; i < currentChannel["data"].length; i += 1) {
                         this.dataENT100.push(currentChannel["data"][i]);
                     }
                 } else {
                     this.dataENT100 = [];
                     this.dataENT100.push('ENT100');
-                    for (let i = 0; i < 100; i += 1) {
+                    for (let i = 0; i < currentChannel["data"].length; i += 1) {
                         this.dataENT100.push(currentChannel["data"][i]);
                     }
                     this.fdENT100 = true;
                 } //end esle
-                let currentLength = 100;
+                let currentLength = currentChannel["data"].length;
                 const promise = new Promise((resolve, reject) => {
                     this.chartENT100.flow({
                         columns: [

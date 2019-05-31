@@ -174,7 +174,9 @@ export class AppComponent{
 
     msg=JSON.stringify({
       "command": "request_channels", 
-      "labels": []
+      "labels": [],
+      "resampled": 0.25,
+      "buffer": 2
     });
 
     this.mySocket.send(msg); 

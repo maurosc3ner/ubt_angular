@@ -21,7 +21,7 @@
 /* eje x */
 /* .test .c3-axis-x line, */
 .test .c3-axis-x .tick {
-    fill: white;
+    fill: black;
   }
 
 .test .c3-axis-x g,
