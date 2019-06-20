@@ -3,37 +3,37 @@
     border-color: aqua;
 }
 
-.test .c3-legend-item {
+.pleth .c3-legend-item {
     fill: #009fee;
  }
 
- .test {
+ .pleth {
     background-color: rgb(0, 0, 0);
     width: 100%;
     min-width: 480;
 }
 
 /* eje y */
-.test .c3-axis-x path,
-.test .c3-axis-y line {
+.pleth .c3-axis-x path,
+.pleth .c3-axis-y line {
     stroke: white;
 }
 /* eje x */
-/* .test .c3-axis-x line, */
-.test .c3-axis-x .tick {
+/* .pleth .c3-axis-x line, */
+.pleth .c3-axis-x .tick {
     fill: black;
   }
 
-.test .c3-axis-x g,
-.test .c3-axis-y g,
-.test .c3-legend-item-data text,
-.test .c3-axis-y-label,
-.test .c3-axis-x-label,
-.test .c3-legend-item {
+.pleth .c3-axis-x g,
+.pleth .c3-axis-y g,
+.pleth .c3-legend-item-data text,
+.pleth .c3-axis-y-label,
+.pleth .c3-axis-x-label,
+.pleth .c3-legend-item {
     fill: whitesmoke;
 }
 /* for the tooltip text color */
-.test .c3-tooltip-container {
+.pleth .c3-tooltip-container {
     color:black;
 }
 
@@ -58,7 +58,7 @@ CO2ET styles
 /* eje x */
 /* .co2et .c3-axis-x line, */
 .co2et .c3-axis-x .tick {
-    fill: white;
+    fill: black;
   }
 
 .co2et .c3-axis-x g,
@@ -74,7 +74,42 @@ CO2ET styles
     color:black;
 }
 
+/*
+CO2FI styles
+*/
+.co2fi .c3-legend-item {
+    fill: #009fee;
+ }
 
+.co2fi {
+    background-color: rgb(0, 0, 0);
+    width: 100%;
+    min-width: 480;
+}
+
+/* eje y */
+.co2fi .c3-axis-x path,
+.co2fi .c3-axis-y line {
+    stroke: white;
+}
+/* eje x */
+/* .co2fi .c3-axis-x line, */
+.co2fi .c3-axis-x .tick {
+    fill: black;
+  }
+
+.co2fi .c3-axis-x g,
+.co2fi .c3-axis-y g,
+.co2fi .c3-legend-item-data text,
+.co2fi .c3-axis-y-label,
+.co2fi .c3-axis-x-label,
+.co2fi .c3-legend-item {
+    fill: whitesmoke;
+}
+/* for the tooltip text color */
+.co2fi .c3-tooltip-container {
+    color:black;
+}
 
 
 
@@ -85,6 +120,8 @@ CO2ET styles
 /* ent100 style 2 */
 .ent100 {
     background-color: rgb(0, 0, 0);
+    width: 100%;
+    min-width: 480;
 }
 
 /* eje x */
@@ -161,4 +198,10 @@ CO2ET styles
 /* for the tooltip text color */
 .entre .c3-tooltip-container {
     color:black;
+}
+
+
+.tickvalues{
+    margin-top:-30px;
+    font-size: 0.7em;
 }

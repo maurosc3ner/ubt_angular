@@ -90,7 +90,9 @@ export class AlzEegC3Component implements OnInit {
         },
 
         data: {
+            
             columns: [
+                
                 this.dataPLETH
             ],
             type: 'spline'
@@ -135,24 +137,14 @@ export class AlzEegC3Component implements OnInit {
                 min: -5
             },
             x: {
+                
                 label: {
                     text: 'PLETH (5s)',
                     position: 'inner-top'
                 }
             }
         },
-        // onrendered: function () {
-        //     var xg = d3.selectAll(".c3-xgrid-lines text");
-        //     xg.each (function (d,i) {
-        //             var title = d3.select(this).select("title");
-        //         if (title.empty()) {
-        //             title = xg.append("title");
-        //         }
-        //         title.text (function (d) {
-        //             return "Gridline: "+d.value+", "+d.text;
-        //         })
-        //     })
-        // },
+
       });
       //ENT_100
       this.fdENT100 = false;
@@ -179,11 +171,7 @@ export class AlzEegC3Component implements OnInit {
                   title: function(d) {
                       return 'Value ';
                   },
-                  // value: function (value, ratio, id) {
-
-                  //     return format(value);
-                  // }
-                  //            value: d3.format(',') // apply this format to both y and y2
+                  
               }
 
           },
@@ -199,12 +187,6 @@ export class AlzEegC3Component implements OnInit {
                   label: {
                       text: 'Voltage (uV)',
                       position: 'outer-middle'
-                      // inner-top : default
-                      // inner-middle
-                      // inner-bottom
-                      // outer-top
-                      // outer-middle
-                      // outer-bottom
                   },
                   max: 50,
                   min: -50
@@ -455,12 +437,6 @@ export class AlzEegC3Component implements OnInit {
                   label: {
                       text: 'Percentage (%)',
                       position: 'outer-middle'
-                      // inner-top : default
-                      // inner-middle
-                      // inner-bottom
-                      // outer-top
-                      // outer-middle
-                      // outer-bottom
                   },
                   max: 120,
                   min: -120
